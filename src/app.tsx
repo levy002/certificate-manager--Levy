@@ -1,6 +1,6 @@
-import * as React from "react";
-import "./app.css";
+import React from "react";
+import Home from "./pages/home";
 
-const App = () => <h1>Hello, World!</h1>;
+const App = () => <Home />;
 
 export default App;
