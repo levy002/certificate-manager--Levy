@@ -9,7 +9,8 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      "process.env.name": JSON.stringify("development"),
+      "process.env.name": JSON.stringify("production"),
+      "process.env.DEV": JSON.stringify(true),
     }),
   ],
 };
