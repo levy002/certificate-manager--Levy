@@ -1,7 +1,7 @@
-import React from "react";
-import Welcome from "../components/welcome";
+import React from 'react';
+import Welcome from '../components/welcome';
 
-const Home = () => {
+const Home:React.FC = () => {
   return <Welcome />;
 };
 

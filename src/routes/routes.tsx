@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-const Routes = () => {
+const Routes: React.FC = () => {
   return <div>routes</div>;
 };
 

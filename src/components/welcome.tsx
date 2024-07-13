@@ -1,7 +1,6 @@
-import React from "react";
-import "../assets/css/welcome.css";
+import "../assets/styles/welcome.module.css";
 
-const Welcome = () => {
+const Welcome:React.FC  = () => {
   return <h1>Welcome!!!</h1>;
 };
 
