@@ -5,7 +5,7 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended",
+    "plugin:react/extends",
     "plugin:@typescript-eslint/recommended",
     "prettier",
     "airbnb",
@@ -45,6 +45,7 @@
     "react-hooks/exhaustive-deps": "warn",
     "react/function-component-definition": [2, {
       "namedComponents": "function-declaration"
-    }]
+    }],
+    "arrow-body-style": ["error", "always"]
   }
 }
