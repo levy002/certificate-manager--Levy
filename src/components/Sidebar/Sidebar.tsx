@@ -6,7 +6,8 @@ import { ReactComponent as ChevronUpSVG } from '../../assets/images/chevron-up.s
 import { ReactComponent as HomeSVG } from '../../assets/images/home.svg';
 import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
 import './sidebar.css';
-import machineLearningExamples from '../../data/Example';
+import machineLearningExamples from '../../data/certificates';
+import MenuNavLink from './MenuNavLink';
 import SVGIcon from '../SVGIcon/SVGIcon';
 
 interface SidebarProps {
@@ -63,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             {machineLearningExamples.map((example) => (
               <MenuNavLink
                 key={example.name}
-                to={`/machineLearning/${example.name}`}
+                to={`/machineLearning/${example.name}/certificates`}
                 desc={example.name}
               />
             ))}

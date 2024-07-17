@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-
-import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
-import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import './Home.css';
 import SVGIcon from '../../components/SVGIcon/SVGIcon';
+import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
+import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
+import { useState } from 'react';
 
 const Home: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);

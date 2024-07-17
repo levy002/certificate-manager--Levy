@@ -1,6 +1,6 @@
-import { machineLearningExampleType } from '../types/types';
+import { certificatesExampleType } from '../types/types';
 
-const machineLearningExamples: machineLearningExampleType[] = [
+const certificatesExamples: certificatesExampleType[] = [
   {
     name: 'Example1',
     certificates: [
@@ -32,5 +32,4 @@ const machineLearningExamples: machineLearningExampleType[] = [
   },
 ];
 
-export default machineLearningExamples;
-
+export default certificatesExamples;

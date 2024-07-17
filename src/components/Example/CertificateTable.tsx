@@ -1,9 +1,10 @@
 import React from 'react';
-import { ExampleProps } from "../../types/types";
+import { certificateTableProps } from "../../types/types";
 import convertTableHeaders from '../../utils/convertTableHeaders';
-import './example.css';
+import './certificateTable.css';
 
-const Example: React.FC<ExampleProps> = ({ name, certificates }) => {
+const CertificatesTable
+: React.FC<certificateTableProps> = ({ name, certificates }) => {
   const tableHeaders: string[] = certificates ? Object.keys(certificates[0]).map(convertTableHeaders) : [];
   
   return (
@@ -45,4 +46,4 @@ const Example: React.FC<ExampleProps> = ({ name, certificates }) => {
   );
 }
 
-export default Example;
+export default CertificatesTable;

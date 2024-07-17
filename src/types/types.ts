@@ -5,7 +5,7 @@ type certificateType = {
   validTo: string;
 };
 
-export type machineLearningExampleType = {
+export type certificatesExampleType = {
   name: string;
   certificates?: certificateType[];
 };

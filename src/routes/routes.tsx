@@ -1,7 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import Example from '../components/Example/Example';
-import machineLearningExamples from '../data/Example';
+import CertificatesTable from '../components/Example/CertificateTable';
+import certificatesExamples from '../data/certificates';
 import Home from '../pages/Home/Home';
 import NotFound from '../pages/NotFound/NotFound';
 import StartScreen from '../pages/StartScreen/Start';
@@ -16,12 +16,17 @@ const router = createBrowserRouter([
         index: true,
         element: <StartScreen />,
       },
-      ...machineLearningExamples.map((example) => ({
-        path: `/machineLearning/${example.name}`,
-        element: <Example name={example.name} certificates={example.certificates}/>,
+      ...certificatesExamples.map((example) => ({
+        path: `/machineLearning/${example.name}/certificates`,
+        element: (
+          <CertificatesTable
+            name={example.name}
+            certificates={example.certificates}
+          />
+        ),
       })),
-    ]
-  }
+    ],
+  },
 ]);
 
 const Routes: React.FC = () => {
