@@ -20,7 +20,7 @@
 
 .home__title {
   margin: 0;
-  background-color: #3f9ac9;
+  background-color: var(--active-color);
   color: #fff;
   padding: 1rem;
   grid-column: span 3;
@@ -36,7 +36,7 @@
 
 @media screen and (max-width: 768px) {
    .home__header {
-    background-color: #3f9ac9;
+    background-color: var(--active-color);;
     display: flex;
     align-items: center;
     justify-content: space-between;

@@ -1,3 +1,8 @@
+:root {
+  --primary-color: #265c79;
+  --active-color: #3f9ac9;
+}
+
 html, body {
   margin: 0;
   padding: 0;
