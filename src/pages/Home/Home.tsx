@@ -32,9 +32,11 @@ const Home: React.FC = () => {
           />
         )}
       </header>
-      <section className="home__contents-wrapper">
+      <section className='home__contents-wrapper'>
         <Sidebar showMobileSidebar={showMobileMenu} />
-        <Outlet />
+        <section className='home__contents'>
+          <Outlet />
+        </section>
       </section>
     </div>
   );
