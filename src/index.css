@@ -1,6 +1,8 @@
 :root {
   --primary-color: #265c79;
   --active-color: #3f9ac9;
+  --secondary-color: #e7e9ea;
+  --grey-color: #565757;
 }
 
 html, body {
