@@ -1,0 +1,41 @@
+.table {
+    color: var(--grey-color);
+}
+
+.table__title {
+  font-size: 2rem;
+  text-align: left;
+  color: var(--grey-color);
+}
+
+.table__container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table__content {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table__head {
+    border-top: 1px solid var(--grey-color);
+}
+
+.table__header {
+    text-align: left;
+    padding: 0.7rem;
+    border-left: 1px solid var(--grey-color);
+}
+
+.table__head .table__row :first-child {
+    border-left: 1px hidden;
+}
+
+.table__row {
+    border-bottom: 1px solid var(--grey-color); 
+}
+
+.table__cell {
+    padding: 0.7rem;
+}

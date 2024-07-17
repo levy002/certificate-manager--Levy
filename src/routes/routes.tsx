@@ -16,14 +16,12 @@ const router = createBrowserRouter([
         index: true,
         element: <StartScreen />,
       },
-      ...machineLearningExamples.map((example) => {
-        return {
-          path: `/machineLearning/${example.name}`,
-          element: <Example name={example.name} />,
-        };
-      }),
-    ],
-  },
+      ...machineLearningExamples.map((example) => ({
+        path: `/machineLearning/${example.name}`,
+        element: <Example name={example.name} certificates={example.certificates}/>,
+      })),
+    ]
+  }
 ]);
 
 const Routes: React.FC = () => {
