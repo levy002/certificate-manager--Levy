@@ -1,18 +1,19 @@
-import { useState } from 'react';
-import { ReactComponent as HomeSVG } from '../../assets/images/home.svg';
-import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
+import React, { useState } from 'react';
+
+import MenuNavLink from './MenuNavLink';
 import { ReactComponent as ChevronDownSVG } from '../../assets/images/chevron-down.svg';
 import { ReactComponent as ChevronUpSVG } from '../../assets/images/chevron-up.svg';
+import { ReactComponent as HomeSVG } from '../../assets/images/home.svg';
+import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
 import './sidebar.css';
 import machineLearningExamples from '../../data/Example';
-import MenuNavLink from './MenuNavLink';
-import SVGIcon from '../SVGIcon/SVGIcon';
 import { SidebarProps } from '../../types/types';
+import SVGIcon from '../SVGIcon/SVGIcon';
 
-const Sidebar: React.FC<SidebarProps> = ({showMobileSidebar}) => {
+const Sidebar: React.FC<SidebarProps> = ({ showMobileSidebar }: SidebarProps) => {
   const [showMachineLearningLinks, setShowMachineLearningLinks] = useState<boolean>(false);
 
-  const handleMachineLearningClick = () => {
+  const handleMachineLearningClick = (): void => {
     setShowMachineLearningLinks(!showMachineLearningLinks);
   };
 
@@ -30,16 +31,21 @@ const Sidebar: React.FC<SidebarProps> = ({showMobileSidebar}) => {
 
       <section className='machine-learning'>
         <section
+          role='button'
+          tabIndex={0}
           className='machine-learning__header'
           onClick={handleMachineLearningClick}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleMachineLearningClick();
+            }
+          }}
         >
           <div className='machine-learning__header-content'>
             <SVGIcon Icon={MenuSVG} />
             <p>Machine Learning</p>
           </div>
-          <SVGIcon
-            Icon={showMachineLearningLinks ? ChevronUpSVG : ChevronDownSVG}
-          />
+          <SVGIcon Icon={showMachineLearningLinks ? ChevronUpSVG : ChevronDownSVG} />
         </section>
         {showMachineLearningLinks && (
           <section className='machine-learning__links'>

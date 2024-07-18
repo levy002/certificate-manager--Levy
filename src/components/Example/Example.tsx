@@ -1,9 +1,7 @@
-import { ExampleProps } from "../../types/types";
+import { ExampleProps } from '../../types/types';
 
-const Example: React.FC<ExampleProps> = ({name}) => {
-  return (
-    <p>{name}</p>
-  )
-}
+const Example: React.FC<ExampleProps> = ({ name }: ExampleProps) => {
+  return <p>{name}</p>;
+};
 
 export default Example;

@@ -1,7 +1,7 @@
 export interface ExampleProps {
-    name: string
+  name: string;
 }
- 
+
 export interface SVGIconProps {
   Icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   width?: number;
@@ -11,7 +11,7 @@ export interface SVGIconProps {
 }
 
 export interface SidebarProps {
-  showMobileSidebar: boolean
+  showMobileSidebar: boolean;
 }
 
 export interface MenuNavLinkProps {
@@ -19,6 +19,6 @@ export interface MenuNavLinkProps {
   desc: React.ReactNode;
 }
 
-export type machineLearningExampleType = {
-  name: string
-}
+export type MachineLearningExampleType = {
+  name: string;
+};

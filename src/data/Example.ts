@@ -1,16 +1,15 @@
-import { machineLearningExampleType } from '../types/types';
+import { MachineLearningExampleType } from '../types/types';
 
-
-const machineLearningExamples: machineLearningExampleType[] = [
-    {
-        name: 'Example1'
-    },
-    {
-        name: 'Example2'
-    },
-    {
-        name: 'Example3'
-    },
+const machineLearningExamples: MachineLearningExampleType[] = [
+  {
+    name: 'Example1',
+  },
+  {
+    name: 'Example2',
+  },
+  {
+    name: 'Example3',
+  },
 ];
 
 export default machineLearningExamples;
