@@ -1,24 +1,32 @@
-import { certificatesExampleType } from '../types/types';
+import { Certificate, CertificateType } from '../types/types';
 
-const certificatesExamples: certificatesExampleType[] = [
+type CertificatesExampleType = {
+  name: string;
+  certificates?: Certificate[];
+};
+
+const certificatesExamples: CertificatesExampleType[] = [
   {
     name: 'Example1',
     certificates: [
       {
+        id: 1,
         supplier: 'DAIMLER AG, 1, Berlin',
-        certificateType: 'Permission of Printing',
+        certificateType: CertificateType.PermissionOfPrinting,
         validFrom: '21.08.2017',
         validTo: '26.08.2017',
       },
       {
+        id: 2,
         supplier: 'ANDEMIS GmbH, 1, Stuttgart',
-        certificateType: 'OHSAS 18001',
+        certificateType: CertificateType.OHSAS18001,
         validFrom: '18.08.2017',
         validTo: '24.08.2017',
       },
       {
+        id: 3,
         supplier: 'ANDEMIS GmbH, 1, Stuttgart',
-        certificateType: 'Permission of Printing',
+        certificateType: CertificateType.PermissionOfPrinting,
         validFrom: '04.10.2017',
         validTo: '10.10.2017',
       },

@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import Sidebar from '../../components/Sidebar/Sidebar';
+
 import './Home.css';
-import SVGIcon from '../../components/SVGIcon/SVGIcon';
-import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
-import { useState } from 'react';
+import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
+import Sidebar from '../../components/Sidebar/Sidebar';
+import SVGIcon from '../../components/SVGIcon/SVGIcon';
 
 const Home: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
@@ -13,7 +13,7 @@ const Home: React.FC = () => {
   const handleMenuClick = useCallback((): void => {
     setShowMobileMenu((prevShowMobileMenu) => !prevShowMobileMenu);
   }, []);
-  
+
   return (
     <div className="home">
       <header className="home__header">
@@ -32,9 +32,9 @@ const Home: React.FC = () => {
           />
         )}
       </header>
-      <section className='home__contents-wrapper'>
+      <section className="home__contents-wrapper">
         <Sidebar showMobileSidebar={showMobileMenu} />
-        <section className='home__contents'>
+        <section className="home__contents">
           <Outlet />
         </section>
       </section>

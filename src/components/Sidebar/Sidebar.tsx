@@ -7,7 +7,6 @@ import { ReactComponent as HomeSVG } from '../../assets/images/home.svg';
 import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
 import './sidebar.css';
 import machineLearningExamples from '../../data/certificates';
-import MenuNavLink from './MenuNavLink';
 import SVGIcon from '../SVGIcon/SVGIcon';
 
 interface SidebarProps {
@@ -21,15 +20,17 @@ const Sidebar: React.FC<SidebarProps> = ({
     useState<boolean>(false);
 
   const handleMachineLearningClick = useCallback((): void => {
-    setShowMachineLearningLinks(prev => !prev);
+    setShowMachineLearningLinks((prev) => !prev);
   }, []);
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      handleMachineLearningClick();
-    }
-  }, [handleMachineLearningClick]);
-  
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>): void => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        handleMachineLearningClick();
+      }
+    },
+    [handleMachineLearningClick],
+  );
 
   return (
     <nav className={showMobileSidebar ? 'sidebar sidebar--mobile' : 'sidebar'}>

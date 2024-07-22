@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import CertificatesTable from '../components/Example/CertificateTable';
+import CertificatesTable from '../components/certificates/CertificateTable';
 import certificatesExamples from '../data/certificates';
 import Home from '../pages/Home/Home';
 import NotFound from '../pages/NotFound/NotFound';
