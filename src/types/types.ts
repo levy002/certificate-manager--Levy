@@ -7,13 +7,6 @@ export type Certificate = {
   id: number;
   supplier: string;
   certificateType: CertificateType;
-  validFrom: string;
-  validTo: string;
+  validFrom: Date;
+  validTo: Date;
 };
-
-export enum TableHeaders {
-  SUPPLIER = 'Supplier',
-  CERTIFICATE_TYPE = 'Certificate Type',
-  VALID_FROM = 'Valid From',
-  VALID_TO = 'Valid To',
-}

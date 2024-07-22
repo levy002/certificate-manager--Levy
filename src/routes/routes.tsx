@@ -1,7 +1,8 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import CertificatesTable from '../components/certificates/CertificateTable';
-import certificatesExamples from '../data/certificates';
+import Example2 from '../components/Example2/Example2';
+import Example3 from '../components/Example3/Example3';
 import Home from '../pages/Home/Home';
 import NotFound from '../pages/NotFound/NotFound';
 import StartScreen from '../pages/StartScreen/Start';
@@ -16,15 +17,18 @@ const router = createBrowserRouter([
         index: true,
         element: <StartScreen />,
       },
-      ...certificatesExamples.map((example) => ({
-        path: `/machineLearning/${example.name}/certificates`,
-        element: (
-          <CertificatesTable
-            name={example.name}
-            certificates={example.certificates}
-          />
-        ),
-      })),
+      {
+        path: '/machineLearning/example1',
+        element: <CertificatesTable />,
+      },
+      {
+        path: '/machineLearning/example2',
+        element: <Example2 />,
+      },
+      {
+        path: '/machineLearning/example3',
+        element: <Example3 />,
+      },
     ],
   },
 ]);
