@@ -33,7 +33,6 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({ name, certificates
               {
                 certificates.map((certificate, index) => (
                   <tr key={index} className="table__row">
-                    <td className="table__cell"></td>
                     <td className="table__cell">{certificate.supplier}</td>
                     <td className="table__cell">{certificate.certificateType}</td>
                     <td className="table__cell">{certificate.validFrom}</td>
