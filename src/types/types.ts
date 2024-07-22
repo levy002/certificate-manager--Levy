@@ -9,4 +9,5 @@ export type Certificate = {
   certificateType: CertificateType;
   validFrom: Date;
   validTo: Date;
+  PDFUrl: string | null;
 };

@@ -5,7 +5,10 @@ interface MenuNavLinkProps {
   desc: React.ReactNode;
 }
 
-const MenuNavLink: React.FC<MenuNavLinkProps> = ({ to, desc }: MenuNavLinkProps) => {
+const MenuNavLink: React.FC<MenuNavLinkProps> = ({
+  to,
+  desc,
+}: MenuNavLinkProps) => {
   return (
     <NavLink
       to={to}

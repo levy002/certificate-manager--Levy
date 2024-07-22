@@ -61,15 +61,15 @@ const Sidebar: React.FC<SidebarProps> = ({
         </section>
         <section className="machine-learning__links">
           <MenuNavLink
-            to="/machineLearning/Example1"
+            to="/machineLearning/example1"
             desc="Example1"
           />
           <MenuNavLink
-            to="/machineLearning/Example2"
+            to="/machineLearning/example2"
             desc="Example2"
           />
           <MenuNavLink
-            to="/machineLearning/Example3"
+            to="/machineLearning/example3"
             desc="Example3"
           />
         </section>
