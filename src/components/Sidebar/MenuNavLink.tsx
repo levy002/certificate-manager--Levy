@@ -1,6 +1,9 @@
 import { NavLink } from 'react-router-dom';
 
-import { MenuNavLinkProps } from '../../types/types';
+interface MenuNavLinkProps {
+  to: string;
+  desc: React.ReactNode;
+}
 
 const MenuNavLink: React.FC<MenuNavLinkProps> = ({ to, desc }: MenuNavLinkProps) => {
   return (

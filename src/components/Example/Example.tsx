@@ -1,4 +1,6 @@
-import { ExampleProps } from '../../types/types';
+interface ExampleProps {
+  name: string;
+}
 
 const Example: React.FC<ExampleProps> = ({ name }: ExampleProps) => {
   return <p>{name}</p>;

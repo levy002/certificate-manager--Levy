@@ -1,4 +1,10 @@
-import { SVGIconProps } from '../../types/types';
+interface SVGIconProps {
+  Icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  width?: number;
+  height?: number;
+  fill?: string;
+  onClick?: React.MouseEventHandler<SVGSVGElement>;
+}
 
 const SVGIcon: React.FC<SVGIconProps> = ({
   Icon,
