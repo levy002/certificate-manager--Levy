@@ -1,6 +1,6 @@
 .sidebar {
   grid-column: span 3;
-  background-color: #e7e9ea;
+  background-color: var(--secondary-color);
   display: flex;
   flex-direction: column;
   padding: 1rem 0;

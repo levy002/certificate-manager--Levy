@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import './Home.css';
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import './Home.css';
 import SVGIcon from '../../components/SVGIcon/SVGIcon';
 
 const Home: React.FC = () => {
@@ -13,7 +13,7 @@ const Home: React.FC = () => {
   const handleMenuClick = useCallback((): void => {
     setShowMobileMenu((prevShowMobileMenu) => !prevShowMobileMenu);
   }, []);
-  
+
   return (
     <div className="home">
       <header className="home__header">
@@ -34,7 +34,9 @@ const Home: React.FC = () => {
       </header>
       <section className="home__contents-wrapper">
         <Sidebar showMobileSidebar={showMobileMenu} />
-        <Outlet />
+        <section className="home__contents">
+          <Outlet />
+        </section>
       </section>
     </div>
   );

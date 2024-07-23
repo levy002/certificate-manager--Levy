@@ -6,7 +6,6 @@ import { ReactComponent as ChevronUpSVG } from '../../assets/images/chevron-up.s
 import { ReactComponent as HomeSVG } from '../../assets/images/home.svg';
 import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
 import './sidebar.css';
-import machineLearningExamples from '../../data/Example';
 import SVGIcon from '../SVGIcon/SVGIcon';
 
 interface SidebarProps {
@@ -20,15 +19,17 @@ const Sidebar: React.FC<SidebarProps> = ({
     useState<boolean>(false);
 
   const handleMachineLearningClick = useCallback((): void => {
-    setShowMachineLearningLinks(prev => !prev);
+    setShowMachineLearningLinks((prev) => !prev);
   }, []);
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      handleMachineLearningClick();
-    }
-  }, [handleMachineLearningClick]);
-  
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>): void => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        handleMachineLearningClick();
+      }
+    },
+    [handleMachineLearningClick],
+  );
 
   return (
     <nav className={showMobileSidebar ? 'sidebar sidebar--mobile' : 'sidebar'}>
@@ -58,17 +59,20 @@ const Sidebar: React.FC<SidebarProps> = ({
             Icon={showMachineLearningLinks ? ChevronUpSVG : ChevronDownSVG}
           />
         </section>
-        {showMachineLearningLinks && (
-          <section className="machine-learning__links">
-            {machineLearningExamples.map((example) => (
-              <MenuNavLink
-                key={example.name}
-                to={`/machineLearning/${example.name}`}
-                desc={example.name}
-              />
-            ))}
-          </section>
-        )}
+        <section className="machine-learning__links">
+          <MenuNavLink
+            to="/machineLearning/Example1"
+            desc="Example1"
+          />
+          <MenuNavLink
+            to="/machineLearning/Example2"
+            desc="Example2"
+          />
+          <MenuNavLink
+            to="/machineLearning/Example3"
+            desc="Example3"
+          />
+        </section>
       </section>
     </nav>
   );
