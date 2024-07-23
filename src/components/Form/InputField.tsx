@@ -9,6 +9,7 @@ type InputProps = {
   placeholder: string;
   error: boolean;
   min?: string;
+  required?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -21,6 +22,7 @@ const InputField: React.FC<InputProps> = ({
   error,
   min,
   onChange,
+  required,
 }) => {
   const inputValue = formatValue(type, value);
 
@@ -41,7 +43,7 @@ const InputField: React.FC<InputProps> = ({
         onChange={onChange}
         className="input-field__input"
         min={min}
-        required
+        required={required}
       />
       {error && <p className="input-field__error">{name} field is empty</p>}
     </div>

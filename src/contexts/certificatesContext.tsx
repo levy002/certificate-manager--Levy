@@ -56,7 +56,12 @@ const CertificatesProvider: React.FC<CertificatesProviderProps> = ({
   }, [fetchCertificates]);
 
   const contextValues = useMemo(
-    () => ({ certificates, loading, error, refetch }),
+    () => ({
+      certificates,
+      loading,
+      error,
+      refetch,
+    }),
     [certificates, loading, error, refetch],
   );
 

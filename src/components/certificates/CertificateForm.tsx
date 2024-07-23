@@ -1,14 +1,16 @@
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as SearchSVG } from '../../assets/images/search.svg';
 import { CertificatesContext } from '../../contexts/certificatesContext';
+import { LookupContext } from '../../contexts/LookupContext';
 import { addNewCertificate, updateCertificate } from '../../data/db';
 import { Certificate, CertificateType } from '../../types/types';
 import formatValue from '../../utils/formatInputValue';
 import InputField from '../Form/InputField';
 import SelectField from '../Form/SelectFIeld';
+import SupplierLookup from '../SupplierLookUp/SupplierLookup';
 import SVGIcon from '../SVGIcon/SVGIcon';
 
 import './certificateForm.css';
@@ -27,6 +29,8 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
   const [formState, setFormState] = useState<Certificate>(initialFormState);
   const [formError, setFormError] = useState<string>('');
   const { refetch } = useContext(CertificatesContext)!;
+  const { showLookup, setShowLookup, setFilterCriteria, selectedItem } =
+    useContext(LookupContext)!;
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -66,6 +70,13 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     setFormError('');
   };
 
+  const handleClearSupplier = useCallback(() => {
+    setFormState((prevState) => ({
+      ...prevState,
+      supplier: '',
+    }));
+  }, []);
+
   const handleAddNewCertificate = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -91,6 +102,20 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     }
   };
 
+  const handleOnclickSearchSupplierSvg = useCallback(() => {
+    setFilterCriteria({ name: formState.supplier, index: '', city: '' });
+    setShowLookup(true);
+  }, [setFilterCriteria, formState]);
+
+  useEffect(() => {
+    if (selectedItem) {
+      setFormState((prevState) => ({
+        ...prevState,
+        supplier: selectedItem.name,
+      }));
+    }
+  }, [selectedItem]);
+
   return (
     <div className="form-container">
       <h2>{mode === 'edit' ? 'Edit Certificate' : 'New Certificate'}</h2>
@@ -109,17 +134,20 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                 placeholder=""
                 error={!!formError}
                 onChange={handleChange}
+                required
               />
               <div className="form-container__icons">
                 <SVGIcon
                   Icon={SearchSVG}
                   fill="#565757"
                   width={16}
+                  onClick={handleOnclickSearchSupplierSvg}
                 />
                 <SVGIcon
                   Icon={CloseSVG}
                   fill="#565757"
                   width={16}
+                  onClick={handleClearSupplier}
                 />
               </div>
             </div>
@@ -157,6 +185,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                   ? formatValue('date', formState.validFrom)
                   : undefined
               }
+              required
             />
           </div>
 
@@ -200,6 +229,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
           </button>
         </div>
       </form>
+      {showLookup && <SupplierLookup />}
       {formError && <p>{formError}</p>}
     </div>
   );

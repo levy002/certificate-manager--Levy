@@ -11,3 +11,9 @@ export type Certificate = {
   validTo: Date | null;
   PDFUrl: string | null;
 };
+
+export interface Supplier {
+  name: string;
+  index: string;
+  city: string;
+}
