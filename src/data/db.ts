@@ -122,3 +122,26 @@ export const updateCertificate = (
     };
   });
 };
+
+export const deleteCertificate = (id: number): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      reject(new Error('Database is not initialized'));
+      return;
+    }
+
+    const tx = db.transaction(Stores.certificatesData, 'readwrite');
+    const store = tx.objectStore(Stores.certificatesData);
+    const deleteRequest = store.delete(id);
+
+    deleteRequest.onsuccess = (): void => {
+      resolve();
+    };
+
+    deleteRequest.onerror = (): void => {
+      reject(
+        new Error(`Delete request error: ${deleteRequest.error?.message}`),
+      );
+    };
+  });
+};

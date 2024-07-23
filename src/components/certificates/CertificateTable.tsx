@@ -1,6 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 
 import { ReactComponent as GearSVG } from '../../assets/images/gear.svg';
+import { CertificatesContext } from '../../contexts/certificatesContext';
+import { deleteCertificate } from '../../data/db';
 import { Certificate } from '../../types/types';
 import MenuNavLink from '../Sidebar/MenuNavLink';
 import SVGIcon from '../SVGIcon/SVGIcon';
@@ -16,6 +18,7 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
   const [openGearCertificateId, setOpenGearCertificateId] = useState<
     number | null
   >(null);
+  const { refetch } = useContext(CertificatesContext)!;
 
   const toggleGearContents = useCallback((id: number): void => {
     setOpenGearCertificateId((prevId) => (prevId === id ? null : id));
@@ -29,6 +32,21 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
       };
     },
     [toggleGearContents],
+  );
+
+  const handleDelete = useCallback(async (id: number): Promise<void> => {
+    await deleteCertificate(id);
+    refetch();
+  }, []);
+
+  const handleDeleteClick = useCallback(
+    (id: number): React.MouseEventHandler<HTMLButtonElement> => {
+      return async (event) => {
+        event.preventDefault();
+        await handleDelete(id);
+      };
+    },
+    [handleDelete],
   );
 
   return (
@@ -63,6 +81,12 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
                           to={`/machineLearning/example1/certificates/${certificate.id}`}
                           desc="Edit"
                         />
+                        <button
+                          onClick={handleDeleteClick(certificate.id)}
+                          type="button"
+                        >
+                          Delete
+                        </button>
                       </section>
                     )}
                   </td>
