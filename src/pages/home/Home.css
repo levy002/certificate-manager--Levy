@@ -17,6 +17,7 @@
 .home__contents {
   grid-column: span 9;
   padding: 1rem;
+  position: relative;
 }
 
 .home__header {
