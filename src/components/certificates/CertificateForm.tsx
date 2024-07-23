@@ -1,81 +1,103 @@
-import { useCallback, useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as SearchSVG } from '../../assets/images/search.svg';
-import { addNewCertificate } from '../../data/db';
+import { CertificatesContext } from '../../contexts/certificatesContext';
+import { addNewCertificate, updateCertificate } from '../../data/db';
 import { Certificate, CertificateType } from '../../types/types';
 import InputField from '../Form/InputField';
 import SelectField from '../Form/SelectFIeld';
 import SVGIcon from '../SVGIcon/SVGIcon';
-
 import './certificateForm.css';
 
-const NewCertificateForm: React.FC = () => {
+interface NewCertificateFormProps {
+  certificate?: Certificate;
+}
+
+const CertificateForm: React.FC<NewCertificateFormProps> = ({
+  certificate,
+}) => {
   const navigate = useNavigate();
 
-  const initialFormState: Certificate = {
+  const initialFormState = {
     supplier: '',
     certificateType: CertificateType.OHSAS18001,
-    validFrom: null,
-    validTo: null,
+    validFrom: '',
+    validTo: '',
     PDFUrl: '',
-    id: Date.now(),
   };
 
-  const [formState, setFormState] = useState<Certificate>(initialFormState);
+  const [formState, setFormState] = useState(initialFormState);
   const [formError, setFormError] = useState<string>('');
+  const [PDFUrl, setPDFUrl] = useState<string | null>(null);
+  const { refetch } = useContext(CertificatesContext)!;
 
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-      const { name, value, type } = event.target;
+  useEffect(() => {
+    if (certificate) {
+      setFormState({
+        supplier: certificate.supplier,
+        certificateType: certificate.certificateType,
+        validFrom: certificate.validFrom.toISOString().split('T')[0],
+        validTo: certificate.validTo.toISOString().split('T')[0],
+        PDFUrl: certificate.PDFUrl || '',
+      });
+      setPDFUrl(certificate.PDFUrl || null);
+    }
+  }, [certificate]);
 
-      setFormState((prevState) => ({
-        ...prevState,
-        [name]: type === 'date' ? new Date(value) : value,
-      }));
-    },
-    [],
-  );
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ): void => {
+    const { name, value } = event.target;
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
-  const handlePDFUrlChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>): void => {
-      const file = e.target.files?.[0];
-      if (file && file.type === 'application/pdf') {
-        const reader = new FileReader();
-        reader.onload = (): void => {
-          if (reader.result) {
-            setFormState((prevState) => ({
-              ...prevState,
-              PDFUrl: reader.result as string,
-            }));
-          }
-        };
-        reader.readAsDataURL(file);
-      } else {
-        setFormError('Please upload a valid PDF file.');
-      }
-    },
-    [],
-  );
+  const handlePDFUrlChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const file = e.target.files?.[0];
+    if (file && file.type === 'application/pdf') {
+      const reader = new FileReader();
+      reader.onload = (): void => {
+        if (reader.result) {
+          setPDFUrl(reader.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setFormError('Please upload a valid PDF file.');
+    }
+  };
 
   const handleReset = (): void => {
     setFormState(initialFormState);
+    setPDFUrl(null);
     setFormError('');
   };
 
-  const handleAddNewCertificate = async (
+  const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
 
     const newCertificateData = {
       ...formState,
+      validFrom: new Date(formState.validFrom),
+      validTo: new Date(formState.validTo),
+      PDFUrl,
+      id: certificate ? certificate.id : Date.now(),
     };
 
     try {
-      await addNewCertificate(newCertificateData);
+      if (certificate) {
+        await updateCertificate(newCertificateData);
+      } else {
+        await addNewCertificate(newCertificateData);
+      }
       handleReset();
+      refetch();
       navigate('/machineLearning/example1');
     } catch (err) {
       setFormError(
@@ -86,9 +108,9 @@ const NewCertificateForm: React.FC = () => {
 
   return (
     <div className="form-container">
-      <h2>New Certificate</h2>
+      <h2>{certificate ? 'Edit Certificate' : 'New Certificate'}</h2>
       <form
-        onSubmit={handleAddNewCertificate}
+        onSubmit={handleSubmit}
         className="form-container__form"
       >
         <div className="form-container__form__all-inputs">
@@ -122,7 +144,9 @@ const NewCertificateForm: React.FC = () => {
               name="certificateType"
               value={formState.certificateType}
               placeholder="Select your option"
-              options={Object.values(CertificateType)}
+              options={Object.values(CertificateType).map((value) => ({
+                value,
+              }))}
               error={!!formError}
               onChange={handleChange}
             />
@@ -145,11 +169,7 @@ const NewCertificateForm: React.FC = () => {
               placeholder="Click to select date"
               error={!!formError}
               onChange={handleChange}
-              min={
-                formState.validFrom instanceof Date
-                  ? formState.validFrom.toISOString().split('T')[0]
-                  : undefined
-              }
+              min={formState.validFrom}
             />
           </div>
 
@@ -165,9 +185,9 @@ const NewCertificateForm: React.FC = () => {
                 />
               </label>
               <div className="form-container__pdf-preview">
-                {formState.PDFUrl && (
+                {PDFUrl && (
                   <embed
-                    src={formState.PDFUrl}
+                    src={PDFUrl}
                     type="application/pdf"
                   />
                 )}
@@ -181,7 +201,7 @@ const NewCertificateForm: React.FC = () => {
             className="form-container__buttons-submit-btn"
             type="submit"
           >
-            Submit
+            {certificate ? 'Update' : 'Save'}
           </button>
 
           <button
@@ -198,4 +218,4 @@ const NewCertificateForm: React.FC = () => {
   );
 };
 
-export default NewCertificateForm;
+export default CertificateForm;
