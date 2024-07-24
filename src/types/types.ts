@@ -7,7 +7,7 @@ export type Certificate = {
   id: number;
   supplier: string;
   certificateType: CertificateType;
-  validFrom: Date;
-  validTo: Date;
+  validFrom: Date | null;
+  validTo: Date | null;
   PDFUrl: string | null;
 };

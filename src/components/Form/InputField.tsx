@@ -1,10 +1,10 @@
-import React from 'react';
 import './formFields.css';
+import formatValue from '../../utils/formatInputValue';
 
 type InputProps = {
-  type: 'text' | 'date' | 'file';
+  type: 'text' | 'date';
   label: string;
-  value: string;
+  value: string | Date | null;
   name: string;
   placeholder: string;
   error: boolean;
@@ -22,6 +22,8 @@ const InputField: React.FC<InputProps> = ({
   min,
   onChange,
 }) => {
+  const inputValue = formatValue(type, value);
+
   return (
     <div className="input-field">
       <label
@@ -33,7 +35,7 @@ const InputField: React.FC<InputProps> = ({
       <input
         type={type}
         id={label}
-        value={value}
+        value={inputValue}
         name={name}
         placeholder={placeholder}
         onChange={onChange}

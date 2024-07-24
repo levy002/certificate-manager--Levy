@@ -1,53 +1,36 @@
-import React from 'react';
 import './formFields.css';
+import Options from '../../helper/selectOptions';
 
-interface SelectOption {
-  value: string;
-}
-
-type SelectProps = {
+type SelectProps<T> = {
   label: string;
-  value: string;
+  value: T;
   name: string;
   placeholder: string;
   error: boolean;
-  options: SelectOption[];
+  options: T[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
-const SelectField: React.FC<SelectProps> = ({
-  label,
-  options,
-  value,
-  onChange,
-  error,
-  name,
-  placeholder,
-}) => {
+const SelectField = <T extends string>(props: SelectProps<T>): JSX.Element => {
+  const { label, options, value, onChange, error, name, placeholder } = props;
+
   return (
     <div className="select-field">
       <label
         className="select-field__label"
-        htmlFor={label}
+        htmlFor={name}
       >
         {label}
       </label>
       <select
-        id={label}
+        id={name}
         value={value}
         name={name}
         onChange={onChange}
         className="select-field__select"
       >
         <option disabled>{placeholder}</option>
-        {options.map((option) => (
-          <option
-            key={option.value}
-            value={option.value}
-          >
-            {option.value}
-          </option>
-        ))}
+        <Options options={options} />
       </select>
       {error && <p className="select-field__error">{name} field is empty!</p>}
     </div>
