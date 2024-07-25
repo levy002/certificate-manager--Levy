@@ -30,10 +30,10 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
                   <td className="table__cell">{certificate.supplier}</td>
                   <td className="table__cell">{certificate.certificateType}</td>
                   <td className="table__cell">
-                    {certificate.validFrom.toLocaleDateString('de-DE')}
+                    {certificate.validFrom?.toLocaleDateString('de-DE')}
                   </td>
                   <td className="table__cell">
-                    {certificate.validTo.toLocaleDateString('de-DE')}
+                    {certificate.validTo?.toLocaleDateString('de-DE')}
                   </td>
                 </tr>
               ))}

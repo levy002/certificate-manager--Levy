@@ -1,0 +1,119 @@
+.form-container {
+    background-color: var(--secondary-color);
+    padding: 1rem;
+    min-height: 95%;
+    display: flex;
+    flex-direction: column; 
+}
+
+.form-container__form {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.7rem;
+    min-height: 100%;
+}
+
+.form-container__input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-container__icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--secondary-color);
+    margin-top: 1.1rem;
+}
+
+.form-container__icons > * {
+    text-align: center;
+    border: 1px solid var(--grey-color);
+    flex: 1;
+    padding: 0.35rem 1rem;
+    cursor: pointer;
+}
+
+.form-container__form__all-inputs {
+    display: flex;
+    gap: 3rem;
+    flex: 1;
+}
+
+.form-container__form__all-inputs > *{
+    flex: 1;
+}
+
+.form-container__supplier-input {
+    display: flex;
+}
+
+.form-container__pdf {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.form-container__pdf-upload {
+    flex: 2;
+}
+
+.form-container__pdf-upload label {
+    background-color: var(--active-color);
+    color: #fff;
+    padding: 0.5rem 2rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.form-container__pdf-upload input {
+    display: none;
+}
+
+.form-container__pdf-preview {
+    border: 1px solid var(--grey-color);
+    height: 95%;
+    flex: 1;
+    margin-top: 1rem;
+}
+
+.form-container__pdf-preview embed {
+    width: 100%;
+    height: 100%;
+}
+
+.form-container__buttons {
+    align-self: flex-end;
+    display: flex;
+    gap: 1rem;
+}
+
+.form-container__buttons button {
+    padding: 0.7rem 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.form-container__buttons-submit-btn {
+  background-color: var(--green-color);
+  color: #fff;
+  border: 1px hidden;
+}
+
+.form-container__buttons-reset-btn {
+    border: 1px solid var(--grey-color);
+}
+
+
+@media screen and (max-width: 1024px) {
+    .form-container {
+      height:fit-content;
+    }
+
+    .form-container__form__all-inputs {
+        flex-direction: column;
+    }
+}
