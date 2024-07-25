@@ -1,4 +1,5 @@
-import './formFields.css';
+import React from 'react';
+
 import Options from '../../helper/selectOptions';
 
 type SelectProps<T> = {
@@ -9,10 +10,22 @@ type SelectProps<T> = {
   error: boolean;
   options: T[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  getOptionValue: (option: T) => string;
+  getOptionName: (option: T) => string;
 };
 
-const SelectField = <T extends string>(props: SelectProps<T>): JSX.Element => {
-  const { label, options, value, onChange, error, name, placeholder } = props;
+const SelectField = <T,>(props: SelectProps<T>): JSX.Element => {
+  const {
+    label,
+    options,
+    value,
+    onChange,
+    error,
+    name,
+    placeholder,
+    getOptionValue,
+    getOptionName,
+  } = props;
 
   return (
     <div className="select-field">
@@ -30,7 +43,11 @@ const SelectField = <T extends string>(props: SelectProps<T>): JSX.Element => {
         className="select-field__select"
       >
         <option disabled>{placeholder}</option>
-        <Options options={options} />
+        <Options
+          options={options}
+          getOptionValue={getOptionValue}
+          getOptionName={getOptionName}
+        />
       </select>
       {error && <p className="select-field__error">{name} field is empty!</p>}
     </div>

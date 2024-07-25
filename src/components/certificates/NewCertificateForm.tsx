@@ -5,6 +5,7 @@ import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as SearchSVG } from '../../assets/images/search.svg';
 import { addNewCertificate } from '../../data/db';
 import { Certificate, CertificateType } from '../../types/types';
+import formatValue from '../../utils/formatInputValue';
 import InputField from '../Form/InputField';
 import SelectField from '../Form/SelectFIeld';
 import SVGIcon from '../SVGIcon/SVGIcon';
@@ -125,6 +126,8 @@ const NewCertificateForm: React.FC = () => {
               options={Object.values(CertificateType)}
               error={!!formError}
               onChange={handleChange}
+              getOptionValue={(option: CertificateType) => option}
+              getOptionName={(option: CertificateType) => option}
             />
 
             <InputField
@@ -147,7 +150,7 @@ const NewCertificateForm: React.FC = () => {
               onChange={handleChange}
               min={
                 formState.validFrom instanceof Date
-                  ? formState.validFrom.toISOString().split('T')[0]
+                  ? formatValue('date', formState.validFrom)
                   : undefined
               }
             />
