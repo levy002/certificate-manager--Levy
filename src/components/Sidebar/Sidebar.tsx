@@ -59,20 +59,22 @@ const Sidebar: React.FC<SidebarProps> = ({
             Icon={showMachineLearningLinks ? ChevronUpSVG : ChevronDownSVG}
           />
         </section>
-        <section className="machine-learning__links">
-          <MenuNavLink
-            to="/machineLearning/example1"
-            desc="Example1"
-          />
-          <MenuNavLink
-            to="/machineLearning/example2"
-            desc="Example2"
-          />
-          <MenuNavLink
-            to="/machineLearning/example3"
-            desc="Example3"
-          />
-        </section>
+        {showMachineLearningLinks && (
+          <section className="machine-learning__links">
+            <MenuNavLink
+              to="/machineLearning/example1"
+              desc="Example1"
+            />
+            <MenuNavLink
+              to="/machineLearning/example2"
+              desc="Example2"
+            />
+            <MenuNavLink
+              to="/machineLearning/example3"
+              desc="Example3"
+            />
+          </section>
+        )}
       </section>
     </nav>
   );
