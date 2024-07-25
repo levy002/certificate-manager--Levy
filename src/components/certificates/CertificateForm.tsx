@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
@@ -6,88 +6,84 @@ import { ReactComponent as SearchSVG } from '../../assets/images/search.svg';
 import { CertificatesContext } from '../../contexts/certificatesContext';
 import { addNewCertificate, updateCertificate } from '../../data/db';
 import { Certificate, CertificateType } from '../../types/types';
+import formatValue from '../../utils/formatInputValue';
 import InputField from '../Form/InputField';
 import SelectField from '../Form/SelectFIeld';
 import SVGIcon from '../SVGIcon/SVGIcon';
+
 import './certificateForm.css';
 
-interface NewCertificateFormProps {
+interface CertificateFormProps {
   certificate?: Certificate;
 }
 
-const CertificateForm: React.FC<NewCertificateFormProps> = ({
-  certificate,
-}) => {
+const CertificateForm: React.FC<CertificateFormProps> = ({ certificate }) => {
   const navigate = useNavigate();
 
-  const initialFormState = {
+  const initialFormState: Certificate = {
     supplier: '',
     certificateType: CertificateType.OHSAS18001,
-    validFrom: '',
-    validTo: '',
+    validFrom: null,
+    validTo: null,
     PDFUrl: '',
+    id: Date.now(),
   };
 
-  const [formState, setFormState] = useState(initialFormState);
+  const [formState, setFormState] = useState<Certificate>(initialFormState);
   const [formError, setFormError] = useState<string>('');
-  const [PDFUrl, setPDFUrl] = useState<string | null>(null);
   const { refetch } = useContext(CertificatesContext)!;
 
   useEffect(() => {
     if (certificate) {
-      setFormState({
-        supplier: certificate.supplier,
-        certificateType: certificate.certificateType,
-        validFrom: certificate.validFrom.toISOString().split('T')[0],
-        validTo: certificate.validTo.toISOString().split('T')[0],
-        PDFUrl: certificate.PDFUrl || '',
-      });
-      setPDFUrl(certificate.PDFUrl || null);
+      setFormState(certificate);
     }
   }, [certificate]);
 
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ): void => {
-    const { name, value } = event.target;
-    setFormState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+      const { name, value, type } = event.target;
 
-  const handlePDFUrlChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const file = e.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
-      const reader = new FileReader();
-      reader.onload = (): void => {
-        if (reader.result) {
-          setPDFUrl(reader.result as string);
-        }
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setFormError('Please upload a valid PDF file.');
-    }
-  };
+      setFormState((prevState) => ({
+        ...prevState,
+        [name]: type === 'date' ? new Date(value) : value,
+      }));
+    },
+    [],
+  );
+
+  const handlePDFUrlChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const file = e.target.files?.[0];
+      if (file && file.type === 'application/pdf') {
+        const reader = new FileReader();
+        reader.onload = (): void => {
+          if (reader.result) {
+            setFormState((prevState) => ({
+              ...prevState,
+              PDFUrl: reader.result as string,
+            }));
+          }
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setFormError('Please upload a valid PDF file.');
+      }
+    },
+    [],
+  );
 
   const handleReset = (): void => {
     setFormState(initialFormState);
-    setPDFUrl(null);
     setFormError('');
   };
 
-  const handleSubmit = async (
+  const handleAddNewCertificate = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
 
     const newCertificateData = {
       ...formState,
-      validFrom: new Date(formState.validFrom),
-      validTo: new Date(formState.validTo),
-      PDFUrl,
-      id: certificate ? certificate.id : Date.now(),
     };
 
     try {
@@ -110,7 +106,7 @@ const CertificateForm: React.FC<NewCertificateFormProps> = ({
     <div className="form-container">
       <h2>{certificate ? 'Edit Certificate' : 'New Certificate'}</h2>
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleAddNewCertificate}
         className="form-container__form"
       >
         <div className="form-container__form__all-inputs">
@@ -144,9 +140,7 @@ const CertificateForm: React.FC<NewCertificateFormProps> = ({
               name="certificateType"
               value={formState.certificateType}
               placeholder="Select your option"
-              options={Object.values(CertificateType).map((value) => ({
-                value,
-              }))}
+              options={Object.values(CertificateType)}
               error={!!formError}
               onChange={handleChange}
             />
@@ -169,7 +163,11 @@ const CertificateForm: React.FC<NewCertificateFormProps> = ({
               placeholder="Click to select date"
               error={!!formError}
               onChange={handleChange}
-              min={formState.validFrom}
+              min={
+                formState.validFrom instanceof Date
+                  ? formatValue('date', formState.validFrom)
+                  : undefined
+              }
             />
           </div>
 
@@ -185,9 +183,9 @@ const CertificateForm: React.FC<NewCertificateFormProps> = ({
                 />
               </label>
               <div className="form-container__pdf-preview">
-                {PDFUrl && (
+                {formState.PDFUrl && (
                   <embed
-                    src={PDFUrl}
+                    src={formState.PDFUrl}
                     type="application/pdf"
                   />
                 )}

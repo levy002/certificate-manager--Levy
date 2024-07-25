@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import { ReactComponent as GearSVG } from '../../assets/images/gear.svg';
 import { Certificate } from '../../types/types';
@@ -17,18 +17,19 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
     number | null
   >(null);
 
-  const toggleGearContents = (id: number): void => {
-    setOpenGearCertificateId(openGearCertificateId === id ? null : id);
-  };
+  const toggleGearContents = useCallback((id: number): void => {
+    setOpenGearCertificateId((prevId) => (prevId === id ? null : id));
+  }, []);
 
-  const handleGearClick = (
-    id: number,
-  ): React.MouseEventHandler<SVGSVGElement> => {
-    return (event) => {
-      event.preventDefault();
-      toggleGearContents(id);
-    };
-  };
+  const handleGearClick = useCallback(
+    (id: number): React.MouseEventHandler<SVGSVGElement> => {
+      return (event) => {
+        event.preventDefault();
+        toggleGearContents(id);
+      };
+    },
+    [toggleGearContents],
+  );
 
   return (
     <section className="table">

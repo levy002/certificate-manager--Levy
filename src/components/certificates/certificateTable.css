@@ -40,6 +40,8 @@
 
 .table__head {
     border-top: 1px solid var(--grey-color);
+    background-color: var(--active-color);
+    color: #fff;
 }
 
 .table__header {
