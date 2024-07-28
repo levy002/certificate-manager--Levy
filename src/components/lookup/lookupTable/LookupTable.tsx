@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
+import { useI18n } from '../../../contexts/LanguageContext';
 import { Supplier } from '../../../types/Types';
 import Button from '../../form/Button';
 import './LookupTable.css';
@@ -21,6 +22,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
     null,
   );
+  const { translate } = useI18n();
 
   const handleSupplierRowClick = useCallback(
     (supplier: Supplier): React.ChangeEventHandler<HTMLInputElement> => {
@@ -51,7 +53,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
           width={12}
           height={10}
         />
-        <p className="lookup__title">Suppliers List</p>
+        <p className="lookup__title">{translate('suppliers_list')}</p>
       </div>
       <section className="lookup-table__container">
         <table className="lookup-table__content">
@@ -63,7 +65,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
                   key={header}
                   className="lookup-table__header"
                 >
-                  {header}
+                  {translate(header)}
                 </th>
               ))}
             </tr>
@@ -89,7 +91,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
                       key={header}
                       className="lookup-table__cell"
                     >
-                      {String(item[header as keyof Supplier])}
+                      {translate(String(item[header as keyof Supplier]))}
                     </td>
                   ))}
                 </tr>
@@ -100,7 +102,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
                   colSpan={tableHeaders.length + 1}
                   className="lookup-table__cell"
                 >
-                  No Suppliers Available!!
+                  {translate('no_suppliers_available')}
                 </td>
               </tr>
             )}
@@ -113,14 +115,14 @@ const LookupTable: React.FC<LookupTableProps> = ({
           type="button"
           onClick={handleSelectSupplier}
         >
-          Select
+          {translate('select')}
         </Button>
         <Button
           className="lookup-table__button lookup-table__button--cancel"
           type="button"
           onClick={handleCancelSelectSupplier}
         >
-          Cancel
+          {translate('cancel')}
         </Button>
       </div>
     </section>

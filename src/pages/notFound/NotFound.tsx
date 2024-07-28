@@ -2,9 +2,11 @@ import { ReactComponent as NotFoundSVG } from '../../assets/images/404.svg';
 import { ReactComponent as HomeSVG } from '../../assets/images/home.svg';
 import MenuNavLink from '../../components/sidebar/MenuNavLink';
 import SVGIcon from '../../components/svgIcon/SVGIcon';
+import { useI18n } from '../../contexts/LanguageContext';
 import './NotFound.css';
 
 const NotFound: React.FC = () => {
+  const { translate } = useI18n();
   return (
     <section className="not-found">
       <h1 className="home__title">DCCS Tuzla</h1>
@@ -12,10 +14,9 @@ const NotFound: React.FC = () => {
         <div className="not-found__icon">
           <SVGIcon Icon={NotFoundSVG} />
         </div>
-        <h2 className="not-found__title">Page Not Found</h2>
+        <h2 className="not-found__title">{translate('page_not_found')}</h2>
         <p className="not-found__description">
-          Sorry, the page you requested could not be found. Try navigating back
-          home.
+          {translate('sorry_page_not_found')}.
         </p>
         <MenuNavLink
           to="/"
@@ -25,7 +26,7 @@ const NotFound: React.FC = () => {
                 Icon={HomeSVG}
                 fill="#fff"
               />
-              <p>Home</p>
+              <p>{translate('home')}</p>
             </div>
           }
         />

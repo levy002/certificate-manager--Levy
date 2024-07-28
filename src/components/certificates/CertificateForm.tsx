@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as SearchSVG } from '../../assets/images/search.svg';
+import { useI18n } from '../../contexts/LanguageContext';
 import { addNewCertificate, updateCertificate } from '../../data/DB';
 import {
   Certificate,
@@ -32,6 +33,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
   const [formState, setFormState] = useState<Certificate>(initialFormState);
   const [formError, setFormError] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
+  const { translate } = useI18n();
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -120,7 +122,11 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
 
   return (
     <div className="form-container">
-      <h2>{mode === FormMode.EDIT ? 'Edit Certificate' : 'New Certificate'}</h2>
+      <h2>
+        {mode === FormMode.EDIT
+          ? translate('edit_certificate')
+          : translate('new_certificate')}
+      </h2>
       <form
         onSubmit={handleAddNewCertificate}
         className="form-container__form"
@@ -156,7 +162,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
             </div>
 
             <SelectField
-              label="Certificate type"
+              label="Certificate Type"
               name="certificateType"
               value={formState.certificateType}
               placeholder="Select your option"
@@ -195,7 +201,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
           <div className="form-container__pdf">
             <div className="form-container__pdf-upload">
               <label htmlFor="PDF file">
-                Upload
+                {translate('upload')}
                 <input
                   type="file"
                   accept="application/pdf"
@@ -220,7 +226,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
             className="form-container__buttons-submit-btn"
             type="submit"
           >
-            {mode === FormMode.EDIT ? 'Update' : 'Save'}
+            {mode === FormMode.EDIT ? translate('update') : translate('save')}
           </button>
 
           <button
@@ -228,7 +234,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
             type="button"
             onClick={handleReset}
           >
-            Reset
+            {translate('reset')}
           </button>
         </div>
       </form>
@@ -245,4 +251,3 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
 };
 
 export default CertificateForm;
-

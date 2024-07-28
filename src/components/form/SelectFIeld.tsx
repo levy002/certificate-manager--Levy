@@ -1,4 +1,5 @@
 import './FormFields.css';
+import { useI18n } from '../../contexts/LanguageContext';
 import Options from '../../helper/SelectOptions';
 
 type SelectProps<T> = {
@@ -12,6 +13,7 @@ type SelectProps<T> = {
 };
 
 const SelectField = <T extends string>(props: SelectProps<T>): JSX.Element => {
+  const { translate } = useI18n();
   const { label, options, value, onChange, error, name, placeholder } = props;
 
   return (
@@ -20,7 +22,7 @@ const SelectField = <T extends string>(props: SelectProps<T>): JSX.Element => {
         className="select-field__label"
         htmlFor={name}
       >
-        {label}
+        {translate(label)}
       </label>
       <select
         id={name}
@@ -29,7 +31,7 @@ const SelectField = <T extends string>(props: SelectProps<T>): JSX.Element => {
         onChange={onChange}
         className="select-field__select"
       >
-        <option disabled>{placeholder}</option>
+        {placeholder && <option disabled>{placeholder}</option>}
         <Options options={options} />
       </select>
       {error && <p className="select-field__error">{name} field is empty!</p>}

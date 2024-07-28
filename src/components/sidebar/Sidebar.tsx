@@ -6,6 +6,7 @@ import { ReactComponent as ChevronUpSVG } from '../../assets/images/chevron-up.s
 import { ReactComponent as HomeSVG } from '../../assets/images/home.svg';
 import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
 import './Sidebar.css';
+import { useI18n } from '../../contexts/LanguageContext';
 import SVGIcon from '../svgIcon/SVGIcon';
 
 interface SidebarProps {
@@ -15,6 +16,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({
   showMobileSidebar,
 }: SidebarProps) => {
+  const { translate } = useI18n();
   const [showMachineLearningLinks, setShowMachineLearningLinks] =
     useState<boolean>(false);
 
@@ -38,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         desc={
           <>
             <SVGIcon Icon={HomeSVG} />
-            <p>Start</p>
+            <p>{translate('start')}</p>
           </>
         }
       />
@@ -53,7 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         >
           <div className="machine-learning__header-content">
             <SVGIcon Icon={MenuSVG} />
-            <p>Machine Learning</p>
+            <p>{translate('machine_learning')}</p>
           </div>
           <SVGIcon
             Icon={showMachineLearningLinks ? ChevronUpSVG : ChevronDownSVG}
@@ -63,15 +65,15 @@ const Sidebar: React.FC<SidebarProps> = ({
           <section className="machine-learning__links">
             <MenuNavLink
               to="/machineLearning/example1"
-              desc="Example1"
+              desc={translate('example1')}
             />
             <MenuNavLink
               to="/machineLearning/example2"
-              desc="Example2"
+              desc={translate('example2')}
             />
             <MenuNavLink
               to="/machineLearning/example3"
-              desc="Example3"
+              desc={translate('example3')}
             />
           </section>
         )}

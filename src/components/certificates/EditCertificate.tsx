@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import CertificateForm from './CertificateForm';
+import { useI18n } from '../../contexts/LanguageContext';
 import { getCertificateById } from '../../data/DB';
 import { Certificate, FormMode } from '../../types/Types';
 
@@ -10,6 +11,7 @@ const EditCertificate: React.FC = () => {
   const [certificate, setCertificate] = useState<Certificate | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { translate } = useI18n();
 
   useEffect(() => {
     const fetchCertificate = async (): Promise<void> => {
@@ -37,7 +39,7 @@ const EditCertificate: React.FC = () => {
   }
 
   if (!certificate) {
-    return <p>No certificate found with id: {id}</p>;
+    return <p>{translate('no_certificate_found')}</p>;
   }
 
   return (

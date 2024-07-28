@@ -25,7 +25,7 @@ export const LanguageProvider = ({
 }): JSX.Element => {
   const [language, setLanguage] = useState('en');
 
-  const translate = (key: string) => {
+  const translate = (key: string): string => {
     return translations[language]?.[key] || key;
   };
 
@@ -41,7 +41,7 @@ export const LanguageProvider = ({
   );
 };
 
-export const useI18n = () => {
+export const useI18n = (): LanguageContextProps => {
   const context = useContext(LanguageContext);
   if (!context) {
     throw new Error('useI18n must be used within an I18nProvider');

@@ -1,5 +1,8 @@
+import { useI18n } from '../../contexts/LanguageContext';
+
 const StartScreen: React.FC = () => {
-  return <h2>Start</h2>;
+  const { translate } = useI18n();
+  return <h2>{translate('start')}</h2>;
 };
 
 export default StartScreen;
