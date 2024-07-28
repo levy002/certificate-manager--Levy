@@ -1,6 +1,7 @@
 import { useCallback, useContext, useState, useEffect } from 'react';
 
 import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
+import { useI18n } from '../../../contexts/languageContext';
 import { LookupContext } from '../../../contexts/LookupContext';
 import { Supplier } from '../../../types/types';
 import Button from '../../Form/Button';
@@ -9,6 +10,7 @@ import './LookupForm.css';
 import SVGIcon from '../../SVGIcon/SVGIcon';
 
 const LookupForm: React.FC = (): JSX.Element => {
+  const { translate } = useI18n();
   const { setFilterCriteria, filterCriteria } = useContext(LookupContext)!;
   const [formState, setFormState] = useState(filterCriteria);
 
@@ -50,7 +52,7 @@ const LookupForm: React.FC = (): JSX.Element => {
           width={12}
           height={10}
         />
-        <p className="lookup__title">Search criteria</p>
+        <p className="lookup__title">{translate('Search criteria')}</p>
       </div>
 
       <form
@@ -76,14 +78,14 @@ const LookupForm: React.FC = (): JSX.Element => {
             type="submit"
             className="lookup-form__button"
           >
-            Search
+            {translate('Search')}
           </Button>
           <Button
             type="reset"
             onClick={handleReset}
             className="lookup-form__button lookup-form__button--reset"
           >
-            Reset
+            {translate('Reset')}
           </Button>
         </div>
       </form>

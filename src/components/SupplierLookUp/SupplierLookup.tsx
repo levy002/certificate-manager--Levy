@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 
+import { useI18n } from '../../contexts/languageContext';
 import { getAllSuppliers } from '../../data/db';
 import { Supplier } from '../../types/types';
 import LookupModal from '../Lookup/LookupModal/LookupModal';
 
 const SupplierLookup: React.FC = () => {
+  const { translate } = useI18n();
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +34,7 @@ const SupplierLookup: React.FC = () => {
 
   return (
     <LookupModal
-      title="Supplier"
+      title={translate('Supplier')}
       loading={loading}
       error={error}
       data={suppliers}

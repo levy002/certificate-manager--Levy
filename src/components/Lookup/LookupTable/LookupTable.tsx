@@ -2,6 +2,7 @@ import { useCallback, useContext, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
+import { useI18n } from '../../../contexts/languageContext';
 import { LookupContext } from '../../../contexts/LookupContext';
 import dataFiltering from '../../../utils/filterFunction';
 import Button from '../../Form/Button';
@@ -21,6 +22,7 @@ const LookupTable = <T,>({
   loading,
   title,
 }: LookupTableProps<T>): JSX.Element => {
+  const { translate } = useI18n();
   const { setSelectedItem, setShowLookup, filterCriteria } =
     useContext(LookupContext)!;
   const [selectedRow, setSelectedRow] = useState<T | null>(null);
@@ -53,10 +55,12 @@ const LookupTable = <T,>({
           width={12}
           height={10}
         />
-        <p className="lookup__title">{title} List</p>
+        <p className="lookup__title">
+          {translate(title)} {translate('List')}
+        </p>
       </div>
       <section className="lookup-table__container">
-        {loading && <p>Loading...</p>}
+        {loading && <p>{translate('Loading')}...</p>}
         {error && !loading && <p>Error: {error}</p>}
 
         <table className="lookup-table__content">
@@ -68,7 +72,7 @@ const LookupTable = <T,>({
                   key={header}
                   className="lookup-table__header"
                 >
-                  {title} {header}
+                  {translate(title)} {translate(header)}
                 </th>
               ))}
             </tr>
@@ -115,14 +119,14 @@ const LookupTable = <T,>({
           type="button"
           onClick={handleSelectSupplier}
         >
-          Select
+          {translate('Select')}
         </Button>
         <Button
           className="lookup-table__button lookup-table__button--cancel"
           type="button"
           onClick={handleCancelSelectSupplier}
         >
-          Cancel
+          {translate('Cancel')}
         </Button>
       </div>
     </section>
