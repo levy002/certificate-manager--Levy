@@ -1,4 +1,5 @@
 import CertificateForm from './CertificateForm';
+import { LookupProvider } from '../../contexts/LookupContext';
 import { Certificate, CertificateType } from '../../types/types';
 
 const AddCertificate: React.FC = () => {
@@ -12,10 +13,12 @@ const AddCertificate: React.FC = () => {
   };
 
   return (
-    <CertificateForm
-      mode="create"
-      initialFormState={initialFormState}
-    />
+    <LookupProvider>
+      <CertificateForm
+        mode="create"
+        initialFormState={initialFormState}
+      />
+    </LookupProvider>
   );
 };
 

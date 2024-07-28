@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
 import { LookupContext } from '../../../contexts/LookupContext';
+import { Supplier } from '../../../types/types';
 import dataFiltering from '../../../utils/filterFunction';
 import Button from '../../Form/Button';
 import './LookupTable.css';
@@ -10,33 +11,45 @@ import SVGIcon from '../../SVGIcon/SVGIcon';
 
 interface LookupTableProps<T> {
   data: T[];
-  error: string | null;
-  loading: boolean;
-  title: string;
+  error?: string | null;
+  loading?: boolean;
 }
 
 const LookupTable = <T,>({
   data,
   error,
   loading,
-  title,
 }: LookupTableProps<T>): JSX.Element => {
-  const { setSelectedItem, setShowLookup, filterCriteria } =
-    useContext(LookupContext)!;
-  const [selectedRow, setSelectedRow] = useState<T | null>(null);
+  const {
+    setSelectedSupplier,
+    setShowLookup,
+    showLookup,
+    filterCriteria,
+    lookupTitle,
+    selectedSupplier,
+  } = useContext(LookupContext)!;
+  const [selectedRow, setSelectedRow] = useState<T | string>(selectedSupplier);
 
-  const handleRowClick = (item: T): void => {
-    setSelectedRow(item);
-  };
+  const handleRowClick = useCallback(
+    (item: T): void => {
+      if (lookupTitle === 'Supplier') {
+        const supplierName = (item as Supplier).name;
+        setSelectedRow(supplierName);
+      }
+    },
+    [lookupTitle],
+  );
 
   const handleSelectSupplier = useCallback(() => {
-    setSelectedItem(selectedRow);
+    if (lookupTitle === 'Supplier') {
+      setSelectedSupplier(selectedRow);
+    }
     setShowLookup(false);
-  }, [setSelectedItem, selectedRow]);
+  }, [setSelectedSupplier, selectedRow, lookupTitle]);
 
   const handleCancelSelectSupplier = useCallback(() => {
     setShowLookup(false);
-  }, []);
+  }, [setShowLookup]);
 
   const filteredData = useMemo(() => {
     return data.filter((item) => dataFiltering(item, filterCriteria));
@@ -46,15 +59,17 @@ const LookupTable = <T,>({
 
   return (
     <section className="lookup-table">
-      <div className="lookup__header">
-        <SVGIcon
-          Icon={ChevronSVG}
-          fill="#fff"
-          width={12}
-          height={10}
-        />
-        <p className="lookup__title">{title} List</p>
-      </div>
+      {showLookup ? (
+        <div className="lookup__header">
+          <SVGIcon
+            Icon={ChevronSVG}
+            fill="#fff"
+            width={12}
+            height={10}
+          />
+          <p className="lookup__title">{lookupTitle} List</p>
+        </div>
+      ) : null}
       <section className="lookup-table__container">
         {loading && <p>Loading...</p>}
         {error && !loading && <p>Error: {error}</p>}
@@ -68,7 +83,7 @@ const LookupTable = <T,>({
                   key={header}
                   className="lookup-table__header"
                 >
-                  {title} {header}
+                  {lookupTitle} {header}
                 </th>
               ))}
             </tr>
@@ -81,10 +96,13 @@ const LookupTable = <T,>({
                   className="lookup-table__row"
                 >
                   <td className="lookup-table__cell">
-                    <input
-                      type="radio"
-                      onClick={() => handleRowClick(item)}
-                    />
+                    {showLookup && lookupTitle === 'Supplier' && (
+                      <input
+                        type="radio"
+                        checked={selectedRow === (item as Supplier).name}
+                        onChange={() => handleRowClick(item)}
+                      />
+                    )}
                   </td>
                   {tableHeaders.map((header) => (
                     <td
@@ -102,29 +120,31 @@ const LookupTable = <T,>({
                   colSpan={tableHeaders.length + 1}
                   className="lookup-table__cell"
                 >
-                  No {title}s Available!!
+                  No {lookupTitle}s Available!!
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </section>
-      <div className="lookup-table__actions">
-        <Button
-          className="lookup-table__button lookup-table__button--select"
-          type="button"
-          onClick={handleSelectSupplier}
-        >
-          Select
-        </Button>
-        <Button
-          className="lookup-table__button lookup-table__button--cancel"
-          type="button"
-          onClick={handleCancelSelectSupplier}
-        >
-          Cancel
-        </Button>
-      </div>
+      {showLookup ? (
+        <div className="lookup-table__actions">
+          <Button
+            className="lookup-table__button lookup-table__button--select"
+            type="button"
+            onClick={handleSelectSupplier}
+          >
+            Select
+          </Button>
+          <Button
+            className="lookup-table__button lookup-table__button--cancel"
+            type="button"
+            onClick={handleCancelSelectSupplier}
+          >
+            Cancel
+          </Button>
+        </div>
+      ) : null}
     </section>
   );
 };

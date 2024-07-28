@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import CertificateForm from './CertificateForm';
+import { LookupProvider } from '../../contexts/LookupContext';
 import { getCertificateById } from '../../data/db';
 import { Certificate } from '../../types/types';
 
@@ -41,10 +42,12 @@ const EditCertificate: React.FC = () => {
   }
 
   return (
-    <CertificateForm
-      initialFormState={certificate}
-      mode="edit"
-    />
+    <LookupProvider>
+      <CertificateForm
+        initialFormState={certificate}
+        mode="edit"
+      />
+    </LookupProvider>
   );
 };
 

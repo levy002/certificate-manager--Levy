@@ -5,6 +5,7 @@ import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as SearchSVG } from '../../assets/images/search.svg';
 import { CertificatesContext } from '../../contexts/certificatesContext';
 import { LookupContext } from '../../contexts/LookupContext';
+import SuppliersProvider from '../../contexts/suppliersContext';
 import { addNewCertificate, updateCertificate } from '../../data/db';
 import { Certificate, CertificateType } from '../../types/types';
 import formatValue from '../../utils/formatInputValue';
@@ -29,8 +30,15 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
   const [formState, setFormState] = useState<Certificate>(initialFormState);
   const [formError, setFormError] = useState<string>('');
   const { refetch } = useContext(CertificatesContext)!;
-  const { showLookup, setShowLookup, setFilterCriteria, selectedItem } =
-    useContext(LookupContext)!;
+  const {
+    showLookup,
+    setShowLookup,
+    setFilterCriteria,
+    selectedSupplier,
+    setLookupTitle,
+    lookupTitle,
+    setSelectedSupplier,
+  } = useContext(LookupContext)!;
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -105,16 +113,23 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
   const handleOnclickSearchSupplierSvg = useCallback(() => {
     setFilterCriteria({ name: formState.supplier, index: '', city: '' });
     setShowLookup(true);
+    setLookupTitle('Supplier');
   }, [setFilterCriteria, formState]);
 
   useEffect(() => {
-    if (selectedItem) {
+    if (formState.supplier) {
+      setSelectedSupplier(formState.supplier);
+    }
+  }, [formState.supplier, setSelectedSupplier]);
+
+  useEffect(() => {
+    if (selectedSupplier) {
       setFormState((prevState) => ({
         ...prevState,
-        supplier: selectedItem.name,
+        supplier: selectedSupplier,
       }));
     }
-  }, [selectedItem]);
+  }, [selectedSupplier]);
 
   return (
     <div className="form-container">
@@ -229,7 +244,11 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
           </button>
         </div>
       </form>
-      {showLookup && <SupplierLookup />}
+      {showLookup && lookupTitle === 'Supplier' && (
+        <SuppliersProvider>
+          <SupplierLookup />
+        </SuppliersProvider>
+      )}
       {formError && <p>{formError}</p>}
     </div>
   );
