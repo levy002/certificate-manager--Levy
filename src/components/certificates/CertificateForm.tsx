@@ -1,30 +1,32 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as SearchSVG } from '../../assets/images/search.svg';
-import { addNewCertificate } from '../../data/db';
+import { CertificatesContext } from '../../contexts/certificatesContext';
+import { addNewCertificate, updateCertificate } from '../../data/db';
 import { Certificate, CertificateType } from '../../types/types';
+import formatValue from '../../utils/formatInputValue';
 import InputField from '../Form/InputField';
 import SelectField from '../Form/SelectFIeld';
 import SVGIcon from '../SVGIcon/SVGIcon';
 
 import './certificateForm.css';
 
-const NewCertificateForm: React.FC = () => {
-  const navigate = useNavigate();
+interface CertificateFormProps {
+  initialFormState: Certificate;
+  mode: string;
+}
 
-  const initialFormState: Certificate = {
-    supplier: '',
-    certificateType: CertificateType.OHSAS18001,
-    validFrom: null,
-    validTo: null,
-    PDFUrl: '',
-    id: Date.now(),
-  };
+const CertificateForm: React.FC<CertificateFormProps> = ({
+  initialFormState,
+  mode,
+}) => {
+  const navigate = useNavigate();
 
   const [formState, setFormState] = useState<Certificate>(initialFormState);
   const [formError, setFormError] = useState<string>('');
+  const { refetch } = useContext(CertificatesContext)!;
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -74,8 +76,13 @@ const NewCertificateForm: React.FC = () => {
     };
 
     try {
-      await addNewCertificate(newCertificateData);
+      if (mode === 'edit') {
+        await updateCertificate(newCertificateData);
+      } else {
+        await addNewCertificate(newCertificateData);
+      }
       handleReset();
+      refetch();
       navigate('/machineLearning/example1');
     } catch (err) {
       setFormError(
@@ -86,7 +93,7 @@ const NewCertificateForm: React.FC = () => {
 
   return (
     <div className="form-container">
-      <h2>New Certificate</h2>
+      <h2>{mode === 'edit' ? 'Edit Certificate' : 'New Certificate'}</h2>
       <form
         onSubmit={handleAddNewCertificate}
         className="form-container__form"
@@ -147,7 +154,7 @@ const NewCertificateForm: React.FC = () => {
               onChange={handleChange}
               min={
                 formState.validFrom instanceof Date
-                  ? formState.validFrom.toISOString().split('T')[0]
+                  ? formatValue('date', formState.validFrom)
                   : undefined
               }
             />
@@ -181,7 +188,7 @@ const NewCertificateForm: React.FC = () => {
             className="form-container__buttons-submit-btn"
             type="submit"
           >
-            Submit
+            {mode === 'edit' ? 'Update' : 'Save'}
           </button>
 
           <button
@@ -198,4 +205,4 @@ const NewCertificateForm: React.FC = () => {
   );
 };
 
-export default NewCertificateForm;
+export default CertificateForm;

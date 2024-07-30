@@ -1,6 +1,8 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import NewCertificateForm from '../components/certificates/NewCertificateForm';
+import AddCertificate from '../components/certificates/AddCertificate';
+import EditCertificate from '../components/certificates/EditCertificate';
+import CertificatesProvider from '../contexts/certificatesContext';
 import Example1View from '../pages/Example1/Example1View';
 import Example2View from '../pages/Example2/Example2View';
 import Example3View from '../pages/Example3/Example3View';
@@ -20,11 +22,27 @@ const router = createBrowserRouter([
       },
       {
         path: '/machineLearning/example1',
-        element: <Example1View />,
+        element: (
+          <CertificatesProvider>
+            <Example1View />
+          </CertificatesProvider>
+        ),
       },
       {
         path: '/machineLearning/example1/certificates/new',
-        element: <NewCertificateForm />,
+        element: (
+          <CertificatesProvider>
+            <AddCertificate />,
+          </CertificatesProvider>
+        ),
+      },
+      {
+        path: '/machineLearning/example1/certificates/:id',
+        element: (
+          <CertificatesProvider>
+            <EditCertificate />
+          </CertificatesProvider>
+        ),
       },
       {
         path: '/machineLearning/example2',
