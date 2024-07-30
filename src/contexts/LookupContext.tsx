@@ -9,8 +9,12 @@ import {
 interface LookupContextProps<T, F> {
   showLookup: boolean;
   setShowLookup: (show: boolean) => void;
-  selectedItem: T;
-  setSelectedItem: (name: T) => void;
+  lookupTitle: string;
+  setLookupTitle: (title: string) => void;
+  selectedSupplier: T;
+  selectedUsers: T[];
+  setSelectedUsers: (users: T[]) => void;
+  setSelectedSupplier: (name: T) => void;
   filterCriteria: F;
   setFilterCriteria: (criteria: F) => void;
 }
@@ -25,15 +29,25 @@ const LookupProvider = <T, F>({
   children: ReactNode;
 }): JSX.Element => {
   const [showLookup, setShowLookup] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<T | null>(null);
+  const [lookupTitle, setLookupTitle] = useState('');
+  const [selectedSupplier, setSelectedSupplier] = useState<T | null>(null);
+  const [selectedUsers, setSelectedUsers] = useState<T[]>([]);
   const [filterCriteria, setFilterCriteria] = useState<F | null>(null);
 
   const handleShowLookup = useCallback((show: boolean) => {
     setShowLookup(show);
   }, []);
 
-  const handleSelectedItem = useCallback((item: T | null) => {
-    setSelectedItem(item);
+  const handleLookupTitle = useCallback((title: string) => {
+    setLookupTitle(title);
+  }, []);
+
+  const handleSelectedSupplier = useCallback((item: T | null) => {
+    setSelectedSupplier(item);
+  }, []);
+
+  const handleSelectedUsers = useCallback((users: T[]) => {
+    setSelectedUsers(users);
   }, []);
 
   const handleFilterCriteria = useCallback((criteria: F | null) => {
@@ -44,18 +58,26 @@ const LookupProvider = <T, F>({
     () => ({
       showLookup,
       setShowLookup: handleShowLookup,
-      selectedItem,
-      setSelectedItem: handleSelectedItem,
+      selectedSupplier,
+      setSelectedSupplier: handleSelectedSupplier,
       filterCriteria,
+      selectedUsers,
+      lookupTitle,
       setFilterCriteria: handleFilterCriteria,
+      setLookupTitle: handleLookupTitle,
+      setSelectedUsers: handleSelectedUsers,
     }),
     [
       showLookup,
-      setSelectedItem,
+      setSelectedSupplier,
       filterCriteria,
+      lookupTitle,
+      selectedUsers,
       handleShowLookup,
-      handleSelectedItem,
+      handleSelectedSupplier,
       handleFilterCriteria,
+      handleLookupTitle,
+      handleSelectedUsers,
     ],
   );
 

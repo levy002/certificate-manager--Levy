@@ -3,15 +3,17 @@ import { useCallback, useContext, useState, useEffect } from 'react';
 import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
 import { useI18n } from '../../../contexts/languageContext';
 import { LookupContext } from '../../../contexts/LookupContext';
-import { Supplier } from '../../../types/types';
+import { Department } from '../../../types/types';
 import Button from '../../Form/Button';
 import InputField from '../../Form/InputField';
 import './LookupForm.css';
+import SelectField from '../../Form/SelectFIeld';
 import SVGIcon from '../../SVGIcon/SVGIcon';
 
 const LookupForm: React.FC = (): JSX.Element => {
   const { translate } = useI18n();
-  const { setFilterCriteria, filterCriteria } = useContext(LookupContext)!;
+  const { setFilterCriteria, filterCriteria, lookupTitle } =
+    useContext(LookupContext)!;
   const [formState, setFormState] = useState(filterCriteria);
 
   useEffect(() => {
@@ -30,7 +32,16 @@ const LookupForm: React.FC = (): JSX.Element => {
   );
 
   const handleReset = useCallback((): void => {
-    const emptyState = { name: '', index: '', city: '' };
+    const emptyState =
+      lookupTitle === 'Supplier'
+        ? { name: '', index: '', city: '' }
+        : {
+            name: '',
+            firstName: '',
+            userId: '',
+            department: Department.ITM,
+            plant: '',
+          };
     setFormState(emptyState);
     setFilterCriteria(emptyState);
   }, [setFilterCriteria, formState]);
@@ -60,18 +71,31 @@ const LookupForm: React.FC = (): JSX.Element => {
         onSubmit={handleSubmit}
       >
         <div className="lookup-form__fields">
-          {(Object.keys(formState) as Array<keyof Supplier>).map((key) => (
-            <InputField
-              key={key}
-              type="text"
-              label={key}
-              name={key}
-              value={formState[key]}
-              placeholder=""
-              error={false}
-              onChange={handleChange}
-            />
-          ))}
+          {Object.keys(formState).map((key) =>
+            key === 'department' ? (
+              <SelectField
+                key={key}
+                label={key}
+                name={key}
+                placeholder=""
+                value={formState[key]}
+                options={Object.values(Department)}
+                error={false}
+                onChange={handleChange}
+              />
+            ) : (
+              <InputField
+                key={key}
+                type="text"
+                label={key}
+                name={key}
+                value={formState[key]}
+                placeholder=""
+                error={false}
+                onChange={handleChange}
+              />
+            ),
+          )}
         </div>
         <div className="lookup-form__buttons">
           <Button

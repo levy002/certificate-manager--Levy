@@ -34,16 +34,19 @@
 
 .lookup-form__fields {
   display: flex;
-  gap: 16px;
+  gap: 1rem;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
-.lookup-form__fields input {
-  flex: 1;
+.lookup-form__fields > * {
+  width: 31%;
+  min-width: 10rem;
 }
 
 .lookup-form__buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 

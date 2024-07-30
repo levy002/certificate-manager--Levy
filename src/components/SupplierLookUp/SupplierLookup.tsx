@@ -1,40 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 
 import { useI18n } from '../../contexts/languageContext';
-import { getAllSuppliers } from '../../data/db';
-import { Supplier } from '../../types/types';
+import { LookupContext } from '../../contexts/LookupContext';
+import { SuppliersContext } from '../../contexts/suppliersContext';
 import LookupModal from '../Lookup/LookupModal/LookupModal';
 
 const SupplierLookup: React.FC = () => {
   const { translate } = useI18n();
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchItems = (): void => {
-      setLoading(true);
-      setError(null);
-      getAllSuppliers()
-        .then((data) => {
-          setSuppliers(data);
-          setLoading(false);
-        })
-        .catch((err: Error) => {
-          setError(err.message);
-          setLoading(false);
-        });
-    };
-
-    const timer = setTimeout(() => {
-      fetchItems();
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
+  const { suppliers, error, loading } = useContext(SuppliersContext)!;
+  const { lookupTitle } = useContext(LookupContext)!;
 
   return (
     <LookupModal
-      title={translate('Supplier')}
+      title={translate(lookupTitle)}
       loading={loading}
       error={error}
       data={suppliers}

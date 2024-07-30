@@ -25,7 +25,7 @@ export const LanguageProvider = ({
 }): JSX.Element => {
   const [language, setLanguage] = useState('en');
 
-  const translate = (key: string) => {
+  const translate = (key: string): string => {
     return translations[language]?.[key] || key;
   };
 

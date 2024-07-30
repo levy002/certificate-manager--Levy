@@ -43,7 +43,6 @@ const LookupModal = <T,>({
           data={data}
           error={error}
           loading={loading}
-          title={title}
         />
       </section>
     </section>
