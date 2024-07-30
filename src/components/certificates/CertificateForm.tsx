@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
@@ -14,30 +14,19 @@ import SVGIcon from '../SVGIcon/SVGIcon';
 import './certificateForm.css';
 
 interface CertificateFormProps {
-  certificate?: Certificate;
+  initialFormState: Certificate;
+  mode: string;
 }
 
-const CertificateForm: React.FC<CertificateFormProps> = ({ certificate }) => {
+const CertificateForm: React.FC<CertificateFormProps> = ({
+  initialFormState,
+  mode,
+}) => {
   const navigate = useNavigate();
-
-  const initialFormState: Certificate = {
-    supplier: '',
-    certificateType: CertificateType.OHSAS18001,
-    validFrom: null,
-    validTo: null,
-    PDFUrl: '',
-    id: Date.now(),
-  };
 
   const [formState, setFormState] = useState<Certificate>(initialFormState);
   const [formError, setFormError] = useState<string>('');
   const { refetch } = useContext(CertificatesContext)!;
-
-  useEffect(() => {
-    if (certificate) {
-      setFormState(certificate);
-    }
-  }, [certificate]);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -87,7 +76,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({ certificate }) => {
     };
 
     try {
-      if (certificate) {
+      if (mode === 'edit') {
         await updateCertificate(newCertificateData);
       } else {
         await addNewCertificate(newCertificateData);
@@ -104,7 +93,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({ certificate }) => {
 
   return (
     <div className="form-container">
-      <h2>{certificate ? 'Edit Certificate' : 'New Certificate'}</h2>
+      <h2>{mode === 'edit' ? 'Edit Certificate' : 'New Certificate'}</h2>
       <form
         onSubmit={handleAddNewCertificate}
         className="form-container__form"
@@ -199,7 +188,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({ certificate }) => {
             className="form-container__buttons-submit-btn"
             type="submit"
           >
-            {certificate ? 'Update' : 'Save'}
+            {mode === 'edit' ? 'Update' : 'Save'}
           </button>
 
           <button

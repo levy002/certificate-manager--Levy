@@ -77,6 +77,27 @@ export const getAllCertificates = (): Promise<Certificate[]> => {
   });
 };
 
+export const getCertificateById = (id: number): Promise<Certificate | null> => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      reject(new Error('Database is not initialized'));
+      return;
+    }
+
+    const tx = db.transaction(Stores.certificatesData, 'readonly');
+    const store = tx.objectStore(Stores.certificatesData);
+    const getRequest = store.get(id);
+
+    getRequest.onsuccess = (): void => {
+      resolve(getRequest.result || null);
+    };
+
+    getRequest.onerror = (): void => {
+      reject(new Error(`Get request error: ${getRequest.error?.message}`));
+    };
+  });
+};
+
 export const updateCertificate = (
   data: Certificate,
 ): Promise<Certificate | string | null> => {

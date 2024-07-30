@@ -22,15 +22,27 @@ const router = createBrowserRouter([
       },
       {
         path: '/machineLearning/example1',
-        element: <Example1View />,
+        element: (
+          <CertificatesProvider>
+            <Example1View />
+          </CertificatesProvider>
+        ),
       },
       {
         path: '/machineLearning/example1/certificates/new',
-        element: <AddCertificate />,
+        element: (
+          <CertificatesProvider>
+            <AddCertificate />,
+          </CertificatesProvider>
+        ),
       },
       {
         path: '/machineLearning/example1/certificates/:id',
-        element: <EditCertificate />,
+        element: (
+          <CertificatesProvider>
+            <EditCertificate />
+          </CertificatesProvider>
+        ),
       },
       {
         path: '/machineLearning/example2',
@@ -45,11 +57,7 @@ const router = createBrowserRouter([
 ]);
 
 const Routes: React.FC = () => {
-  return (
-    <CertificatesProvider>
-      <RouterProvider router={router} />
-    </CertificatesProvider>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default Routes;
