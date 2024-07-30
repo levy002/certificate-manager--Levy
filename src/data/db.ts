@@ -1,4 +1,4 @@
-import { Certificate, Supplier } from '../types/types';
+import { Certificate, Supplier, User } from '../types/types';
 
 let db: IDBDatabase;
 const version = 1;
@@ -6,6 +6,7 @@ const version = 1;
 export enum Stores {
   certificatesData = 'certificates',
   suppliersData = 'suppliers',
+  usersData = 'users',
 }
 
 export const initDB = (): Promise<boolean> => {
@@ -21,6 +22,10 @@ export const initDB = (): Promise<boolean> => {
 
       if (!database.objectStoreNames.contains(Stores.suppliersData)) {
         database.createObjectStore(Stores.suppliersData, { keyPath: 'index' });
+      }
+
+      if (!database.objectStoreNames.contains(Stores.usersData)) {
+        database.createObjectStore(Stores.usersData, { keyPath: 'userId' });
       }
     };
 
@@ -212,19 +217,75 @@ export const getAllSuppliers = (): Promise<Supplier[]> => {
   });
 };
 
-export const initialSuppliers: Supplier[] = [
-  { name: 'Supplier A', index: 'SUP-001', city: 'Berlin' },
-  { name: 'Supplier B', index: 'SUP-002', city: 'Munich' },
-  { name: 'Supplier C', index: 'SUP-003', city: 'Vienna' },
-  { name: 'Supplier D', index: 'SUP-004', city: 'Graz' },
-  { name: 'Supplier E', index: 'SUP-005', city: 'Sarajevo' },
-  { name: 'Supplier F', index: 'SUP-006', city: 'Graz' },
-  { name: 'Supplier G', index: 'SUP-007', city: 'Sarajevo' },
-];
+export const addInitialUsers = (allUsers: User[]): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      reject(new Error('Database is not initialized'));
+      return;
+    }
 
-initDB().then((success) => {
-  if (success) {
-    return addInitialSuppliers(initialSuppliers);
-  }
-  return Promise.resolve();
-});
+    const checkAndAddUser = (user: User): Promise<void> => {
+      return new Promise((res, rej) => {
+        const checkTx = db.transaction(Stores.usersData, 'readonly');
+        const checkStore = checkTx.objectStore(Stores.usersData);
+        const getRequest = checkStore.get(user.userId);
+
+        getRequest.onsuccess = (): void => {
+          if (getRequest.result) {
+            res();
+          } else {
+            const addTx = db.transaction(Stores.usersData, 'readwrite');
+            const addStore = addTx.objectStore(Stores.usersData);
+            const addRequest = addStore.add(user);
+
+            addRequest.onsuccess = (): void => res();
+            addRequest.onerror = (): void =>
+              rej(new Error(`Add request error for user: ${user.name}`));
+
+            addTx.oncomplete = (): void => res();
+            addTx.onerror = (): void =>
+              rej(new Error('Add transaction failed'));
+          }
+        };
+
+        getRequest.onerror = (): void =>
+          rej(new Error(`Error checking user: ${user.name}`));
+      });
+    };
+
+    const promises = allUsers.map((user) => {
+      if (!user.userId) {
+        return Promise.reject(new Error('User must have a userId property'));
+      }
+      return checkAndAddUser(user);
+    });
+
+    Promise.all(promises)
+      .then(() => resolve())
+      .catch((error) => reject(error));
+  });
+};
+
+export const getAllUsers = (): Promise<User[]> => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      reject(new Error('Database is not initialized'));
+      return;
+    }
+
+    const tx = db.transaction(Stores.usersData, 'readonly');
+    const store = tx.objectStore(Stores.usersData);
+
+    const getAllRequest = store.getAll();
+
+    getAllRequest.onsuccess = (): void => {
+      resolve(getAllRequest.result);
+    };
+
+    getAllRequest.onerror = (): void => {
+      reject(
+        new Error(`Get all request error: ${getAllRequest.error?.message}`),
+      );
+    };
+  });
+};
