@@ -1,30 +1,26 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
-import { Supplier } from '../../../types/types';
-import dataFiltering from '../../../utils/filterFunction';
-import Button from '../../Form/Button';
+import { Supplier } from '../../../types/Types';
+import Button from '../../form/Button';
 import './LookupTable.css';
-import SVGIcon from '../../SVGIcon/SVGIcon';
+import SVGIcon from '../../svgIcon/SVGIcon';
 
 interface LookupTableProps {
   data: Supplier[];
-  filterCriteria: Supplier;
-  handleSelectedSupplier: (supplier: Supplier) => void;
+  handleSelectedSupplier: (supplier: Supplier | null) => void;
   closeModal: () => void;
-  title: string;
 }
 
 const LookupTable: React.FC<LookupTableProps> = ({
-  filterCriteria,
   handleSelectedSupplier,
   data,
   closeModal,
-  title,
 }): JSX.Element => {
-  const [selectedSupplier, setSelectedSupplier] =
-    useState<Supplier>(filterCriteria);
+  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
+    null,
+  );
 
   const handleSupplierRowClick = useCallback(
     (supplier: Supplier): React.ChangeEventHandler<HTMLInputElement> => {
@@ -44,11 +40,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
     closeModal();
   }, []);
 
-  const filteredData = useMemo(() => {
-    return data.filter((item) => dataFiltering(item, filterCriteria));
-  }, [filterCriteria, data]);
-
-  const tableHeaders = filterCriteria ? Object.keys(filterCriteria) : [];
+  const tableHeaders = ['name', 'index', 'city'];
 
   return (
     <section className="lookup-table">
@@ -59,7 +51,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
           width={12}
           height={10}
         />
-        <p className="lookup__title">{title} List</p>
+        <p className="lookup__title">Suppliers List</p>
       </div>
       <section className="lookup-table__container">
         <table className="lookup-table__content">
@@ -77,8 +69,8 @@ const LookupTable: React.FC<LookupTableProps> = ({
             </tr>
           </thead>
           <tbody className="lookup-table__body">
-            {filteredData.length > 0 ? (
-              filteredData.map((item) => (
+            {data.length > 0 ? (
+              data.map((item) => (
                 <tr
                   key={uuidv4()}
                   className="lookup-table__row"
@@ -87,7 +79,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
                     <input
                       type="radio"
                       checked={
-                        selectedSupplier.name === (item as Supplier).name
+                        selectedSupplier?.index === (item as Supplier).index
                       }
                       onChange={handleSupplierRowClick(item)}
                     />

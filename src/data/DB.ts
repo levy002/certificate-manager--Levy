@@ -1,4 +1,4 @@
-import { Certificate, Supplier } from '../types/types';
+import { Certificate, Supplier } from '../types/Types';
 
 let db: IDBDatabase;
 const version = 1;
@@ -229,6 +229,27 @@ export const getAllSuppliers = (): Promise<Supplier[]> => {
       reject(
         new Error(`Get all request error: ${getAllRequest.error?.message}`),
       );
+    };
+  });
+};
+
+export const getSupplierByIndex = (index: string): Promise<Supplier | null> => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      reject(new Error('Database is not initialized'));
+      return;
+    }
+
+    const tx = db.transaction(Stores.suppliersData, 'readonly');
+    const store = tx.objectStore(Stores.suppliersData);
+    const getRequest = store.get(index);
+
+    getRequest.onsuccess = (): void => {
+      resolve(getRequest.result || null);
+    };
+
+    getRequest.onerror = (): void => {
+      reject(new Error(`Get request error: ${getRequest.error?.message}`));
     };
   });
 };

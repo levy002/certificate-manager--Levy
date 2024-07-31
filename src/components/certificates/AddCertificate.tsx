@@ -1,10 +1,9 @@
 import CertificateForm from './CertificateForm';
-import SuppliersProvider from '../../contexts/suppliersContext';
-import { Certificate, CertificateType } from '../../types/types';
+import { Certificate, CertificateType, FormMode } from '../../types/Types';
 
 const AddCertificate: React.FC = () => {
   const initialFormState: Certificate = {
-    supplier: '',
+    supplier: null,
     certificateType: CertificateType.OHSAS18001,
     validFrom: null,
     validTo: null,
@@ -13,12 +12,10 @@ const AddCertificate: React.FC = () => {
   };
 
   return (
-    <SuppliersProvider>
-      <CertificateForm
-        mode="create"
-        initialFormState={initialFormState}
-      />
-    </SuppliersProvider>
+    <CertificateForm
+      mode={FormMode.CREATE}
+      initialFormState={initialFormState}
+    />
   );
 };
 

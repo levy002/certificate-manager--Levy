@@ -1,4 +1,4 @@
-import { Supplier } from '../types/types';
+import { Supplier } from '../types/Types';
 
 export const initialSuppliers: Supplier[] = [
   { name: 'Supplier A', index: 'SUP-001', city: 'Berlin' },

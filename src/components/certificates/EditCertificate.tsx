@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import CertificateForm from './CertificateForm';
-import SuppliersProvider from '../../contexts/suppliersContext';
-import { getCertificateById } from '../../data/db';
-import { Certificate } from '../../types/types';
+import { getCertificateById } from '../../data/DB';
+import { Certificate, FormMode } from '../../types/Types';
 
 const EditCertificate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -42,12 +41,10 @@ const EditCertificate: React.FC = () => {
   }
 
   return (
-    <SuppliersProvider>
-      <CertificateForm
-        initialFormState={certificate}
-        mode="edit"
-      />
-    </SuppliersProvider>
+    <CertificateForm
+      initialFormState={certificate}
+      mode={FormMode.EDIT}
+    />
   );
 };
 

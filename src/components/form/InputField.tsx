@@ -1,5 +1,5 @@
-import './formFields.css';
-import formatValue from '../../utils/formatInputValue';
+import './FormFields.css';
+import formatValue from '../../utils/FormatInputValue';
 
 type InputProps = {
   type: 'text' | 'date';

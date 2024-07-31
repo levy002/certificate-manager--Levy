@@ -1,24 +1,24 @@
-import React, { useState, useCallback, useContext } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import { ReactComponent as GearSVG } from '../../assets/images/gear.svg';
-import { CertificatesContext } from '../../contexts/certificatesContext';
-import { deleteCertificate } from '../../data/db';
-import { Certificate } from '../../types/types';
-import MenuNavLink from '../Sidebar/MenuNavLink';
-import SVGIcon from '../SVGIcon/SVGIcon';
-import './certificateTable.css';
+import { deleteCertificate } from '../../data/DB';
+import { Certificate } from '../../types/Types';
+import MenuNavLink from '../sidebar/MenuNavLink';
+import SVGIcon from '../svgIcon/SVGIcon';
+import './CertificateTable.css';
 
 type CertificateTableProps = {
   certificates: Certificate[];
+  refetch: () => void;
 };
 
 const CertificatesTable: React.FC<CertificateTableProps> = ({
   certificates,
+  refetch,
 }) => {
   const [openGearCertificateId, setOpenGearCertificateId] = useState<
     number | null
   >(null);
-  const { refetch } = useContext(CertificatesContext)!;
 
   const toggleGearContents = useCallback((id: number): void => {
     setOpenGearCertificateId((prevId) => (prevId === id ? null : id));
@@ -90,7 +90,7 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
                       </section>
                     )}
                   </td>
-                  <td className="table__cell">{certificate.supplier}</td>
+                  <td className="table__cell">{certificate?.supplier?.name}</td>
                   <td className="table__cell">{certificate.certificateType}</td>
                   <td className="table__cell">
                     {certificate.validFrom?.toLocaleDateString('de-DE')}

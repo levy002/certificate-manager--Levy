@@ -5,8 +5,8 @@ import { ReactComponent as ChevronDownSVG } from '../../assets/images/chevron-do
 import { ReactComponent as ChevronUpSVG } from '../../assets/images/chevron-up.svg';
 import { ReactComponent as HomeSVG } from '../../assets/images/home.svg';
 import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
-import './sidebar.css';
-import SVGIcon from '../SVGIcon/SVGIcon';
+import './Sidebar.css';
+import SVGIcon from '../svgIcon/SVGIcon';
 
 interface SidebarProps {
   showMobileSidebar: boolean;

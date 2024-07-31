@@ -1,43 +1,43 @@
 import { useCallback, useState } from 'react';
 
 import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
-import { Supplier } from '../../../types/types';
-import Button from '../../Form/Button';
-import InputField from '../../Form/InputField';
+import { Supplier } from '../../../types/Types';
+import Button from '../../form/Button';
+import InputField from '../../form/InputField';
 import './LookupForm.css';
-import SVGIcon from '../../SVGIcon/SVGIcon';
+import SVGIcon from '../../svgIcon/SVGIcon';
 
 interface LookupModalFormProps {
-  initialFilterCriteria: Supplier;
-  handleFilterCriteria: (criteria: Supplier) => void;
+  handleFilterCriteria: (criteria: Supplier | null) => void;
+  initialFilterCriteria: Supplier | null;
 }
 
 const LookupForm: React.FC<LookupModalFormProps> = ({
   initialFilterCriteria,
   handleFilterCriteria,
 }): JSX.Element => {
-  const [formState, setFormState] = useState(initialFilterCriteria);
+  const [formState, setFormState] = useState<Supplier | null>(
+    initialFilterCriteria,
+  );
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
       const { name, value } = event.target;
-      setFormState((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
+      setFormState(
+        (prevState) =>
+          ({
+            ...prevState,
+            [name]: value,
+          }) as Supplier,
+      );
     },
     [],
   );
 
   const handleReset = useCallback((): void => {
-    const emptyState = {
-      name: '',
-      index: '',
-      city: '',
-    };
-    setFormState(emptyState);
-    handleFilterCriteria(formState);
-  }, [formState]);
+    setFormState(null);
+    handleFilterCriteria(null);
+  }, []);
 
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>): void => {
@@ -47,9 +47,7 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
     [formState],
   );
 
-  const formFields = initialFilterCriteria
-    ? Object.keys(initialFilterCriteria)
-    : [];
+  const formFields = ['name', 'index', 'city'];
 
   return (
     <section className="lookup__form-container">
@@ -74,7 +72,7 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
               type="text"
               label={key}
               name={key}
-              value={formState[key as keyof Supplier]}
+              value={formState ? formState[key as keyof Supplier] || '' : ''}
               placeholder=""
               error={false}
               onChange={handleChange}

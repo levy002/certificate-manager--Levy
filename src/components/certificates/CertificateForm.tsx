@@ -1,23 +1,26 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as SearchSVG } from '../../assets/images/search.svg';
-import { CertificatesContext } from '../../contexts/certificatesContext';
-import { SuppliersContext } from '../../contexts/suppliersContext';
-import { addNewCertificate, updateCertificate } from '../../data/db';
-import { Certificate, CertificateType, Supplier } from '../../types/types';
-import formatValue from '../../utils/formatInputValue';
-import InputField from '../Form/InputField';
-import SelectField from '../Form/SelectFIeld';
-import LookupModal from '../Lookup/LookupModal/LookupModal';
-import SVGIcon from '../SVGIcon/SVGIcon';
+import { addNewCertificate, updateCertificate } from '../../data/DB';
+import {
+  Certificate,
+  CertificateType,
+  FormMode,
+  Supplier,
+} from '../../types/Types';
+import formatValue from '../../utils/FormatInputValue';
+import InputField from '../form/InputField';
+import SelectField from '../form/SelectFIeld';
+import LookupModal from '../lookup/supplierLookupModal/SupplierLookupModal';
+import SVGIcon from '../svgIcon/SVGIcon';
 
-import './certificateForm.css';
+import './CertificateForm.css';
 
 interface CertificateFormProps {
   initialFormState: Certificate;
-  mode: string;
+  mode: FormMode;
 }
 
 const CertificateForm: React.FC<CertificateFormProps> = ({
@@ -25,15 +28,10 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
   mode,
 }) => {
   const navigate = useNavigate();
-  const { suppliers } = useContext(SuppliersContext)!;
-  const { refetch } = useContext(CertificatesContext)!;
 
   const [formState, setFormState] = useState<Certificate>(initialFormState);
   const [formError, setFormError] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
-  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
-    null,
-  );
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -76,7 +74,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
   const handleClearSupplier = useCallback(() => {
     setFormState((prevState) => ({
       ...prevState,
-      supplier: '',
+      supplier: null,
     }));
   }, []);
 
@@ -90,12 +88,11 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     };
 
     try {
-      if (mode === 'edit') {
+      if (mode === FormMode.EDIT) {
         await updateCertificate(newCertificateData);
       } else {
         await addNewCertificate(newCertificateData);
       }
-      refetch();
       handleReset();
       navigate('/machineLearning/example1');
     } catch (err) {
@@ -109,27 +106,17 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     setShowModal(true);
   };
 
-  const handleSupplierSelection = (supplier: Supplier): void => {
+  const handleSupplierSelection = (supplier: Supplier | null): void => {
     setFormState((prevState) => ({
       ...prevState,
-      supplier: supplier.name,
+      supplier,
     }));
-    setSelectedSupplier(supplier);
     setShowModal(false);
   };
 
-  useEffect(() => {
-    if (selectedSupplier) {
-      setFormState((prevState) => ({
-        ...prevState,
-        supplier: selectedSupplier.name,
-      }));
-    }
-  }, [selectedSupplier]);
-
   return (
     <div className="form-container">
-      <h2>{mode === 'edit' ? 'Edit Certificate' : 'New Certificate'}</h2>
+      <h2>{mode === FormMode.EDIT ? 'Edit Certificate' : 'New Certificate'}</h2>
       <form
         onSubmit={handleAddNewCertificate}
         className="form-container__form"
@@ -141,7 +128,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                 type="text"
                 label="Supplier"
                 name="supplier"
-                value={formState.supplier}
+                value={formState?.supplier?.name || ''}
                 placeholder=""
                 error={!!formError}
                 onChange={handleChange}
@@ -228,7 +215,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
             className="form-container__buttons-submit-btn"
             type="submit"
           >
-            {mode === 'edit' ? 'Update' : 'Save'}
+            {mode === FormMode.EDIT ? 'Update' : 'Save'}
           </button>
 
           <button
@@ -243,11 +230,9 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
       {formError && <p>{formError}</p>}
       {showModal && (
         <LookupModal
-          title="Supplier"
-          filters={{ name: formState.supplier, index: '', city: '' }}
           onClose={() => setShowModal(false)}
           handleSelectedSupplier={handleSupplierSelection}
-          data={suppliers}
+          preSelectedSupplier={formState.supplier || null}
         />
       )}
     </div>
