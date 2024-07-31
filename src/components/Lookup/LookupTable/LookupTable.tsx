@@ -28,13 +28,12 @@ const LookupTable = <T,>({
     lookupTitle,
     selectedSupplier,
   } = useContext(LookupContext)!;
-  const [selectedRow, setSelectedRow] = useState<T | string>(selectedSupplier);
+  const [selectedRow, setSelectedRow] = useState<Supplier>(selectedSupplier);
 
   const handleRowClick = useCallback(
     (item: T): void => {
       if (lookupTitle === 'Supplier') {
-        const supplierName = (item as Supplier).name;
-        setSelectedRow(supplierName);
+        setSelectedRow(item as Supplier);
       }
     },
     [lookupTitle],
@@ -55,7 +54,7 @@ const LookupTable = <T,>({
     return data.filter((item) => dataFiltering(item, filterCriteria));
   }, [filterCriteria, data]);
 
-  const tableHeaders = Object.keys(filterCriteria);
+  const tableHeaders = filterCriteria ? Object.keys(filterCriteria) : [];
 
   return (
     <section className="lookup-table">
@@ -99,7 +98,7 @@ const LookupTable = <T,>({
                     {showLookup && lookupTitle === 'Supplier' && (
                       <input
                         type="radio"
-                        checked={selectedRow === (item as Supplier).name}
+                        checked={selectedRow.name === (item as Supplier).name}
                         onChange={() => handleRowClick(item)}
                       />
                     )}

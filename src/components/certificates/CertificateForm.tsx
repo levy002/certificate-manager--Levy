@@ -118,7 +118,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
 
   useEffect(() => {
     if (formState.supplier) {
-      setSelectedSupplier(formState.supplier);
+      setSelectedSupplier({ name: formState.supplier, index: '', city: '' });
     }
   }, [formState.supplier, setSelectedSupplier]);
 
@@ -126,7 +126,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     if (selectedSupplier) {
       setFormState((prevState) => ({
         ...prevState,
-        supplier: selectedSupplier,
+        supplier: selectedSupplier.name,
       }));
     }
   }, [selectedSupplier]);

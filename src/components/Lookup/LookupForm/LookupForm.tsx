@@ -10,7 +10,9 @@ import SVGIcon from '../../SVGIcon/SVGIcon';
 const LookupForm: React.FC = (): JSX.Element => {
   const { setFilterCriteria, filterCriteria, lookupTitle } =
     useContext(LookupContext)!;
-  const [formState, setFormState] = useState(filterCriteria);
+  const [formState, setFormState] = useState<Record<string, string> | null>(
+    filterCriteria,
+  );
 
   useEffect(() => {
     setFormState(filterCriteria);
@@ -19,7 +21,7 @@ const LookupForm: React.FC = (): JSX.Element => {
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
       const { name, value } = event.target;
-      setFormState((prevState: object) => ({
+      setFormState((prevState: Record<string, string> | null) => ({
         ...prevState,
         [name]: value,
       }));
@@ -28,11 +30,14 @@ const LookupForm: React.FC = (): JSX.Element => {
   );
 
   const handleReset = useCallback((): void => {
-    const emptyState = lookupTitle === 'Supplier' && {
-      name: '',
-      index: '',
-      city: '',
-    };
+    const emptyState =
+      lookupTitle === 'Supplier'
+        ? {
+            name: '',
+            index: '',
+            city: '',
+          }
+        : null;
     setFormState(emptyState);
     setFilterCriteria(emptyState);
   }, [setFilterCriteria, formState]);
@@ -45,8 +50,9 @@ const LookupForm: React.FC = (): JSX.Element => {
     [formState, setFilterCriteria],
   );
 
-  console.log(filterCriteria, 'Assddfggggg');
+  console.log(formState, 'initial', filterCriteria);
 
+  const formFields = filterCriteria ? Object.keys(filterCriteria) : [];
   return (
     <section className="lookup__form-container">
       <div className="lookup__header">
@@ -64,13 +70,13 @@ const LookupForm: React.FC = (): JSX.Element => {
         onSubmit={handleSubmit}
       >
         <div className="lookup-form__fields">
-          {Object.keys(formState).map((key) => (
+          {formFields.map((key) => (
             <InputField
               key={key}
               type="text"
               label={key}
               name={key}
-              value={formState[key]}
+              value={formState ? formState[key] : ''}
               placeholder=""
               error={false}
               onChange={handleChange}

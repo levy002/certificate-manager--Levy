@@ -6,30 +6,33 @@ import {
   useMemo,
 } from 'react';
 
-interface LookupContextProps<T, F> {
+import { Supplier } from '../types/types';
+
+interface LookupContextProps {
   showLookup: boolean;
   setShowLookup: (show: boolean) => void;
   lookupTitle: string;
   setLookupTitle: (title: string) => void;
-  selectedSupplier: T;
-  setSelectedSupplier: (name: T) => void;
-  filterCriteria: F;
-  setFilterCriteria: (criteria: F) => void;
+  selectedSupplier: Supplier;
+  setSelectedSupplier: (name: Supplier) => void;
+  filterCriteria: Record<string, string> | null;
+  setFilterCriteria: (criteria: Record<string, string> | null) => void;
 }
 
-const LookupContext = createContext<LookupContextProps<any, any> | undefined>(
-  undefined,
-);
+const LookupContext = createContext<LookupContextProps | undefined>(undefined);
 
-const LookupProvider = <T, F>({
-  children,
-}: {
-  children: ReactNode;
-}): JSX.Element => {
+const LookupProvider = ({ children }: { children: ReactNode }): JSX.Element => {
   const [showLookup, setShowLookup] = useState(false);
   const [lookupTitle, setLookupTitle] = useState('');
-  const [selectedSupplier, setSelectedSupplier] = useState<T | null>(null);
-  const [filterCriteria, setFilterCriteria] = useState<F | null>(null);
+  const [selectedSupplier, setSelectedSupplier] = useState<Supplier>({
+    name: '',
+    index: '',
+    city: '',
+  });
+  const [filterCriteria, setFilterCriteria] = useState<Record<
+    string,
+    string
+  > | null>(null);
 
   const handleShowLookup = useCallback((show: boolean) => {
     setShowLookup(show);
@@ -39,13 +42,16 @@ const LookupProvider = <T, F>({
     setLookupTitle(title);
   }, []);
 
-  const handleSelectedSupplier = useCallback((item: T | null) => {
+  const handleSelectedSupplier = useCallback((item: Supplier) => {
     setSelectedSupplier(item);
   }, []);
 
-  const handleFilterCriteria = useCallback((criteria: F | null) => {
-    setFilterCriteria(criteria);
-  }, []);
+  const handleFilterCriteria = useCallback(
+    (criteria: Record<string, string> | null) => {
+      return setFilterCriteria(criteria);
+    },
+    [],
+  );
 
   const contextValues = useMemo(
     () => ({
