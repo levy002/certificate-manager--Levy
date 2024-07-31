@@ -114,6 +114,10 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     setShowModal(false);
   };
 
+  const handleCloseModal = useCallback(() => {
+    setShowModal(false);
+  }, []);
+
   return (
     <div className="form-container">
       <h2>{mode === FormMode.EDIT ? 'Edit Certificate' : 'New Certificate'}</h2>
@@ -230,7 +234,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
       {formError && <p>{formError}</p>}
       {showModal && (
         <LookupModal
-          onClose={() => setShowModal(false)}
+          onClose={handleCloseModal}
           handleSelectedSupplier={handleSupplierSelection}
           preSelectedSupplier={formState.supplier || null}
         />
