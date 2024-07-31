@@ -1,27 +1,27 @@
-import { useCallback, useContext, useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 
 import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
-import { LookupContext } from '../../../contexts/LookupContext';
+import { Supplier } from '../../../types/types';
 import Button from '../../Form/Button';
 import InputField from '../../Form/InputField';
 import './LookupForm.css';
 import SVGIcon from '../../SVGIcon/SVGIcon';
 
-const LookupForm: React.FC = (): JSX.Element => {
-  const { setFilterCriteria, filterCriteria, lookupTitle } =
-    useContext(LookupContext)!;
-  const [formState, setFormState] = useState<Record<string, string> | null>(
-    filterCriteria,
-  );
+interface LookupModalFormProps {
+  initialFilterCriteria: Supplier;
+  handleFilterCriteria: (criteria: Supplier) => void;
+}
 
-  useEffect(() => {
-    setFormState(filterCriteria);
-  }, [filterCriteria]);
+const LookupForm: React.FC<LookupModalFormProps> = ({
+  initialFilterCriteria,
+  handleFilterCriteria,
+}): JSX.Element => {
+  const [formState, setFormState] = useState(initialFilterCriteria);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
       const { name, value } = event.target;
-      setFormState((prevState: Record<string, string> | null) => ({
+      setFormState((prevState) => ({
         ...prevState,
         [name]: value,
       }));
@@ -30,29 +30,27 @@ const LookupForm: React.FC = (): JSX.Element => {
   );
 
   const handleReset = useCallback((): void => {
-    const emptyState =
-      lookupTitle === 'Supplier'
-        ? {
-            name: '',
-            index: '',
-            city: '',
-          }
-        : null;
+    const emptyState = {
+      name: '',
+      index: '',
+      city: '',
+    };
     setFormState(emptyState);
-    setFilterCriteria(emptyState);
-  }, [setFilterCriteria, formState]);
+    handleFilterCriteria(formState);
+  }, [formState]);
 
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>): void => {
       event.preventDefault();
-      setFilterCriteria(formState);
+      handleFilterCriteria(formState);
     },
-    [formState, setFilterCriteria],
+    [formState],
   );
 
-  console.log(formState, 'initial', filterCriteria);
+  const formFields = initialFilterCriteria
+    ? Object.keys(initialFilterCriteria)
+    : [];
 
-  const formFields = filterCriteria ? Object.keys(filterCriteria) : [];
   return (
     <section className="lookup__form-container">
       <div className="lookup__header">
@@ -76,7 +74,7 @@ const LookupForm: React.FC = (): JSX.Element => {
               type="text"
               label={key}
               name={key}
-              value={formState ? formState[key] : ''}
+              value={formState[key as keyof Supplier]}
               placeholder=""
               error={false}
               onChange={handleChange}

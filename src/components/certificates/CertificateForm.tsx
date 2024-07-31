@@ -1,17 +1,16 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as SearchSVG } from '../../assets/images/search.svg';
 import { CertificatesContext } from '../../contexts/certificatesContext';
-import { LookupContext } from '../../contexts/LookupContext';
-import SuppliersProvider from '../../contexts/suppliersContext';
+import { SuppliersContext } from '../../contexts/suppliersContext';
 import { addNewCertificate, updateCertificate } from '../../data/db';
-import { Certificate, CertificateType } from '../../types/types';
+import { Certificate, CertificateType, Supplier } from '../../types/types';
 import formatValue from '../../utils/formatInputValue';
 import InputField from '../Form/InputField';
 import SelectField from '../Form/SelectFIeld';
-import SupplierLookup from '../SupplierLookUp/SupplierLookup';
+import LookupModal from '../Lookup/LookupModal/LookupModal';
 import SVGIcon from '../SVGIcon/SVGIcon';
 
 import './certificateForm.css';
@@ -26,19 +25,15 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
   mode,
 }) => {
   const navigate = useNavigate();
+  const { suppliers } = useContext(SuppliersContext)!;
+  const { refetch } = useContext(CertificatesContext)!;
 
   const [formState, setFormState] = useState<Certificate>(initialFormState);
   const [formError, setFormError] = useState<string>('');
-  const { refetch } = useContext(CertificatesContext)!;
-  const {
-    showLookup,
-    setShowLookup,
-    setFilterCriteria,
-    selectedSupplier,
-    setLookupTitle,
-    lookupTitle,
-    setSelectedSupplier,
-  } = useContext(LookupContext)!;
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
+    null,
+  );
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -100,8 +95,8 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
       } else {
         await addNewCertificate(newCertificateData);
       }
-      handleReset();
       refetch();
+      handleReset();
       navigate('/machineLearning/example1');
     } catch (err) {
       setFormError(
@@ -110,17 +105,18 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     }
   };
 
-  const handleOnclickSearchSupplierSvg = useCallback(() => {
-    setFilterCriteria({ name: formState.supplier, index: '', city: '' });
-    setShowLookup(true);
-    setLookupTitle('Supplier');
-  }, [setFilterCriteria, formState]);
+  const handleOpenLookupModal = (): void => {
+    setShowModal(true);
+  };
 
-  useEffect(() => {
-    if (formState.supplier) {
-      setSelectedSupplier({ name: formState.supplier, index: '', city: '' });
-    }
-  }, [formState.supplier, setSelectedSupplier]);
+  const handleSupplierSelection = (supplier: Supplier): void => {
+    setFormState((prevState) => ({
+      ...prevState,
+      supplier: supplier.name,
+    }));
+    setSelectedSupplier(supplier);
+    setShowModal(false);
+  };
 
   useEffect(() => {
     if (selectedSupplier) {
@@ -156,7 +152,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                   Icon={SearchSVG}
                   fill="#565757"
                   width={16}
-                  onClick={handleOnclickSearchSupplierSvg}
+                  onClick={handleOpenLookupModal}
                 />
                 <SVGIcon
                   Icon={CloseSVG}
@@ -244,12 +240,16 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
           </button>
         </div>
       </form>
-      {showLookup && lookupTitle === 'Supplier' && (
-        <SuppliersProvider>
-          <SupplierLookup />
-        </SuppliersProvider>
-      )}
       {formError && <p>{formError}</p>}
+      {showModal && (
+        <LookupModal
+          title="Supplier"
+          filters={{ name: formState.supplier, index: '', city: '' }}
+          onClose={() => setShowModal(false)}
+          handleSelectedSupplier={handleSupplierSelection}
+          data={suppliers}
+        />
+      )}
     </div>
   );
 };

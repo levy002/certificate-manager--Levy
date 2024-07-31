@@ -1,17 +1,16 @@
-/* eslint-disable react/button-has-type */
 import React from 'react';
 
 interface ButtonProps {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
-  type: 'button' | 'submit' | 'reset';
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const Button: React.FC<ButtonProps> = ({
   children,
   onClick,
-  type,
+  type = 'button',
   className,
 }) => {
   return (

@@ -1,5 +1,5 @@
 import CertificateForm from './CertificateForm';
-import { LookupProvider } from '../../contexts/LookupContext';
+import SuppliersProvider from '../../contexts/suppliersContext';
 import { Certificate, CertificateType } from '../../types/types';
 
 const AddCertificate: React.FC = () => {
@@ -13,12 +13,12 @@ const AddCertificate: React.FC = () => {
   };
 
   return (
-    <LookupProvider>
+    <SuppliersProvider>
       <CertificateForm
         mode="create"
         initialFormState={initialFormState}
       />
-    </LookupProvider>
+    </SuppliersProvider>
   );
 };
 

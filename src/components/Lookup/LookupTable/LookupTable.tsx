@@ -1,54 +1,48 @@
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
-import { LookupContext } from '../../../contexts/LookupContext';
 import { Supplier } from '../../../types/types';
 import dataFiltering from '../../../utils/filterFunction';
 import Button from '../../Form/Button';
 import './LookupTable.css';
 import SVGIcon from '../../SVGIcon/SVGIcon';
 
-interface LookupTableProps<T> {
-  data: T[];
-  error?: string | null;
-  loading?: boolean;
+interface LookupTableProps {
+  data: Supplier[];
+  filterCriteria: Supplier;
+  handleSelectedSupplier: (supplier: Supplier) => void;
+  closeModal: () => void;
+  title: string;
 }
 
-const LookupTable = <T,>({
+const LookupTable: React.FC<LookupTableProps> = ({
+  filterCriteria,
+  handleSelectedSupplier,
   data,
-  error,
-  loading,
-}: LookupTableProps<T>): JSX.Element => {
-  const {
-    setSelectedSupplier,
-    setShowLookup,
-    showLookup,
-    filterCriteria,
-    lookupTitle,
-    selectedSupplier,
-  } = useContext(LookupContext)!;
-  const [selectedRow, setSelectedRow] = useState<Supplier>(selectedSupplier);
+  closeModal,
+  title,
+}): JSX.Element => {
+  const [selectedSupplier, setSelectedSupplier] =
+    useState<Supplier>(filterCriteria);
 
-  const handleRowClick = useCallback(
-    (item: T): void => {
-      if (lookupTitle === 'Supplier') {
-        setSelectedRow(item as Supplier);
-      }
+  const handleSupplierRowClick = useCallback(
+    (supplier: Supplier): React.ChangeEventHandler<HTMLInputElement> => {
+      return async (event) => {
+        event.preventDefault();
+        setSelectedSupplier(supplier);
+      };
     },
-    [lookupTitle],
+    [],
   );
 
   const handleSelectSupplier = useCallback(() => {
-    if (lookupTitle === 'Supplier') {
-      setSelectedSupplier(selectedRow);
-    }
-    setShowLookup(false);
-  }, [setSelectedSupplier, selectedRow, lookupTitle]);
+    handleSelectedSupplier(selectedSupplier);
+  }, [selectedSupplier]);
 
   const handleCancelSelectSupplier = useCallback(() => {
-    setShowLookup(false);
-  }, [setShowLookup]);
+    closeModal();
+  }, []);
 
   const filteredData = useMemo(() => {
     return data.filter((item) => dataFiltering(item, filterCriteria));
@@ -58,21 +52,16 @@ const LookupTable = <T,>({
 
   return (
     <section className="lookup-table">
-      {showLookup ? (
-        <div className="lookup__header">
-          <SVGIcon
-            Icon={ChevronSVG}
-            fill="#fff"
-            width={12}
-            height={10}
-          />
-          <p className="lookup__title">{lookupTitle} List</p>
-        </div>
-      ) : null}
+      <div className="lookup__header">
+        <SVGIcon
+          Icon={ChevronSVG}
+          fill="#fff"
+          width={12}
+          height={10}
+        />
+        <p className="lookup__title">{title} List</p>
+      </div>
       <section className="lookup-table__container">
-        {loading && <p>Loading...</p>}
-        {error && !loading && <p>Error: {error}</p>}
-
         <table className="lookup-table__content">
           <thead className="lookup-table__head">
             <tr className="lookup-table__row">
@@ -82,7 +71,7 @@ const LookupTable = <T,>({
                   key={header}
                   className="lookup-table__header"
                 >
-                  {lookupTitle} {header}
+                  {header}
                 </th>
               ))}
             </tr>
@@ -95,20 +84,20 @@ const LookupTable = <T,>({
                   className="lookup-table__row"
                 >
                   <td className="lookup-table__cell">
-                    {showLookup && lookupTitle === 'Supplier' && (
-                      <input
-                        type="radio"
-                        checked={selectedRow.name === (item as Supplier).name}
-                        onChange={() => handleRowClick(item)}
-                      />
-                    )}
+                    <input
+                      type="radio"
+                      checked={
+                        selectedSupplier.name === (item as Supplier).name
+                      }
+                      onChange={handleSupplierRowClick(item)}
+                    />
                   </td>
                   {tableHeaders.map((header) => (
                     <td
                       key={header}
                       className="lookup-table__cell"
                     >
-                      {String((item as Record<string, string>)[header])}
+                      {String(item[header as keyof Supplier])}
                     </td>
                   ))}
                 </tr>
@@ -119,31 +108,29 @@ const LookupTable = <T,>({
                   colSpan={tableHeaders.length + 1}
                   className="lookup-table__cell"
                 >
-                  No {lookupTitle}s Available!!
+                  No Suppliers Available!!
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </section>
-      {showLookup ? (
-        <div className="lookup-table__actions">
-          <Button
-            className="lookup-table__button lookup-table__button--select"
-            type="button"
-            onClick={handleSelectSupplier}
-          >
-            Select
-          </Button>
-          <Button
-            className="lookup-table__button lookup-table__button--cancel"
-            type="button"
-            onClick={handleCancelSelectSupplier}
-          >
-            Cancel
-          </Button>
-        </div>
-      ) : null}
+      <div className="lookup-table__actions">
+        <Button
+          className="lookup-table__button lookup-table__button--select"
+          type="button"
+          onClick={handleSelectSupplier}
+        >
+          Select
+        </Button>
+        <Button
+          className="lookup-table__button lookup-table__button--cancel"
+          type="button"
+          onClick={handleCancelSelectSupplier}
+        >
+          Cancel
+        </Button>
+      </div>
     </section>
   );
 };
