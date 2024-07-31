@@ -1,8 +1,8 @@
 import { ReactComponent as NotFoundSVG } from '../../assets/images/404.svg';
 import { ReactComponent as HomeSVG } from '../../assets/images/home.svg';
-import MenuNavLink from '../../components/Sidebar/MenuNavLink';
-import SVGIcon from '../../components/SVGIcon/SVGIcon';
-import './notFound.css';
+import MenuNavLink from '../../components/sidebar/MenuNavLink';
+import SVGIcon from '../../components/svgIcon/SVGIcon';
+import './NotFound.css';
 
 const NotFound: React.FC = () => {
   return (

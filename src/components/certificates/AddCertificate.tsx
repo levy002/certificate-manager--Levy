@@ -1,9 +1,9 @@
 import CertificateForm from './CertificateForm';
-import { Certificate, CertificateType } from '../../types/types';
+import { Certificate, CertificateType, FormMode } from '../../types/Types';
 
 const AddCertificate: React.FC = () => {
   const initialFormState: Certificate = {
-    supplier: '',
+    supplier: null,
     certificateType: CertificateType.OHSAS18001,
     validFrom: null,
     validTo: null,
@@ -13,7 +13,7 @@ const AddCertificate: React.FC = () => {
 
   return (
     <CertificateForm
-      mode="create"
+      mode={FormMode.CREATE}
       initialFormState={initialFormState}
     />
   );

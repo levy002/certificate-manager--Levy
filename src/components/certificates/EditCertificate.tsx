@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import CertificateForm from './CertificateForm';
-import { getCertificateById } from '../../data/db';
-import { Certificate } from '../../types/types';
+import { getCertificateById } from '../../data/DB';
+import { Certificate, FormMode } from '../../types/Types';
 
 const EditCertificate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,7 +43,7 @@ const EditCertificate: React.FC = () => {
   return (
     <CertificateForm
       initialFormState={certificate}
-      mode="edit"
+      mode={FormMode.EDIT}
     />
   );
 };

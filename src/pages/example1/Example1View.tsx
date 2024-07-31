@@ -1,31 +1,11 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  useRef,
-  useCallback,
-} from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { getAllCertificates, initDB } from '../data/db';
-import { Certificate } from '../types/types';
+import CertificatesTable from '../../components/certificates/CertificateTable';
+import MenuNavLink from '../../components/sidebar/MenuNavLink';
+import { getAllCertificates, initDB } from '../../data/DB';
+import { Certificate } from '../../types/Types';
 
-interface CertificateContextType {
-  certificates: Certificate[];
-  loading: boolean;
-  error: string | null;
-  refetch: () => void;
-}
-
-interface CertificatesProviderProps {
-  children: React.ReactNode;
-}
-
-export const CertificatesContext =
-  React.createContext<CertificateContextType | null>(null);
-
-const CertificatesProvider: React.FC<CertificatesProviderProps> = ({
-  children,
-}) => {
+const Example1View: React.FC = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -55,16 +35,25 @@ const CertificatesProvider: React.FC<CertificatesProviderProps> = ({
     fetchCertificates();
   }, [fetchCertificates]);
 
-  const contextValues = useMemo(
-    () => ({ certificates, loading, error, refetch }),
-    [certificates, loading, error, refetch],
-  );
-
   return (
-    <CertificatesContext.Provider value={contextValues}>
-      {children}
-    </CertificatesContext.Provider>
+    <section>
+      <h2>Example 1</h2>
+      <div className="table__new-certificate">
+        <MenuNavLink
+          to="/machineLearning/example1/certificates/new"
+          desc="New Certificate"
+        />
+      </div>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
+      {!loading && !error && (
+        <CertificatesTable
+          certificates={certificates}
+          refetch={refetch}
+        />
+      )}
+    </section>
   );
 };
 
-export default CertificatesProvider;
+export default Example1View;

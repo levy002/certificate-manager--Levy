@@ -1,10 +1,11 @@
-import { Certificate } from '../types/types';
+import { Certificate, Supplier } from '../types/Types';
 
 let db: IDBDatabase;
 const version = 1;
 
 export enum Stores {
   certificatesData = 'certificates',
+  suppliersData = 'suppliers',
 }
 
 export const initDB = (): Promise<boolean> => {
@@ -16,6 +17,10 @@ export const initDB = (): Promise<boolean> => {
 
       if (!database.objectStoreNames.contains(Stores.certificatesData)) {
         database.createObjectStore(Stores.certificatesData, { keyPath: 'id' });
+      }
+
+      if (!database.objectStoreNames.contains(Stores.suppliersData)) {
+        database.createObjectStore(Stores.suppliersData, { keyPath: 'index' });
       }
     };
 
@@ -36,6 +41,11 @@ export const addNewCertificate = (
   return new Promise((resolve, reject) => {
     if (!db) {
       reject(new Error('Database is not initialized'));
+      return;
+    }
+
+    if (!data.id) {
+      reject(new Error('Certificate must have an id property'));
       return;
     }
 
@@ -142,6 +152,104 @@ export const deleteCertificate = (id: number): Promise<void> => {
       reject(
         new Error(`Delete request error: ${deleteRequest.error?.message}`),
       );
+    };
+  });
+};
+
+export const addInitialSuppliers = (suppliers: Supplier[]): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      reject(new Error('Database is not initialized'));
+      return;
+    }
+
+    const checkAndAddSupplier = (supplier: Supplier): Promise<void> => {
+      return new Promise((res, rej) => {
+        const checkTx = db.transaction(Stores.suppliersData, 'readonly');
+        const checkStore = checkTx.objectStore(Stores.suppliersData);
+        const getRequest = checkStore.get(supplier.index);
+
+        getRequest.onsuccess = (): void => {
+          if (getRequest.result) {
+            res();
+          } else {
+            const addTx = db.transaction(Stores.suppliersData, 'readwrite');
+            const addStore = addTx.objectStore(Stores.suppliersData);
+            const addRequest = addStore.add(supplier);
+
+            addRequest.onsuccess = (): void => res();
+            addRequest.onerror = (): void =>
+              rej(
+                new Error(`Add request error for supplier: ${supplier.name}`),
+              );
+
+            addTx.oncomplete = (): void => res();
+            addTx.onerror = (): void =>
+              rej(new Error('Add transaction failed'));
+          }
+        };
+
+        getRequest.onerror = (): void =>
+          rej(new Error(`Error checking supplier: ${supplier.name}`));
+      });
+    };
+
+    const promises = suppliers.map((supplier) => {
+      if (!supplier.index) {
+        return Promise.reject(
+          new Error('Supplier must have an index property'),
+        );
+      }
+      return checkAndAddSupplier(supplier);
+    });
+
+    Promise.all(promises)
+      .then(() => resolve())
+      .catch((error) => reject(error));
+  });
+};
+
+export const getAllSuppliers = (): Promise<Supplier[]> => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      reject(new Error('Database is not initialized'));
+      return;
+    }
+
+    const tx = db.transaction(Stores.suppliersData, 'readonly');
+    const store = tx.objectStore(Stores.suppliersData);
+
+    const getAllRequest = store.getAll();
+
+    getAllRequest.onsuccess = (): void => {
+      resolve(getAllRequest.result);
+    };
+
+    getAllRequest.onerror = (): void => {
+      reject(
+        new Error(`Get all request error: ${getAllRequest.error?.message}`),
+      );
+    };
+  });
+};
+
+export const getSupplierByIndex = (index: string): Promise<Supplier | null> => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      reject(new Error('Database is not initialized'));
+      return;
+    }
+
+    const tx = db.transaction(Stores.suppliersData, 'readonly');
+    const store = tx.objectStore(Stores.suppliersData);
+    const getRequest = store.get(index);
+
+    getRequest.onsuccess = (): void => {
+      resolve(getRequest.result || null);
+    };
+
+    getRequest.onerror = (): void => {
+      reject(new Error(`Get request error: ${getRequest.error?.message}`));
     };
   });
 };

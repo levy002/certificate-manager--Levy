@@ -1,21 +1,26 @@
-import { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as SearchSVG } from '../../assets/images/search.svg';
-import { CertificatesContext } from '../../contexts/certificatesContext';
-import { addNewCertificate, updateCertificate } from '../../data/db';
-import { Certificate, CertificateType } from '../../types/types';
-import formatValue from '../../utils/formatInputValue';
-import InputField from '../Form/InputField';
-import SelectField from '../Form/SelectFIeld';
-import SVGIcon from '../SVGIcon/SVGIcon';
+import { addNewCertificate, updateCertificate } from '../../data/DB';
+import {
+  Certificate,
+  CertificateType,
+  FormMode,
+  Supplier,
+} from '../../types/Types';
+import formatValue from '../../utils/FormatInputValue';
+import InputField from '../form/InputField';
+import SelectField from '../form/SelectFIeld';
+import LookupModal from '../lookup/supplierLookupModal/SupplierLookupModal';
+import SVGIcon from '../svgIcon/SVGIcon';
 
-import './certificateForm.css';
+import './CertificateForm.css';
 
 interface CertificateFormProps {
   initialFormState: Certificate;
-  mode: string;
+  mode: FormMode;
 }
 
 const CertificateForm: React.FC<CertificateFormProps> = ({
@@ -26,7 +31,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
 
   const [formState, setFormState] = useState<Certificate>(initialFormState);
   const [formError, setFormError] = useState<string>('');
-  const { refetch } = useContext(CertificatesContext)!;
+  const [showModal, setShowModal] = useState(false);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -66,6 +71,13 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     setFormError('');
   };
 
+  const handleClearSupplier = useCallback(() => {
+    setFormState((prevState) => ({
+      ...prevState,
+      supplier: null,
+    }));
+  }, []);
+
   const handleAddNewCertificate = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -76,13 +88,12 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     };
 
     try {
-      if (mode === 'edit') {
+      if (mode === FormMode.EDIT) {
         await updateCertificate(newCertificateData);
       } else {
         await addNewCertificate(newCertificateData);
       }
       handleReset();
-      refetch();
       navigate('/machineLearning/example1');
     } catch (err) {
       setFormError(
@@ -91,9 +102,25 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     }
   };
 
+  const handleOpenLookupModal = (): void => {
+    setShowModal(true);
+  };
+
+  const handleSupplierSelection = (supplier: Supplier | null): void => {
+    setFormState((prevState) => ({
+      ...prevState,
+      supplier,
+    }));
+    setShowModal(false);
+  };
+
+  const handleCloseModal = useCallback(() => {
+    setShowModal(false);
+  }, []);
+
   return (
     <div className="form-container">
-      <h2>{mode === 'edit' ? 'Edit Certificate' : 'New Certificate'}</h2>
+      <h2>{mode === FormMode.EDIT ? 'Edit Certificate' : 'New Certificate'}</h2>
       <form
         onSubmit={handleAddNewCertificate}
         className="form-container__form"
@@ -105,21 +132,25 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                 type="text"
                 label="Supplier"
                 name="supplier"
-                value={formState.supplier}
+                value={formState?.supplier?.name || ''}
                 placeholder=""
                 error={!!formError}
                 onChange={handleChange}
+                required
+                readonly
               />
               <div className="form-container__icons">
                 <SVGIcon
                   Icon={SearchSVG}
                   fill="#565757"
                   width={16}
+                  onClick={handleOpenLookupModal}
                 />
                 <SVGIcon
                   Icon={CloseSVG}
                   fill="#565757"
                   width={16}
+                  onClick={handleClearSupplier}
                 />
               </div>
             </div>
@@ -157,6 +188,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                   ? formatValue('date', formState.validFrom)
                   : undefined
               }
+              required
             />
           </div>
 
@@ -188,7 +220,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
             className="form-container__buttons-submit-btn"
             type="submit"
           >
-            {mode === 'edit' ? 'Update' : 'Save'}
+            {mode === FormMode.EDIT ? 'Update' : 'Save'}
           </button>
 
           <button
@@ -201,6 +233,13 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
         </div>
       </form>
       {formError && <p>{formError}</p>}
+      {showModal && (
+        <LookupModal
+          onClose={handleCloseModal}
+          handleSelectedSupplier={handleSupplierSelection}
+          preSelectedSupplier={formState.supplier || null}
+        />
+      )}
     </div>
   );
 };

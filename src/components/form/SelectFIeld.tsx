@@ -1,5 +1,5 @@
-import './formFields.css';
-import Options from '../../helper/selectOptions';
+import './FormFields.css';
+import Options from '../../helper/SelectOptions';
 
 type SelectProps<T> = {
   label: string;

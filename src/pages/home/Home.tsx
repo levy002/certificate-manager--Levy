@@ -4,8 +4,8 @@ import { Outlet } from 'react-router-dom';
 import './Home.css';
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
-import Sidebar from '../../components/Sidebar/Sidebar';
-import SVGIcon from '../../components/SVGIcon/SVGIcon';
+import Sidebar from '../../components/sidebar/Sidebar';
+import SVGIcon from '../../components/svgIcon/SVGIcon';
 
 const Home: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
