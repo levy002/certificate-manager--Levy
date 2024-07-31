@@ -137,6 +137,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                 error={!!formError}
                 onChange={handleChange}
                 required
+                readonly
               />
               <div className="form-container__icons">
                 <SVGIcon

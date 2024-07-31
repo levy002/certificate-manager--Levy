@@ -10,6 +10,7 @@ type InputProps = {
   error: boolean;
   min?: string;
   required?: boolean;
+  readonly?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -23,6 +24,7 @@ const InputField: React.FC<InputProps> = ({
   min,
   onChange,
   required,
+  readonly,
 }) => {
   const inputValue = formatValue(type, value);
 
@@ -44,6 +46,7 @@ const InputField: React.FC<InputProps> = ({
         className="input-field__input"
         min={min}
         required={required}
+        readOnly={readonly}
       />
       {error && <p className="input-field__error">{name} field is empty</p>}
     </div>
