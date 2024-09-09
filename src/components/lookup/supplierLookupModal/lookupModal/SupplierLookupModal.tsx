@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { ReactComponent as CloseSVG } from '../../../assets/images/close.svg';
-import { useI18n } from '../../../contexts/LanguageContext';
-import { getSupplierByIndex } from '../../../data/DB';
-import { Supplier } from '../../../types/Types';
-import SVGIcon from '../../svgIcon/SVGIcon';
+import { ReactComponent as CloseSVG } from '../../../../assets/images/close.svg';
+import { useI18n } from '../../../../contexts/LanguageContext';
+import { getSupplierByIndex } from '../../../../data/DB';
+import { Supplier } from '../../../../types/Types';
+import SVGIcon from '../../../svgIcon/SVGIcon';
 import LookupForm from '../lookupForm/LookupForm';
 import './LookupModal.css';
 import LookupTable from '../lookupTable/LookupTable';

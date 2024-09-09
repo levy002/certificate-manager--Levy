@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import CertificateAssignedUsersTable from './CertificateAssignedUsersTable';
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as SearchSVG } from '../../assets/images/search.svg';
 import { useI18n } from '../../contexts/LanguageContext';
@@ -10,11 +11,14 @@ import {
   CertificateType,
   FormMode,
   Supplier,
+  User,
 } from '../../types/Types';
 import formatValue from '../../utils/FormatInputValue';
+import Button from '../form/Button';
 import InputField from '../form/InputField';
 import SelectField from '../form/SelectFIeld';
-import LookupModal from '../lookup/supplierLookupModal/SupplierLookupModal';
+import LookupModal from '../lookup/supplierLookupModal/lookupModal/SupplierLookupModal';
+import UserLookupModal from '../lookup/userLookupModal/lookupModal/UserLookupModal';
 import SVGIcon from '../svgIcon/SVGIcon';
 
 import './CertificateForm.css';
@@ -32,7 +36,8 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
 
   const [formState, setFormState] = useState<Certificate>(initialFormState);
   const [formError, setFormError] = useState<string>('');
-  const [showModal, setShowModal] = useState(false);
+  const [showSupplierModal, setShowSupplierModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
   const { translate } = useI18n();
 
   const handleChange = useCallback(
@@ -104,8 +109,12 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     }
   };
 
-  const handleOpenLookupModal = (): void => {
-    setShowModal(true);
+  const handleOpenSupplierLookupModal = (): void => {
+    setShowSupplierModal(true);
+  };
+
+  const handleOpenUserLookupModal = (): void => {
+    setShowUserModal(true);
   };
 
   const handleSupplierSelection = (supplier: Supplier | null): void => {
@@ -113,11 +122,32 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
       ...prevState,
       supplier,
     }));
-    setShowModal(false);
+    setShowSupplierModal(false);
   };
 
-  const handleCloseModal = useCallback(() => {
-    setShowModal(false);
+  const handleAssigningUsers = (users: User[]): void => {
+    setFormState((prevState) => ({
+      ...prevState,
+      assignedUsers: users,
+    }));
+    setShowUserModal(false);
+  };
+
+  const handleUnAssignUser = (userId: string): void => {
+    setFormState((prevState) => ({
+      ...prevState,
+      assignedUsers: prevState.assignedUsers.filter(
+        (user) => user.userId !== userId,
+      ),
+    }));
+  };
+
+  const handleCloseSupplierModal = useCallback(() => {
+    setShowSupplierModal(false);
+  }, []);
+
+  const handleCloseUserModal = useCallback(() => {
+    setShowUserModal(false);
   }, []);
 
   return (
@@ -150,7 +180,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                   Icon={SearchSVG}
                   fill="#565757"
                   width={16}
-                  onClick={handleOpenLookupModal}
+                  onClick={handleOpenSupplierLookupModal}
                 />
                 <SVGIcon
                   Icon={CloseSVG}
@@ -196,6 +226,35 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
               }
               required
             />
+
+            <section className="assigned-users">
+              <label
+                htmlFor="users"
+                className="input-field__label"
+              >
+                {translate('assigned_users')}
+              </label>
+
+              <Button
+                onClick={handleOpenUserLookupModal}
+                type="button"
+                className="assigned-users__button"
+              >
+                <>
+                  <SVGIcon
+                    Icon={SearchSVG}
+                    fill="#565757"
+                    height={16}
+                  />
+                  {translate('add_participant')}
+                </>
+              </Button>
+
+              <CertificateAssignedUsersTable
+                users={formState.assignedUsers}
+                unAssignUser={handleUnAssignUser}
+              />
+            </section>
           </div>
 
           <div className="form-container__pdf">
@@ -239,11 +298,19 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
         </div>
       </form>
       {formError && <p>{formError}</p>}
-      {showModal && (
+      {showSupplierModal && (
         <LookupModal
-          onClose={handleCloseModal}
+          onClose={handleCloseSupplierModal}
           handleSelectedSupplier={handleSupplierSelection}
           preSelectedSupplier={formState.supplier || null}
+        />
+      )}
+
+      {showUserModal && (
+        <UserLookupModal
+          onClose={handleCloseUserModal}
+          handleAssigningUsers={handleAssigningUsers}
+          preAssignedUsers={formState.assignedUsers}
         />
       )}
     </div>

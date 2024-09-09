@@ -1,4 +1,4 @@
-import { Supplier } from '../types/Types';
+import { Supplier, Department, User } from '../types/Types';
 
 export const initialSuppliers: Supplier[] = [
   { name: 'Supplier A', index: 'SUP-001', city: 'Berlin' },
@@ -8,4 +8,87 @@ export const initialSuppliers: Supplier[] = [
   { name: 'Supplier E', index: 'SUP-005', city: 'Sarajevo' },
   { name: 'Supplier F', index: 'SUP-006', city: 'Graz' },
   { name: 'Supplier G', index: 'SUP-007', city: 'Sarajevo' },
+];
+
+export const initialUsers: User[] = [
+  {
+    name: 'John',
+    firstName: 'Doe',
+    userId: 'JHD',
+    department: Department.ITM,
+    plant: 'Plant 1',
+    email: 'john.doe@example.com',
+  },
+  {
+    name: 'Jane',
+    firstName: 'Smith',
+    userId: 'JST',
+    department: Department.HR,
+    plant: 'Plant 2',
+    email: 'jane.smith@example.com',
+  },
+  {
+    name: 'Alice',
+    firstName: 'Johnson',
+    userId: 'AJS',
+    department: Department.Sales,
+    plant: 'Plant 3',
+    email: 'alice.johnson@example.com',
+  },
+  {
+    name: 'Bob',
+    firstName: 'Brown',
+    userId: 'BBR',
+    department: Department.Engineering,
+    plant: 'Plant 4',
+    email: 'bob.brown@example.com',
+  },
+  {
+    name: 'Charlie',
+    firstName: 'Davis',
+    userId: 'CDV',
+    department: Department.Sales,
+    plant: 'Plant 5',
+    email: 'charlie.davis@example.com',
+  },
+  {
+    name: 'David',
+    firstName: 'Wilson',
+    userId: 'DWL',
+    department: Department.ITM,
+    plant: 'Plant 6',
+    email: 'david.wilson@example.com',
+  },
+  {
+    name: 'Eve',
+    firstName: 'Moore',
+    userId: 'EMR',
+    department: Department.Engineering,
+    plant: 'Plant 7',
+    email: 'eve.moore@example.com',
+  },
+  {
+    name: 'Frank',
+    firstName: 'Clark',
+    userId: 'FCL',
+    department: Department.Engineering,
+    plant: 'Plant 8',
+    email: 'frank.clark@example.com',
+  },
+  {
+    name: 'Grace',
+    firstName: 'Lee',
+    userId: 'GLE',
+    department: Department.Sales,
+    plant: 'Plant 9',
+    email: 'grace.lee@example.com',
+  },
+  {
+    name: 'Henry',
+    firstName: 'Martin',
+    userId: 'HMT',
+    department: Department.ITM,
+    plant: 'Plant 10',
+    email: 'henry.martin@example.com',
+  },
 ];

@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
-import { useI18n } from '../../../contexts/LanguageContext';
-import { Supplier } from '../../../types/Types';
-import Button from '../../form/Button';
+import { ReactComponent as ChevronSVG } from '../../../../assets/images/chevron.svg';
+import { useI18n } from '../../../../contexts/LanguageContext';
+import { Supplier } from '../../../../types/Types';
+import Button from '../../../form/Button';
 import './LookupTable.css';
-import SVGIcon from '../../svgIcon/SVGIcon';
+import SVGIcon from '../../../svgIcon/SVGIcon';
 
 interface LookupTableProps {
   data: Supplier[];

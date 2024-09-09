@@ -33,6 +33,12 @@
   "city": "city",
   "no_certificate_found": "No certificate found",
   "search_for_supplier": "Search for Supplier",
+   "search_for_user": "Search for User",
+  "users_list": "Users List",
+  "no_users_available": "No Users Available",
+  "assigned_users": "Assigned users",
+  "add_participant": "Add participant",
+  "no_participants": "No participants!" ,
   "please_upload_pdf": "Please upload a valid PDF file.",
   "something_went_wrong": "Something went wrong, try again",
   "click_to_select_date": "Click to select date"

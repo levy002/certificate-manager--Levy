@@ -9,6 +9,7 @@ const AddCertificate: React.FC = () => {
     validTo: null,
     PDFUrl: '',
     id: Date.now(),
+    assignedUsers: [],
   };
 
   return (

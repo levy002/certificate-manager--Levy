@@ -9,6 +9,22 @@ export interface Supplier {
   city: string;
 }
 
+export enum Department {
+  ITM = 'ITM',
+  HR = 'HR',
+  Sales = 'Sales',
+  Engineering = 'Engineering',
+}
+
+export interface User {
+  name: string;
+  firstName: string;
+  userId: string;
+  department: Department;
+  plant: string;
+  email: string;
+}
+
 export type Certificate = {
   id: number;
   supplier: Supplier | null;
@@ -16,6 +32,7 @@ export type Certificate = {
   validFrom: Date | null;
   validTo: Date | null;
   PDFUrl: string | null;
+  assignedUsers: User[];
 };
 
 export enum FormMode {

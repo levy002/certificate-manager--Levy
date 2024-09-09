@@ -1,25 +1,30 @@
 import { useCallback, useState } from 'react';
 
-import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
-import { useI18n } from '../../../contexts/LanguageContext';
-import { Supplier } from '../../../types/Types';
-import Button from '../../form/Button';
-import InputField from '../../form/InputField';
-import './LookupForm.css';
-import SVGIcon from '../../svgIcon/SVGIcon';
+import { ReactComponent as ChevronSVG } from '../../../../assets/images/chevron.svg';
+import { useI18n } from '../../../../contexts/LanguageContext';
+import { Department, User } from '../../../../types/Types';
+import Button from '../../../form/Button';
+import InputField from '../../../form/InputField';
+import '../../supplierLookupModal/lookupForm/LookupForm.css';
+import SVGIcon from '../../../svgIcon/SVGIcon';
 
 interface LookupModalFormProps {
-  handleFilterCriteria: (criteria: Supplier | null) => void;
-  initialFilterCriteria: Supplier | null;
+  handleFilterCriteria: (criteria: User) => void;
 }
 
 const LookupForm: React.FC<LookupModalFormProps> = ({
-  initialFilterCriteria,
   handleFilterCriteria,
 }): JSX.Element => {
-  const [formState, setFormState] = useState<Supplier | null>(
-    initialFilterCriteria,
-  );
+  const initialFilterCriteria: User = {
+    name: '',
+    firstName: '',
+    userId: '',
+    department: Department.ITM,
+    plant: '',
+    email: '',
+  };
+
+  const [formState, setFormState] = useState<User>(initialFilterCriteria);
   const { translate } = useI18n();
 
   const handleChange = useCallback(
@@ -30,15 +35,15 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
           ({
             ...prevState,
             [name]: value,
-          }) as Supplier,
+          }) as User,
       );
     },
     [],
   );
 
   const handleReset = useCallback((): void => {
-    setFormState(null);
-    handleFilterCriteria(null);
+    setFormState(initialFilterCriteria);
+    handleFilterCriteria(initialFilterCriteria);
   }, []);
 
   const handleSubmit = useCallback(
@@ -49,7 +54,14 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
     [formState],
   );
 
-  const formFields = ['name', 'index', 'city'];
+  const formFields = [
+    'name',
+    'firstName',
+    'userId',
+    'department',
+    'plant',
+    'email',
+  ];
 
   return (
     <section className="lookup__form-container">
@@ -74,7 +86,7 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
               type="text"
               label={translate(key)}
               name={key}
-              value={formState ? formState[key as keyof Supplier] || '' : ''}
+              value={formState ? formState[key as keyof User] || '' : ''}
               placeholder=""
               error={false}
               onChange={handleChange}
