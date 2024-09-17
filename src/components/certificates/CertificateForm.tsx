@@ -62,10 +62,10 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
         };
         reader.readAsDataURL(file);
       } else {
-        setFormError('Please upload a valid PDF file.');
+        setFormError(translate('please_upload_pdf'));
       }
     },
-    [],
+    [translate],
   );
 
   const handleReset = (): void => {
@@ -99,7 +99,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
       navigate('/machineLearning/example1');
     } catch (err) {
       setFormError(
-        err instanceof Error ? err.message : 'Something went wrong, try again',
+        err instanceof Error ? err.message : translate('something_went_wrong'),
       );
     }
   };
@@ -136,10 +136,10 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
             <div className="form-container__supplier-input">
               <InputField
                 type="text"
-                label="Supplier"
+                label={translate('supplier')}
                 name="supplier"
                 value={formState?.supplier?.name || ''}
-                placeholder=""
+                placeholder={translate('search_for_supplier')}
                 error={!!formError}
                 onChange={handleChange}
                 required
@@ -162,10 +162,10 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
             </div>
 
             <SelectField
-              label="Certificate Type"
+              label={translate('certificate_type')}
               name="certificateType"
               value={formState.certificateType}
-              placeholder="Select your option"
+              placeholder={translate('select')}
               options={Object.values(CertificateType)}
               error={!!formError}
               onChange={handleChange}
@@ -173,20 +173,20 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
 
             <InputField
               type="date"
-              label="Valid from"
+              label={translate('valid_from')}
               name="validFrom"
               value={formState.validFrom}
-              placeholder="Click to select date"
+              placeholder={translate('click_to_select_date')}
               error={!!formError}
               onChange={handleChange}
             />
 
             <InputField
               type="date"
-              label="Valid to"
+              label={translate('valid_to')}
               name="validTo"
               value={formState.validTo}
-              placeholder="Click to select date"
+              placeholder={translate('click_to_select_date')}
               error={!!formError}
               onChange={handleChange}
               min={

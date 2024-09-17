@@ -32,5 +32,8 @@
   "no_suppliers_available": "No Suppliers Available",
   "city": "city",
   "no_certificate_found": "No certificate found",
-  "search_for_supplier": "Search for Supplier"
+  "search_for_supplier": "Search for Supplier",
+  "please_upload_pdf": "Please upload a valid PDF file.",
+  "something_went_wrong": "Something went wrong, try again",
+  "click_to_select_date": "Click to select date"
 }

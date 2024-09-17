@@ -61,7 +61,7 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
                 <th className="table__header" />
                 <th className="table__header">{translate('supplier')}</th>
                 <th className="table__header">
-                  {translate('Certificate Type')}
+                  {translate('certificate_type')}
                 </th>
                 <th className="table__header">{translate('valid_from')}</th>
                 <th className="table__header">{translate('valid_to')}</th>

@@ -32,5 +32,8 @@
   "no_suppliers_available": "Keine Lieferanten verfügbar",
   "city": "Stadt",
   "no_certificate_found": "Kein Zertifikat gefunden",
-  "search_for_supplier": "Lieferantensuche"
+  "search_for_supplier": "Lieferantensuche",
+  "please_upload_pdf": "Bitte laden Sie eine gültige PDF-Datei hoch.",
+  "something_went_wrong": "Etwas ist schiefgelaufen, bitte versuchen Sie es erneut",
+  "click_to_select_date": "Klicken, um Datum auszuwählen"
 }
