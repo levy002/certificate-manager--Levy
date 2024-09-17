@@ -14,6 +14,8 @@ interface LookupTableProps {
   closeModal: () => void;
 }
 
+const tableHeaders = ['name', 'index', 'city'];
+
 const LookupTable: React.FC<LookupTableProps> = ({
   handleSelectedSupplier,
   data,
@@ -41,8 +43,6 @@ const LookupTable: React.FC<LookupTableProps> = ({
   const handleCancelSelectSupplier = useCallback(() => {
     closeModal();
   }, []);
-
-  const tableHeaders = ['name', 'index', 'city'];
 
   return (
     <section className="lookup-table">

@@ -11,6 +11,8 @@ interface CertificateAssignedUsersTableProps {
   unAssignUser: (userId: string) => void;
 }
 
+const tableHeaders = ['name', 'department', 'email'];
+
 const CertificateAssignedUsersTable: React.FC<
   CertificateAssignedUsersTableProps
 > = ({ users, unAssignUser }): JSX.Element => {
@@ -22,8 +24,6 @@ const CertificateAssignedUsersTable: React.FC<
     },
     [unAssignUser],
   );
-
-  const tableHeaders = ['name', 'department', 'email'];
 
   return (
     <section className="lookup-table__container">

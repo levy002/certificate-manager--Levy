@@ -14,6 +14,15 @@ interface LookupTableProps {
   closeModal: () => void;
 }
 
+const tableHeaders = [
+  'name',
+  'firstName',
+  'userId',
+  'department',
+  'plant',
+  'email',
+];
+
 const LookupTable: React.FC<LookupTableProps> = ({
   handleSelectedUser,
   data,
@@ -42,15 +51,6 @@ const LookupTable: React.FC<LookupTableProps> = ({
   const handleCancel = useCallback(() => {
     closeModal();
   }, [closeModal]);
-
-  const tableHeaders = [
-    'name',
-    'firstName',
-    'userId',
-    'department',
-    'plant',
-    'email',
-  ];
 
   return (
     <section className="lookup-table">

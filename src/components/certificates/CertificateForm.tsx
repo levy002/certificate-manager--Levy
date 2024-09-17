@@ -36,8 +36,8 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
 
   const [formState, setFormState] = useState<Certificate>(initialFormState);
   const [formError, setFormError] = useState<string>('');
-  const [showSupplierModal, setShowSupplierModal] = useState(false);
-  const [showUserModal, setShowUserModal] = useState(false);
+  const [showSupplierModal, setShowSupplierModal] = useState<boolean>(false);
+  const [showUserModal, setShowUserModal] = useState<boolean>(false);
   const { translate } = useI18n();
 
   const handleChange = useCallback(

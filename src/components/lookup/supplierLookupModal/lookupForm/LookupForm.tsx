@@ -13,6 +13,8 @@ interface LookupModalFormProps {
   initialFilterCriteria: Supplier | null;
 }
 
+const formFields = ['name', 'index', 'city'];
+
 const LookupForm: React.FC<LookupModalFormProps> = ({
   initialFilterCriteria,
   handleFilterCriteria,
@@ -48,8 +50,6 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
     },
     [formState],
   );
-
-  const formFields = ['name', 'index', 'city'];
 
   return (
     <section className="lookup__form-container">
