@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
+import { useI18n } from '../../../contexts/LanguageContext';
 import { Supplier } from '../../../types/Types';
 import Button from '../../form/Button';
 import InputField from '../../form/InputField';
@@ -19,6 +20,7 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
   const [formState, setFormState] = useState<Supplier | null>(
     initialFilterCriteria,
   );
+  const { translate } = useI18n();
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -58,7 +60,7 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
           width={12}
           height={10}
         />
-        <p className="lookup__title">Search criteria</p>
+        <p className="lookup__title">{translate('search_criteria')}</p>
       </div>
 
       <form
@@ -70,7 +72,7 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
             <InputField
               key={key}
               type="text"
-              label={key}
+              label={translate(key)}
               name={key}
               value={formState ? formState[key as keyof Supplier] || '' : ''}
               placeholder=""
@@ -84,14 +86,14 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
             type="submit"
             className="lookup-form__button"
           >
-            Search
+            {translate('search')}
           </Button>
           <Button
             type="reset"
             onClick={handleReset}
             className="lookup-form__button lookup-form__button--reset"
           >
-            Reset
+            {translate('reset')}
           </Button>
         </div>
       </form>

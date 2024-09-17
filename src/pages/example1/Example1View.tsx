@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import CertificatesTable from '../../components/certificates/CertificateTable';
 import MenuNavLink from '../../components/sidebar/MenuNavLink';
+import { useI18n } from '../../contexts/LanguageContext';
 import { getAllCertificates, initDB } from '../../data/DB';
 import { Certificate } from '../../types/Types';
 
@@ -10,6 +11,7 @@ const Example1View: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const dbInitialized = useRef<boolean>(false);
+  const { translate } = useI18n();
 
   const fetchCertificates = useCallback(async (): Promise<void> => {
     try {
@@ -37,14 +39,14 @@ const Example1View: React.FC = () => {
 
   return (
     <section>
-      <h2>Example 1</h2>
+      <h2>{translate('example1')}</h2>
       <div className="table__new-certificate">
         <MenuNavLink
           to="/machineLearning/example1/certificates/new"
-          desc="New Certificate"
+          desc={translate('new_certificate')}
         />
       </div>
-      {loading && <p>Loading...</p>}
+      {loading && <p>{translate('loading')}...</p>}
       {error && <p>Error: {error}</p>}
       {!loading && !error && (
         <CertificatesTable

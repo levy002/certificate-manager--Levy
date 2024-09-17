@@ -1,4 +1,5 @@
 import './FormFields.css';
+import { useI18n } from '../../contexts/LanguageContext';
 import formatValue from '../../utils/FormatInputValue';
 
 type InputProps = {
@@ -26,6 +27,7 @@ const InputField: React.FC<InputProps> = ({
   required,
   readonly,
 }) => {
+  const { translate } = useI18n();
   const inputValue = formatValue(type, value);
 
   return (
@@ -34,7 +36,7 @@ const InputField: React.FC<InputProps> = ({
         className="input-field__label"
         htmlFor={label}
       >
-        {label}
+        {translate(label)}
       </label>
       <input
         type={type}

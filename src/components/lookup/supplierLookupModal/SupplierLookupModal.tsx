@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { ReactComponent as CloseSVG } from '../../../assets/images/close.svg';
+import { useI18n } from '../../../contexts/LanguageContext';
 import { getSupplierByIndex } from '../../../data/DB';
 import { Supplier } from '../../../types/Types';
 import SVGIcon from '../../svgIcon/SVGIcon';
@@ -21,6 +22,7 @@ const SupplierLookupModal: React.FC<SupplierLookupModalProps> = ({
 }): JSX.Element => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const { translate } = useI18n();
 
   useEffect(() => {
     dialogRef.current?.showModal();
@@ -66,7 +68,9 @@ const SupplierLookupModal: React.FC<SupplierLookupModalProps> = ({
     >
       <section className="lookup-container">
         <div className="lookup-container__header">
-          <h3 className="lookup-container__title">Search for Supplier</h3>
+          <h3 className="lookup-container__title">
+            {translate('search_for_supplier')}
+          </h3>
           <SVGIcon
             Icon={CloseSVG}
             fill="#565757"

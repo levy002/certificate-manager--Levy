@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 
 import { ReactComponent as GearSVG } from '../../assets/images/gear.svg';
+import { useI18n } from '../../contexts/LanguageContext';
 import { deleteCertificate } from '../../data/DB';
 import { Certificate } from '../../types/Types';
 import MenuNavLink from '../sidebar/MenuNavLink';
@@ -16,6 +17,7 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
   certificates,
   refetch,
 }) => {
+  const { translate } = useI18n();
   const [openGearCertificateId, setOpenGearCertificateId] = useState<
     number | null
   >(null);
@@ -57,10 +59,12 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
             <thead className="table__head">
               <tr className="table__row">
                 <th className="table__header" />
-                <th className="table__header">Supplier</th>
-                <th className="table__header">Certificate Type</th>
-                <th className="table__header">Valid from</th>
-                <th className="table__header">Valid to</th>
+                <th className="table__header">{translate('supplier')}</th>
+                <th className="table__header">
+                  {translate('certificate_type')}
+                </th>
+                <th className="table__header">{translate('valid_from')}</th>
+                <th className="table__header">{translate('valid_to')}</th>
               </tr>
             </thead>
             <tbody className="table__body">
@@ -79,13 +83,13 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
                       <section className="table__cell-gear-contents">
                         <MenuNavLink
                           to={`/machineLearning/example1/certificates/${certificate.id}`}
-                          desc="Edit"
+                          desc={translate('edit')}
                         />
                         <button
                           onClick={handleDeleteClick(certificate.id)}
                           type="button"
                         >
-                          Delete
+                          {translate('delete')}
                         </button>
                       </section>
                     )}
@@ -104,7 +108,7 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
           </table>
         </section>
       ) : (
-        <h4>No certificates available.</h4>
+        <h4>{translate('no_certificates_available')}.</h4>
       )}
     </section>
   );

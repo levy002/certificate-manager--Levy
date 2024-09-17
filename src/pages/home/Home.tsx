@@ -1,23 +1,49 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import './Home.css';
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as MenuSVG } from '../../assets/images/menu.svg';
+import SelectField from '../../components/form/SelectFIeld';
 import Sidebar from '../../components/sidebar/Sidebar';
 import SVGIcon from '../../components/svgIcon/SVGIcon';
+import { useI18n } from '../../contexts/LanguageContext';
 
 const Home: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
+  const { setLanguage, language } = useI18n();
 
   const handleMenuClick = useCallback((): void => {
     setShowMobileMenu((prevShowMobileMenu) => !prevShowMobileMenu);
   }, []);
 
+  const handleLanguageChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>): void => {
+      const selectedLanguage = e.target.value;
+      if (selectedLanguage === 'English') {
+        setLanguage('en');
+      } else {
+        setLanguage('de');
+      }
+    },
+    [setLanguage],
+  );
+
   return (
     <div className="home">
       <header className="home__header">
         <h1 className="home__title">DCCS Tuzla</h1>
+        <div className="home_language">
+          <SelectField
+            label="Language"
+            value={language === 'en' ? 'English' : 'German'}
+            name="language"
+            placeholder=""
+            error={false}
+            options={['English', 'German']}
+            onChange={handleLanguageChange}
+          />
+        </div>
         {showMobileMenu ? (
           <SVGIcon
             Icon={CloseSVG}

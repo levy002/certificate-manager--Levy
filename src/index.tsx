@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 import App from './App';
 import './index.css';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 const rootElement = document.getElementById('root') as HTMLDivElement;
 
@@ -15,7 +16,9 @@ const root = createRoot(rootElement);
 root.render(
   process.env.DEV ? (
     <StrictMode>
-      <App />
+      <LanguageProvider>
+        <App />
+      </LanguageProvider>
     </StrictMode>
   ) : (
     <App />
