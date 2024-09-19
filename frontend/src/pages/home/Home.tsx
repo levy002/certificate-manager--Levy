@@ -8,10 +8,12 @@ import SelectField from '../../components/form/SelectFIeld';
 import Sidebar from '../../components/sidebar/Sidebar';
 import SVGIcon from '../../components/svgIcon/SVGIcon';
 import { useI18n } from '../../contexts/LanguageContext';
+import { UserContext } from '../../contexts/UserContext';
 
 const Home: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
   const { setLanguage, language } = useI18n();
+  const { users, activeUser, setActiveUser } = React.useContext(UserContext)!;
 
   const handleMenuClick = useCallback((): void => {
     setShowMobileMenu((prevShowMobileMenu) => !prevShowMobileMenu);
@@ -29,6 +31,21 @@ const Home: React.FC = () => {
     [setLanguage],
   );
 
+  const handleUserChange = useCallback(
+      (e: React.ChangeEvent<HTMLSelectElement>): void => {
+        const selectedUserId = e.target.value.split(' ');
+        const selectedUser = users.find(
+          (user) =>
+            user.firstName === selectedUserId[0] &&
+            user.name === selectedUserId[1],
+        );
+        if (selectedUser) {
+          setActiveUser(selectedUser);
+        }
+      },
+      [users, setActiveUser],
+    );
+
   return (
     <div className="home">
       <header className="home__header">
@@ -44,6 +61,17 @@ const Home: React.FC = () => {
             onChange={handleLanguageChange}
           />
         </div>
+         <div className="home_user">
+                  <SelectField
+                    label="User"
+                    value={`${activeUser?.firstName} ${activeUser?.name}`}
+                    name="user"
+                    placeholder=""
+                    error={false}
+                    options={users.map((user) => `${user.firstName} ${user.name}`)}
+                    onChange={handleUserChange}
+                  />
+          </div>
         {showMobileMenu ? (
           <SVGIcon
             Icon={CloseSVG}

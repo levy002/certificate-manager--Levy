@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { initDB, addInitialSuppliers, addInitialUsers } from './data/DB';
-import { initialSuppliers, initialUsers } from './data/Dummydata'; // Import dummy data
+import { initialSuppliers, initialUsers } from './data/Dummydata';
 import Routes from './routes/Routes';
 
 const App: React.FC = () => {
