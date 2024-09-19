@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: path.resolve(__dirname, '..', './src/index.tsx'),
   output: {
-    path: path.resolve(__dirname, '..', 'dist'),
+    path: path.resolve(__dirname, '..', 'build'),
     filename: 'bundle.js',
     publicPath: '/',
   },
@@ -22,7 +22,7 @@ module.exports = {
         test: /\.svg$/,
         use: ['@svgr/webpack', 'url-loader'],
       },
-     {
+      {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
       },
@@ -34,7 +34,7 @@ module.exports = {
     }),
   ],
   devServer: {
-    static: path.resolve(__dirname, 'dist'),
+    static: path.resolve(__dirname, '..', 'build'),
     historyApiFallback: true,
     port: 8080,
     open: true,
