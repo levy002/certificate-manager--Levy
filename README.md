@@ -11,7 +11,7 @@ The application for managing certificates.
 ### Tech Stack <a name="tech-stack"></a>
 
   <ul>
-    <li>Java (Quarkus) -- Backend</li>
+    <li>Java (Quarkus + Maven) -- Backend</li>
     <li>ReactJs (Typescript) -- Frontend</li>
   </ul>
 
