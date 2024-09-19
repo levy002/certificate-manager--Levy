@@ -1,24 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import CertificatesTable from '../../components/certificates/CertificateTable';
 import MenuNavLink from '../../components/sidebar/MenuNavLink';
 import { useI18n } from '../../contexts/LanguageContext';
-import { getAllCertificates, initDB } from '../../data/DB';
+import { getAllCertificates } from '../../data/DB';
 import { Certificate } from '../../types/Types';
 
 const Example1View: React.FC = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const dbInitialized = useRef<boolean>(false);
   const { translate } = useI18n();
 
   const fetchCertificates = useCallback(async (): Promise<void> => {
     try {
-      if (!dbInitialized.current) {
-        await initDB();
-        dbInitialized.current = true;
-      }
       const allCertificates = await getAllCertificates();
       setCertificates(allCertificates);
     } catch (err) {

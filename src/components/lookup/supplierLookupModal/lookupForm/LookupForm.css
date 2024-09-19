@@ -27,15 +27,21 @@
 .lookup-form__form {
   padding: 16px;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 1.5rem;
   margin: 0.5rem 0 0;
 }
 
 .lookup-form__fields {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   margin-bottom: 16px;
+}
+
+.lookup-form__fields > * {
+  width: 31%;
+  min-width: 10rem;
 }
 
 .lookup-form__fields input {

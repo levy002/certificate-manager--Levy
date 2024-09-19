@@ -1,17 +1,19 @@
 import { useCallback, useState } from 'react';
 
-import { ReactComponent as ChevronSVG } from '../../../assets/images/chevron.svg';
-import { useI18n } from '../../../contexts/LanguageContext';
-import { Supplier } from '../../../types/Types';
-import Button from '../../form/Button';
-import InputField from '../../form/InputField';
+import { ReactComponent as ChevronSVG } from '../../../../assets/images/chevron.svg';
+import { useI18n } from '../../../../contexts/LanguageContext';
+import { Supplier } from '../../../../types/Types';
+import Button from '../../../form/Button';
+import InputField from '../../../form/InputField';
 import './LookupForm.css';
-import SVGIcon from '../../svgIcon/SVGIcon';
+import SVGIcon from '../../../svgIcon/SVGIcon';
 
 interface LookupModalFormProps {
   handleFilterCriteria: (criteria: Supplier | null) => void;
   initialFilterCriteria: Supplier | null;
 }
+
+const formFields = ['name', 'index', 'city'];
 
 const LookupForm: React.FC<LookupModalFormProps> = ({
   initialFilterCriteria,
@@ -48,8 +50,6 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
     },
     [formState],
   );
-
-  const formFields = ['name', 'index', 'city'];
 
   return (
     <section className="lookup__form-container">
