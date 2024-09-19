@@ -13,7 +13,7 @@ public class DepartmentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Changed from 'index' to 'id'
+    private Long id;
 
     @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
     @Column(nullable = false, unique = true)
