@@ -11,9 +11,8 @@ The application for managing certificates.
 ### Tech Stack <a name="tech-stack"></a>
 
   <ul>
-    <li>ReactJS</li>
-    <li>CSS</li>
-    <li>Webpack</li>
+    <li>Java (Quarkus) -- Backend</li>
+    <li>ReactJs (Typescript) -- Frontend</li>
   </ul>
 
 <!-- Features -->
@@ -27,48 +26,21 @@ The application for managing certificates.
 
 - [Live Link]() -->
 
-<!-- GETTING STARTED -->
+## Running the application in dev mode
 
-## 💻 Getting Started <a name="getting-started"></a>
+You can run your application in dev mode that enables live coding using:
 
-To get a local copy up and running, follow these steps.
-
-### Prerequisites
-
-In order to run this project locally you need to install following locally:
-
-- [Visual Studio Code](https://code.visualstudio.com/) or your preffered IDE
-
-### Setup
-
-To run the project locally, execute the following command:
-
-- Clone this repository
-
-``` sh 
-  git git@github.com:levy002/certificate-manager--Levy.git
-``` 
-or Download a Zip File from This [repository](https://github.com/levy002/certificate-manager--Levy)
-
-- Naviagate to the directory
-
-``` sh 
-  cd certificate-manager--Levy
+First build application:
+```shell script
+mvn clean install
 ```
 
-- Open the directory in preffered IDE
-
-- Open your terminal and install project packages by running this command
-
-```
-  npm install
+then inside the `backend` module:
+```shell script
+mvn quarkus:dev
 ```
 
-- Open the app in your browser by runnin this command in your terminal
-
-```
-  npm start
-```
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
 
 <!-- AUTHORS -->
 
