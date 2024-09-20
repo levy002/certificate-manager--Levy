@@ -101,7 +101,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
         await addNewCertificate(newCertificateData);
       }
       handleReset();
-      navigate('/frontend/machineLearning/example1');
+      navigate('/machineLearning/example1');
     } catch (err) {
       setFormError(
         err instanceof Error ? err.message : translate('something_went_wrong'),

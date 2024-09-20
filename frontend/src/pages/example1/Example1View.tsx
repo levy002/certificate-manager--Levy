@@ -37,7 +37,7 @@ const Example1View: React.FC = () => {
       <h2>{translate('example1')}</h2>
       <div className="table__new-certificate">
         <MenuNavLink
-          to="/frontend/machineLearning/example1/certificates/new"
+          to="/machineLearning/example1/certificates/new"
           desc={translate('new_certificate')}
         />
       </div>

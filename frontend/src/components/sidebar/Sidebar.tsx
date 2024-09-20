@@ -36,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <nav className={showMobileSidebar ? 'sidebar sidebar--mobile' : 'sidebar'}>
       <MenuNavLink
-        to="/frontend/"
+        to="/"
         desc={
           <>
             <SVGIcon Icon={HomeSVG} />
@@ -64,15 +64,15 @@ const Sidebar: React.FC<SidebarProps> = ({
         {showMachineLearningLinks && (
           <section className="machine-learning__links">
             <MenuNavLink
-              to="/frontend/machineLearning/example1"
+              to="/machineLearning/example1"
               desc={translate('example1')}
             />
             <MenuNavLink
-              to="/frontend/machineLearning/example2"
+              to="/machineLearning/example2"
               desc={translate('example2')}
             />
             <MenuNavLink
-              to="/frontend/machineLearning/example3"
+              to="/machineLearning/example3"
               desc={translate('example3')}
             />
           </section>

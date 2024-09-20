@@ -82,7 +82,7 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
                     {openGearCertificateId === certificate.id && (
                       <section className="table__cell-gear-contents">
                         <MenuNavLink
-                          to={`/frontend/machineLearning/example1/certificates/${certificate.id}`}
+                          to={`/machineLearning/example1/certificates/${certificate.id}`}
                           desc={translate('edit')}
                         />
                         <button

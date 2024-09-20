@@ -19,7 +19,7 @@ const NotFound: React.FC = () => {
           {translate('sorry_page_not_found')}.
         </p>
         <MenuNavLink
-          to="/frontend"
+          to="/"
           desc={
             <div className="not-found__nav-link">
               <SVGIcon

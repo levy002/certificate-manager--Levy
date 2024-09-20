@@ -11,7 +11,7 @@ import StartScreen from '../pages/startScreen/Start';
 
 const router = createBrowserRouter([
   {
-    path: '/frontend',
+    path: '/',
     element: <Home />,
     errorElement: <NotFound />,
     children: [
