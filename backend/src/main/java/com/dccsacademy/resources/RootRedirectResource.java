@@ -13,5 +13,11 @@ public class RootRedirectResource {
                 .location(java.net.URI.create("/frontend/"))
                 .build();
     }
+
+    @GET
+    @Path("frontend/{path:.*}")
+    public Response forwardToIndex() {
+        return Response.ok(getClass().getResourceAsStream("/META-INF/resources/frontend/index.html")).build();
+    }
 }
 
