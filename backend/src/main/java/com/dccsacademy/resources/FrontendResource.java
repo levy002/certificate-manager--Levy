@@ -15,7 +15,7 @@ public class FrontendResource {
     public Response getFrontend(@PathParam("path") String path) {
 
         if (!path.isEmpty() && !Character.isLetterOrDigit(path.charAt(0))) {
-            return Response.seeOther(URI.create("/frontend")).build();
+            return Response.seeOther(URI.create("/frontend/")).build();
         }
 
         return Response.ok(getClass().getResourceAsStream("/META-INF/resources/frontend/index.html"))
