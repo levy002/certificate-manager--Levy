@@ -20,23 +20,23 @@ const router = createBrowserRouter([
         element: <StartScreen />,
       },
       {
-        path: '/machineLearning/example1',
+        path: 'machineLearning/example1',
         element: <Example1View />,
       },
       {
-        path: '/machineLearning/example1/certificates/new',
+        path: 'machineLearning/example1/certificates/new',
         element: <AddCertificate />,
       },
       {
-        path: '/machineLearning/example1/certificates/:id',
+        path: 'machineLearning/example1/certificates/:id',
         element: <EditCertificate />,
       },
       {
-        path: '/machineLearning/example2',
+        path: 'machineLearning/example2',
         element: <Example2View />,
       },
       {
-        path: '/machineLearning/example3',
+        path: 'machineLearning/example3',
         element: <Example3View />,
       },
     ],

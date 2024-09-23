@@ -21,6 +21,8 @@ root.render(
       </LanguageProvider>
     </StrictMode>
   ) : (
-    <App />
+    <LanguageProvider>
+      <App />
+    </LanguageProvider>
   ),
 );
