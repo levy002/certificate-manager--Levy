@@ -18,8 +18,6 @@ root.render(
       <App />
     </StrictMode>
   ) : (
-    <LanguageProvider>
       <App />
-    </LanguageProvider>
   ),
 );
