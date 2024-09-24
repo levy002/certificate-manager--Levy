@@ -43,8 +43,8 @@ public class UserService {
         userDto.setId(userEntity.getId());
     }
 
-    public List<UserDto> searchUsers(String id, String firstName, String lastName, String departmentId, String plant) {
-        return userRepository.searchUsers(id, firstName, lastName, departmentId, plant).stream()
+    public List<UserDto> searchUsers(String id, String firstName, String lastName, String departmentName, String plant) {
+        return userRepository.searchUsers(id, firstName, lastName, departmentName, plant).stream()
                 .map(UserMapper::toDto)
                 .collect(Collectors.toList());
     }

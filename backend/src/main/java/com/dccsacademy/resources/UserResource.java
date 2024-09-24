@@ -24,10 +24,10 @@ public class UserResource {
             @QueryParam("id") String id,
             @QueryParam("firstName") String firstName,
             @QueryParam("lastName") String lastName,
-            @QueryParam("departmentId") String departmentId,
+            @QueryParam("departmentName") String departmentName,
             @QueryParam("plant") String plant) {
         try {
-            List<UserDto> users = userService.searchUsers(id, firstName, lastName, departmentId, plant);
+            List<UserDto> users = userService.searchUsers(id, firstName, lastName, departmentName, plant);
             return ResponseBuilder.buildSuccessResponse("Users retrieved successfully", users, Response.Status.OK);
         } catch (EntityNotFoundException e) {
             return ResponseBuilder.buildErrorResponse(e.getMessage(), Response.Status.NOT_FOUND);

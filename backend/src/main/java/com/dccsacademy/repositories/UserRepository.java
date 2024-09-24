@@ -1,53 +1,52 @@
 package com.dccsacademy.repositories;
 
 import com.dccsacademy.entities.UserEntity;
+import com.dccsacademy.utils.SearchQueryUtil;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
 public class UserRepository implements PanacheRepository<UserEntity> {
-
     @Inject
     DepartmentRepository departmentRepository;
 
     public UserEntity findByEmail(String email) {
-        return find("email", email).firstResult();
+        return SearchQueryUtil.findByField(UserEntity.class, "email", email, getEntityManager());
     }
 
-    public List<UserEntity> searchUsers(String id, String firstName, String lastName, String departmentId, String plant) {
-        firstName = (firstName != null) ? firstName.trim().toLowerCase() : "";
-        lastName = (lastName != null) ? lastName.trim().toLowerCase() : "";
-        plant = (plant != null) ? plant.trim().toLowerCase() : "";
+    public List<UserEntity> searchUsers(String id, String firstName, String lastName, String departmentName, String plant) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<UserEntity> query = cb.createQuery(UserEntity.class);
+        Root<UserEntity> user = query.from(UserEntity.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        SearchQueryUtil.addCaseInsensitiveLikePredicate(predicates, cb, user, "firstName", firstName);
+        SearchQueryUtil.addCaseInsensitiveLikePredicate(predicates, cb, user, "lastName", lastName);
+        SearchQueryUtil.addCaseInsensitiveLikePredicate(predicates, cb, user, "plant", plant);
+
         Long userId = (id != null && !id.isEmpty()) ? Long.parseLong(id) : null;
-        Long deptId = (departmentId != null && !departmentId.isEmpty()) ? Long.parseLong(departmentId) : null;
-
-        String query = "lower(firstName) like ?1 and lower(lastName) like ?2 and lower(plant) like ?3";
-        List<Object> params = new ArrayList<>();
-        params.add("%" + firstName + "%");
-        params.add("%" + lastName + "%");
-        params.add("%" + plant + "%");
-
-        int nextIndex=4;
         if (userId != null) {
-            query += " and id = ?" + nextIndex;
-            params.add(userId);
-            nextIndex++;
+            predicates.add(cb.equal(user.get("id"), userId));
         }
 
-        if (deptId != null) {
-            var department = departmentRepository.findById(deptId);
+        if (departmentName != null && !departmentName.trim().isEmpty()) {
+            var department = departmentRepository.findByName(departmentName);
             if(department != null) {
-                query += " and department = ?" + nextIndex;
-                params.add(department);
+                predicates.add(cb.equal(cb.lower(user.get("department").get("name")), departmentName.trim().toLowerCase()));
             }
         }
 
-        return find(query, params.toArray()).list();
+        query.where(predicates.toArray(new Predicate[0]));
+
+        return getEntityManager().createQuery(query).getResultList();
     }
-
 }
-

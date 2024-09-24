@@ -27,5 +27,4 @@ public class DepartmentResource {
             return ResponseBuilder.buildErrorResponse(e.getMessage(), Response.Status.BAD_REQUEST);
         }
     }
-
 }

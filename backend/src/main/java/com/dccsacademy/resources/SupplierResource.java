@@ -1,6 +1,5 @@
 package com.dccsacademy.resources;
 
-import com.dccsacademy.dtos.DepartmentDto;
 import com.dccsacademy.dtos.SupplierDto;
 import com.dccsacademy.services.SupplierService;
 import com.dccsacademy.utils.ResponseBuilder;
