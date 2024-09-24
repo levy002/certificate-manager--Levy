@@ -8,6 +8,10 @@ import jakarta.persistence.*;
 public class UserEntity extends BaseEntity {
 
     @NotNull
+    @Column(name = "user_id", nullable = false, unique = true)
+    private String userId;
+
+    @NotNull
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -65,5 +69,13 @@ public class UserEntity extends BaseEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

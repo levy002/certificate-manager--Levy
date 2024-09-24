@@ -1,23 +1,26 @@
 package com.dccsacademy.dtos;
 
+import io.smallrye.common.constraint.NotNull;
+import jakarta.persistence.Column;
+
 import java.util.Set;
 
 public class UserDto {
-    private Long id;
     private String firstName;
     private String lastName;
     private Long departmentId;
     private String plant;
     private String email;
+    private String userId;
 
     // Getters and setters
 
-    public Long getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getFirstName() {
@@ -63,7 +66,8 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(String firstName, String lastName, Long departmentId, String plant, String email) {
+    public UserDto(String userId, String firstName, String lastName, Long departmentId, String plant, String email) {
+        this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.departmentId = departmentId;
@@ -74,7 +78,7 @@ public class UserDto {
     @Override
     public String toString() {
         return "UserDTO{" +
-                "id=" + id +
+                "userId=" + userId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", departmentId=" + departmentId +

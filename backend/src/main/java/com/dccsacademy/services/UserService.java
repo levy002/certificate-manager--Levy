@@ -33,6 +33,10 @@ public class UserService {
             throw new EntityNotFoundException("Department not found");
         }
 
+        if (userRepository.findByUserId(userDto.getUserId()) != null) {
+            throw new IllegalArgumentException("User with the same userId already exists");
+        }
+
         if (userRepository.findByEmail(userDto.getEmail()) != null) {
             throw new IllegalArgumentException("User with the same email already exists");
         }
@@ -40,11 +44,11 @@ public class UserService {
         UserEntity userEntity =toEntity(userDto);
         userEntity.setDepartment(departmentEntity);
         userRepository.persist(userEntity);
-        userDto.setId(userEntity.getId());
+        userDto.setUserId(userEntity.getUserId());
     }
 
-    public List<UserDto> searchUsers(String id, String firstName, String lastName, String departmentName, String plant) {
-        return userRepository.searchUsers(id, firstName, lastName, departmentName, plant).stream()
+    public List<UserDto> searchUsers(String userId, String firstName, String lastName, String departmentName, String plant) {
+        return userRepository.searchUsers(userId, firstName, lastName, departmentName, plant).stream()
                 .map(UserMapper::toDto)
                 .collect(Collectors.toList());
     }

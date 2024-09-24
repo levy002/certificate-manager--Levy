@@ -23,7 +23,11 @@ public class UserRepository implements PanacheRepository<UserEntity> {
         return SearchQueryUtil.findByField(UserEntity.class, "email", email, getEntityManager());
     }
 
-    public List<UserEntity> searchUsers(String id, String firstName, String lastName, String departmentName, String plant) {
+    public UserEntity findByUserId(String userId) {
+        return SearchQueryUtil.findByField(UserEntity.class, "userId", userId, getEntityManager());
+    }
+
+    public List<UserEntity> searchUsers(String userId, String firstName, String lastName, String departmentName, String plant) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<UserEntity> query = cb.createQuery(UserEntity.class);
         Root<UserEntity> user = query.from(UserEntity.class);
@@ -32,11 +36,7 @@ public class UserRepository implements PanacheRepository<UserEntity> {
         SearchQueryUtil.addCaseInsensitiveLikePredicate(predicates, cb, user, "firstName", firstName);
         SearchQueryUtil.addCaseInsensitiveLikePredicate(predicates, cb, user, "lastName", lastName);
         SearchQueryUtil.addCaseInsensitiveLikePredicate(predicates, cb, user, "plant", plant);
-
-        Long userId = (id != null && !id.isEmpty()) ? Long.parseLong(id) : null;
-        if (userId != null) {
-            predicates.add(cb.equal(user.get("id"), userId));
-        }
+        SearchQueryUtil.addCaseInsensitiveLikePredicate(predicates, cb, user, "userId", userId);
 
         if (departmentName != null && !departmentName.trim().isEmpty()) {
             var department = departmentRepository.findByName(departmentName);
