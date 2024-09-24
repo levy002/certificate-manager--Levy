@@ -37,23 +37,32 @@
 }
 
 .home_language {
-  grid-column-start: 11;
-  grid-column-end: 12;
+  grid-column-start: 10;
+  grid-column-end: 11;
   align-self: center;
 }
 
-.home_language .select-field {
+.home_user {
+  align-self: center;
+  grid-column-start: 11;
+  grid-column-end: 12;
+}
+
+.home_language .select-field,
+.home_user .select-field {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
 }
 
-.home_language .select-field .select-field__label {
+.home_language .select-field .select-field__label,
+.home_user .select-field .select-field__label {
   font-style: normal;
 }
 
-.home_language .select-field .select-field__select {
+.home_language .select-field .select-field__select,
+.home_user .select-field .select-field__select {
   padding: 0.4rem;
 }
 
