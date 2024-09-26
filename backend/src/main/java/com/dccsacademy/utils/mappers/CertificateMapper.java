@@ -24,7 +24,7 @@ public class CertificateMapper {
         dto.setValidFrom(entity.getValidFrom());
         dto.setValidTo(entity.getValidTo());
         dto.setPdfFile(entity.getPdfFile());
-        dto.setSupplierId(entity.getSupplier().getId());
+        dto.setSupplier(SupplierMapper.toDto(entity.getSupplier()));
         return dto;
     }
 }

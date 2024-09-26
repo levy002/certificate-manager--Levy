@@ -11,8 +11,8 @@ public class CertificateDto {
     private LocalDate validFrom;
     private LocalDate validTo;
     private String pdfFile;
-    private Long supplierId;
-    private List<UserDto> assignedUsers;
+    private SupplierDto supplier;
+    private List<Long> assignedUsers;
     private List<CommentDto> comments;
 
   // Getters and setters
@@ -57,19 +57,19 @@ public class CertificateDto {
         this.validTo = validTo;
     }
 
-    public Long getSupplierId() {
-        return supplierId;
+    public SupplierDto getSupplier() {
+        return supplier;
     }
 
-    public void setSupplierId(Long supplierId) {
-        this.supplierId = supplierId;
+    public void setSupplier(SupplierDto supplier) {
+        this.supplier = supplier;
     }
 
-    public List<UserDto> getAssignedUsers() {
+    public List<Long> getAssignedUsers() {
         return assignedUsers;
     }
 
-    public void setAssignedUsers(List<UserDto> assignedUsers) {
+    public void setAssignedUsers(List<Long> assignedUsers) {
         this.assignedUsers = assignedUsers;
     }
 
@@ -89,7 +89,7 @@ public class CertificateDto {
                 ", validFrom=" + validFrom +
                 ", validTo=" + validTo +
                 ", pdfFile='" + pdfFile + '\'' +
-                ", supplierId=" + supplierId +
+                ", supplier=" + supplier +
                 ", assignedUsers=" + assignedUsers +
                 ", comments=" + comments +
                 '}';

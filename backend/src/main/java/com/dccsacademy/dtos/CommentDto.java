@@ -8,7 +8,6 @@ public class CommentDto {
 
     // Getter and setter
 
-
     public Long getId() {
         return id;
     }

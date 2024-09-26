@@ -39,9 +39,9 @@ public class CertificateService {
     CommentRepository commentRepository;
 
     public void createCertificate(CertificateDto certificateDto) {
-        SupplierEntity supplier = supplierRepository.findById(certificateDto.getSupplierId());
+        SupplierEntity supplier = supplierRepository.findById(certificateDto.getSupplier().getId());
         if (supplier == null) {
-            throw new EntityNotFoundException("Supplier with ID " + certificateDto.getSupplierId() + " does not exists");
+            throw new EntityNotFoundException("Supplier with ID " + certificateDto.getSupplier() + " does not exists");
         }
 
         List<UserEntity> assignedUsers = getAssignedUsers(certificateDto.getAssignedUsers());
@@ -60,7 +60,7 @@ public class CertificateService {
         }
         CertificateDto certificate = CertificateMapper.toDto(certificateEntity);
 
-        List<UserDto> assignedUsers = getUserDtos(certificateEntity.getAssignedUsers());
+        List<Long> assignedUsers = getUserDtos(certificateEntity.getAssignedUsers());
         List<CommentDto> comments = getCommentDtos(certificateEntity.getComments());
 
         certificate.setAssignedUsers(assignedUsers);
@@ -81,9 +81,9 @@ public class CertificateService {
             throw new EntityNotFoundException("Certificate with ID " + id + " does not exist");
         }
 
-        SupplierEntity supplier = supplierRepository.findById(certificateDto.getSupplierId());
+        SupplierEntity supplier = supplierRepository.findById(certificateDto.getSupplier().getId());
         if (supplier == null) {
-            throw new EntityNotFoundException("Supplier with ID " + certificateDto.getSupplierId() + " does not exists");
+            throw new EntityNotFoundException("Supplier with ID " + certificateDto.getSupplier() + " does not exists");
         }
 
         certificate.setSupplier(supplier);
@@ -115,12 +115,12 @@ public class CertificateService {
     }
 
 
-    private List<UserEntity> getAssignedUsers(List<UserDto> userDtos) {
+    private List<UserEntity> getAssignedUsers(List<Long> userDtos) {
         return userDtos.stream()
-                .map(userDto -> {
-                    UserEntity user = userRepository.findById(userDto.getId());
+                .map(userId -> {
+                    UserEntity user = userRepository.findById(userId);
                     if (user == null) {
-                        throw new EntityNotFoundException("User with ID " + userDto.getId() + " does not exists");
+                        throw new EntityNotFoundException("User with ID " + userId+ " does not exists");
                     }
                     return user;
                 })
@@ -139,12 +139,12 @@ public class CertificateService {
                 .collect(Collectors.toList());
     }
 
-    private List<UserDto> getUserDtos(List<UserEntity> userEntities) {
+    private List<Long> getUserDtos(List<UserEntity> userEntities) {
         return userEntities.stream()
                 .map(userEntity -> {
                     UserDto currentUser = UserMapper.toDto(userEntity);
                     currentUser.setId(userEntity.getId());
-                    return currentUser;
+                    return currentUser.getId();
                 })
                 .collect(Collectors.toList());
     }
@@ -167,5 +167,4 @@ public class CertificateService {
                 })
                 .collect(Collectors.toList());
     }
-
 }
