@@ -26,16 +26,7 @@ public class SupplierService {
         supplierDto.setId(supplierEntity.getId());
     }
 
-
-    public List<SupplierDto> getSuppliers() {
-        List<SupplierEntity> supplierEntities = supplierRepository.listAll();
-        return supplierEntities.stream()
-                .map(SupplierMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
     public List<SupplierDto> searchSuppliers(String id, String name, String city) {
-        System.out.println("In service: " + id + " " + name + " " + city);
         return supplierRepository.searchSuppliers(id, name, city).stream()
                 .map(SupplierMapper::toDto)
                 .collect(Collectors.toList());

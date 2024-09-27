@@ -3,6 +3,8 @@ package com.dccsacademy.entities;
 import io.smallrye.common.constraint.NotNull;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users", schema = "certificates")
 public class UserEntity extends BaseEntity {
@@ -29,6 +31,9 @@ public class UserEntity extends BaseEntity {
     @NotNull
     @Column(nullable = false, unique = true)
     private String email;
+
+    @ManyToMany(mappedBy = "assignedUsers")
+    private List<CertificateEntity> certificates;
 
     // Getters and setters
     public String getFirstName() {
