@@ -25,6 +25,7 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
   handleFilterCriteria,
 }): JSX.Element => {
   const initialFilterCriteria: User = {
+    id:0,
     name: '',
     firstName: '',
     userId: '',
@@ -86,7 +87,7 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
               type="text"
               label={translate(key)}
               name={key}
-              value={formState ? formState[key as keyof User] || '' : ''}
+              value={String(formState[key as keyof User] || '')}
               placeholder=""
               error={false}
               onChange={handleChange}

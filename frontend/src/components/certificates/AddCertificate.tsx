@@ -10,6 +10,7 @@ const AddCertificate: React.FC = () => {
     PDFUrl: '',
     id: Date.now(),
     assignedUsers: [],
+    comments: [],
   };
 
   return (
