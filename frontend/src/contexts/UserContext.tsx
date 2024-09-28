@@ -12,7 +12,7 @@ interface UserContextType {
   users: User[];
   loading: boolean;
   error: string | null;
-  activeUser: User | null;
+  activeUser: User;
   setActiveUser: (user: User) => void;
 }
 
@@ -26,7 +26,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeUser, setActiveUser] = useState<User | null>(null);
+  const [activeUser, setActiveUser] = useState<User>(users[0]);
 
   const fetchUsers = useCallback(async (): Promise<void> => {
     try {
@@ -48,7 +48,6 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     fetchUsers();
   }, [fetchUsers]);
   
-
   const contextValues = useMemo(
     () => ({
       users,

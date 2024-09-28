@@ -333,6 +333,7 @@ export const getAllUsers = (): Promise<User[]> => {
 };
 
 export const searchUser = (
+  id?: number,
   name?: string,
   firstName?: string,
   userId?: string,
@@ -356,6 +357,7 @@ export const searchUser = (
 
       const filteredUsers = users.filter((user) => {
         return (
+           (id ? true : true) &&
           (name
             ? user.name?.toLowerCase().includes(name.toLowerCase())
             : true) &&

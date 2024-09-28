@@ -12,6 +12,7 @@ export const initialSuppliers: Supplier[] = [
 
 export const initialUsers: User[] = [
   {
+    id: 1,
     name: 'John',
     firstName: 'Doe',
     userId: 'JHD',
@@ -20,6 +21,7 @@ export const initialUsers: User[] = [
     email: 'john.doe@example.com',
   },
   {
+    id: 2,
     name: 'Jane',
     firstName: 'Smith',
     userId: 'JST',
@@ -28,6 +30,7 @@ export const initialUsers: User[] = [
     email: 'jane.smith@example.com',
   },
   {
+    id: 3,
     name: 'Alice',
     firstName: 'Johnson',
     userId: 'AJS',
@@ -36,6 +39,7 @@ export const initialUsers: User[] = [
     email: 'alice.johnson@example.com',
   },
   {
+    id: 4,
     name: 'Bob',
     firstName: 'Brown',
     userId: 'BBR',
@@ -44,6 +48,7 @@ export const initialUsers: User[] = [
     email: 'bob.brown@example.com',
   },
   {
+    id: 5,
     name: 'Charlie',
     firstName: 'Davis',
     userId: 'CDV',
@@ -52,6 +57,7 @@ export const initialUsers: User[] = [
     email: 'charlie.davis@example.com',
   },
   {
+    id: 6,
     name: 'David',
     firstName: 'Wilson',
     userId: 'DWL',
@@ -60,6 +66,7 @@ export const initialUsers: User[] = [
     email: 'david.wilson@example.com',
   },
   {
+    id: 7,
     name: 'Eve',
     firstName: 'Moore',
     userId: 'EMR',
@@ -67,7 +74,7 @@ export const initialUsers: User[] = [
     plant: 'Plant 7',
     email: 'eve.moore@example.com',
   },
-  {
+  {id: 8,
     name: 'Frank',
     firstName: 'Clark',
     userId: 'FCL',
@@ -76,6 +83,7 @@ export const initialUsers: User[] = [
     email: 'frank.clark@example.com',
   },
   {
+    id: 9,
     name: 'Grace',
     firstName: 'Lee',
     userId: 'GLE',
@@ -84,6 +92,7 @@ export const initialUsers: User[] = [
     email: 'grace.lee@example.com',
   },
   {
+    id: 10,
     name: 'Henry',
     firstName: 'Martin',
     userId: 'HMT',

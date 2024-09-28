@@ -12,7 +12,6 @@ public class CommentMapper {
         }
 
         CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setId(dto.getId());
         commentEntity.setComment(dto.getComment());
         commentEntity.setCertificate(certificate);
         commentEntity.setUser(user);
@@ -26,10 +25,8 @@ public class CommentMapper {
         }
 
         CommentDto commentDto = new CommentDto();
-        commentDto.setId(entity.getId());
         commentDto.setComment(entity.getComment());
         commentDto.setUserId(entity.getUser().getId());
-        commentDto.setCertificateId(entity.getCertificate().getId());
 
         return commentDto;
     }

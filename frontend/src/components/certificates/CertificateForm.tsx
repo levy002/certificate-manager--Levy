@@ -22,6 +22,8 @@ import UserLookupModal from '../lookup/userLookupModal/lookupModal/UserLookupMod
 import SVGIcon from '../svgIcon/SVGIcon';
 
 import './CertificateForm.css';
+import CertificateComments from './CertificateComments';
+import { CommentDto } from '../../types/index';
 
 interface CertificateFormProps {
   initialFormState: Certificate;
@@ -150,6 +152,14 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     setShowUserModal(false);
   }, []);
 
+   const handleAddComment = (newComment: CommentDto): void => {
+    setFormState((prevState) => ({
+      ...prevState,
+      comments: [...prevState.comments, newComment]
+    }));
+  };
+  
+
   return (
     <div className="form-container">
       <h2>
@@ -227,6 +237,11 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
               required
             />
 
+            <CertificateComments
+          comments={formState.comments}
+          addComment={handleAddComment}
+        />
+            
             <section className="assigned-users">
               <label
                 htmlFor="users"
