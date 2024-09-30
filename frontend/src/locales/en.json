@@ -41,5 +41,11 @@
   "no_participants": "No participants!" ,
   "please_upload_pdf": "Please upload a valid PDF file.",
   "something_went_wrong": "Something went wrong, try again",
-  "click_to_select_date": "Click to select date"
+  "click_to_select_date": "Click to select date",
+  "comment": "Comment",
+  "user": "User",
+   "new_comment": "New comment",
+   "cancel_comment": "Cancel comment",
+   "no_comments_yet": "No comments yet!",
+   "send": "Send"
 }
