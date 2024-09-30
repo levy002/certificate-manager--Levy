@@ -2,17 +2,17 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { ReactComponent as CloseSVG } from '../../../../assets/images/close.svg';
 import { useI18n } from '../../../../contexts/LanguageContext';
-import { getSupplierByIndex } from '../../../../data/DB';
-import { Supplier } from '../../../../types/Types';
 import SVGIcon from '../../../svgIcon/SVGIcon';
 import LookupForm from '../lookupForm/LookupForm';
 import './LookupModal.css';
 import LookupTable from '../lookupTable/LookupTable';
+import { SupplierDto } from '../../../../generated-sources/typesAndServices';
+import apiClient from '../../../../api/clientApi';
 
 interface SupplierLookupModalProps {
   onClose: () => void;
-  handleSelectedSupplier: (supplier: Supplier | null) => void;
-  preSelectedSupplier: Supplier | null;
+  handleSelectedSupplier: (supplier: SupplierDto | null) => void;
+  preSelectedSupplier: SupplierDto | null;
 }
 
 const SupplierLookupModal: React.FC<SupplierLookupModalProps> = ({
@@ -21,7 +21,7 @@ const SupplierLookupModal: React.FC<SupplierLookupModalProps> = ({
   preSelectedSupplier,
 }): JSX.Element => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [suppliers, setSuppliers] = useState<SupplierDto[]>([]);
   const { translate } = useI18n();
 
   useEffect(() => {
@@ -36,18 +36,18 @@ const SupplierLookupModal: React.FC<SupplierLookupModalProps> = ({
     onClose();
   };
 
-  const handleChangeSelectedSupplier = (supplier: Supplier | null): void => {
+  const handleChangeSelectedSupplier = (supplier: SupplierDto | null): void => {
     handleSelectedSupplier(supplier);
     handleClose();
   };
 
   const handleFilterCriteria = useCallback(
-    async (criteria: Supplier | null): Promise<void> => {
-      if (criteria?.index) {
+    async (criteria: SupplierDto | null): Promise<void> => {
+      if (criteria) {
         try {
-          const supplier = await getSupplierByIndex(criteria.index);
+          const supplier = await apiClient.searchSuppliers({name: criteria.name, city: criteria.city, id: criteria.id ? String(criteria.id) : ""})
           if (supplier) {
-            setSuppliers([supplier]);
+            setSuppliers(supplier.data.data);
           } else {
             setSuppliers([]);
           }
