@@ -84,9 +84,6 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
   ): Promise<void> => {
     e.preventDefault();
 
-    // const { id, ...newCertificateData } = formState;
-
-
     try {
       if (mode === FormMode.EDIT) {
         await apiClient.updateCertificate(formState.id, formState);

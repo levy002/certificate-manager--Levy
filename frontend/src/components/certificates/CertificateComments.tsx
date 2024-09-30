@@ -48,8 +48,6 @@ const CertificateComments: React.FC<CertificateCommentsProps> = ({ comments, add
             <div key={index} className="comment">
               <p><strong>{translate("user")}:</strong> {users.find((user) => user.id === comment.userId)?.firstName}</p>
               <p><strong>{translate("comment")}:</strong> {comment.comment}</p>
-              <p><strong>User:</strong> {users.find((user) => user.id === comment.userId)?.firstName}</p>
-              <p><strong>Comment:</strong> {comment.comment}</p>
             </div>
           ))
         ) : (
