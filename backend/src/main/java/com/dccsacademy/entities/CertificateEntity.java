@@ -28,8 +28,9 @@ public class CertificateEntity extends BaseEntity {
     @Column(name = "valid_to", nullable = false)
     private LocalDate validTo;
 
+    @Lob
     @Column(name = "pdf_file")
-    private String pdfFile;
+    private byte[] pdfFile;
 
     @ManyToMany
     @JoinTable(name = "assigned_users",
@@ -85,14 +86,13 @@ public class CertificateEntity extends BaseEntity {
         this.validTo = validTo;
     }
 
-    public String getPdfFile() {
+    public byte[] getPdfFile() {
         return pdfFile;
     }
 
-    public void setPdfFile(String pdfFile) {
+    public void setPdfFile(byte[] pdfFile) {
         this.pdfFile = pdfFile;
     }
-
     public List<UserEntity> getAssignedUsers() {
         return assignedUsers;
     }
