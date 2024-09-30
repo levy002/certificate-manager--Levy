@@ -1,3 +1,5 @@
+import { CommentDto } from ".";
+
 export enum CertificateType {
   PermissionOfPrinting = 'Permission of Printing',
   OHSAS18001 = 'OHSAS 18001',
@@ -17,6 +19,7 @@ export enum Department {
 }
 
 export interface User {
+  id: number;
   name: string;
   firstName: string;
   userId: string;
@@ -33,6 +36,7 @@ export type Certificate = {
   validTo: Date | null;
   PDFUrl: string | null;
   assignedUsers: User[];
+  comments: CommentDto[];
 };
 
 export enum FormMode {
