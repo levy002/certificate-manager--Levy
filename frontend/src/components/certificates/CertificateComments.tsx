@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import Button from '../form/Button';
 import Textarea from '../form/Textarea';
 import { UserContext } from '../../contexts/UserContext';
-import { CommentDto } from '../../types/index';
+import { CommentDto } from '../../generated-sources/typesAndServices';
 import "./CertificateComments.css";
 import { useI18n } from '../../contexts/LanguageContext';
 
@@ -29,7 +29,7 @@ const CertificateComments: React.FC<CertificateCommentsProps> = ({ comments, add
     if (newComment.trim() === '') {
       setError('Please fill your comment!');
     } else {
-      addComment({ userId: activeUser?.id, comment: newComment.trim() });
+      addComment({ userId: activeUser!.id, comment: newComment.trim() });
       setNewComment('');
       setShowForm(false);
       setError('');
@@ -46,8 +46,10 @@ const CertificateComments: React.FC<CertificateCommentsProps> = ({ comments, add
         {comments.length > 0 ? (
           comments.map((comment, index) => (
             <div key={index} className="comment">
-              <p><strong>{translate("user")}:</strong> {users.find((user) => user.id === comment.userId)?.name}</p>
+              <p><strong>{translate("user")}:</strong> {users.find((user) => user.id === comment.userId)?.firstName}</p>
               <p><strong>{translate("comment")}:</strong> {comment.comment}</p>
+              <p><strong>User:</strong> {users.find((user) => user.id === comment.userId)?.firstName}</p>
+              <p><strong>Comment:</strong> {comment.comment}</p>
             </div>
           ))
         ) : (
@@ -58,7 +60,7 @@ const CertificateComments: React.FC<CertificateCommentsProps> = ({ comments, add
       {showForm && (
         <div className="comment-form">
           <Textarea
-            label={translate(activeUser?.name)}
+            label={activeUser?.firstName}
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder={translate("comment")}

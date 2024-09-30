@@ -1,13 +1,14 @@
 import CertificateForm from './CertificateForm';
-import { Certificate, CertificateType, FormMode } from '../../types/Types';
+import { FormMode } from '../../types/Types';
+import { CertificateDto, CertificateType } from '../../generated-sources/typesAndServices';
 
 const AddCertificate: React.FC = () => {
-  const initialFormState: Certificate = {
-    supplier: null,
-    certificateType: CertificateType.OHSAS18001,
-    validFrom: null,
-    validTo: null,
-    PDFUrl: '',
+  const initialFormState: CertificateDto = {
+    supplier: {id: 0, name: "", city: ""},
+    certificateType: CertificateType.PERMISSION_OF_PRINTING,
+    validFrom: new Date(),
+    validTo: new Date(),
+    pdfFile: '',
     id: Date.now(),
     assignedUsers: [],
     comments: [],

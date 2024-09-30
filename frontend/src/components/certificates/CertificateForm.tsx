@@ -5,14 +5,6 @@ import CertificateAssignedUsersTable from './CertificateAssignedUsersTable';
 import { ReactComponent as CloseSVG } from '../../assets/images/close.svg';
 import { ReactComponent as SearchSVG } from '../../assets/images/search.svg';
 import { useI18n } from '../../contexts/LanguageContext';
-import { addNewCertificate, updateCertificate } from '../../data/DB';
-import {
-  Certificate,
-  CertificateType,
-  FormMode,
-  Supplier,
-  User,
-} from '../../types/Types';
 import formatValue from '../../utils/FormatInputValue';
 import Button from '../form/Button';
 import InputField from '../form/InputField';
@@ -20,13 +12,14 @@ import SelectField from '../form/SelectFIeld';
 import LookupModal from '../lookup/supplierLookupModal/lookupModal/SupplierLookupModal';
 import UserLookupModal from '../lookup/userLookupModal/lookupModal/UserLookupModal';
 import SVGIcon from '../svgIcon/SVGIcon';
-
 import './CertificateForm.css';
 import CertificateComments from './CertificateComments';
-import { CommentDto } from '../../types/index';
+import { CertificateDto, CommentDto, SupplierDto, CertificateType } from '../../generated-sources/typesAndServices';
+import { FormMode } from '../../types/Types';
+import apiClient from '../../api/clientApi';
 
 interface CertificateFormProps {
-  initialFormState: Certificate;
+  initialFormState: CertificateDto;
   mode: FormMode;
 }
 
@@ -36,7 +29,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  const [formState, setFormState] = useState<Certificate>(initialFormState);
+  const [formState, setFormState] = useState<CertificateDto>(initialFormState);
   const [formError, setFormError] = useState<string>('');
   const [showSupplierModal, setShowSupplierModal] = useState<boolean>(false);
   const [showUserModal, setShowUserModal] = useState<boolean>(false);
@@ -44,11 +37,11 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-      const { name, value, type } = event.target;
+      const { name, value } = event.target;
 
       setFormState((prevState) => ({
         ...prevState,
-        [name]: type === 'date' ? new Date(value) : value,
+        [name]: value,
       }));
     },
     [],
@@ -63,7 +56,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
           if (reader.result) {
             setFormState((prevState) => ({
               ...prevState,
-              PDFUrl: reader.result as string,
+              pdfFile: reader.result as string,
             }));
           }
         };
@@ -77,13 +70,12 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
 
   const handleReset = (): void => {
     setFormState(initialFormState);
-    setFormError('');
   };
 
   const handleClearSupplier = useCallback(() => {
     setFormState((prevState) => ({
       ...prevState,
-      supplier: null,
+      supplier: {name: "", city: "", id: 0},
     }));
   }, []);
 
@@ -92,18 +84,17 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
   ): Promise<void> => {
     e.preventDefault();
 
-    const newCertificateData = {
-      ...formState,
-    };
+    // const { id, ...newCertificateData } = formState;
+
 
     try {
       if (mode === FormMode.EDIT) {
-        await updateCertificate(newCertificateData);
+        await apiClient.updateCertificate(formState.id, formState);
       } else {
-        await addNewCertificate(newCertificateData);
+        await apiClient.createCertificate(formState);
       }
       handleReset();
-      navigate('/machineLearning/example1');
+      navigate('/machineLearning/certificates');
     } catch (err) {
       setFormError(
         err instanceof Error ? err.message : translate('something_went_wrong'),
@@ -119,15 +110,15 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     setShowUserModal(true);
   };
 
-  const handleSupplierSelection = (supplier: Supplier | null): void => {
+  const handleSupplierSelection = (supplier: SupplierDto | null): void => {
     setFormState((prevState) => ({
       ...prevState,
-      supplier,
+      supplier: supplier ? supplier : prevState.supplier,
     }));
     setShowSupplierModal(false);
   };
 
-  const handleAssigningUsers = (users: User[]): void => {
+  const handleAssigningUsers = (users: number[]): void => {
     setFormState((prevState) => ({
       ...prevState,
       assignedUsers: users,
@@ -135,11 +126,11 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     setShowUserModal(false);
   };
 
-  const handleUnAssignUser = (userId: string): void => {
+  const handleUnAssignUser = (userId: number): void => {
     setFormState((prevState) => ({
       ...prevState,
       assignedUsers: prevState.assignedUsers.filter(
-        (user) => user.userId !== userId,
+        (currentUserId) => currentUserId !== userId,
       ),
     }));
   };
@@ -157,7 +148,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
       ...prevState,
       comments: [...prevState.comments, newComment]
     }));
-  };
+   };
   
 
   return (
@@ -206,7 +197,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
               name="certificateType"
               value={formState.certificateType}
               placeholder={translate('select')}
-              options={Object.values(CertificateType)}
+              options={Object.values(CertificateType).map((type) => ({label: type, value: type}))}
               error={!!formError}
               onChange={handleChange}
             />
@@ -266,7 +257,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
               </Button>
 
               <CertificateAssignedUsersTable
-                users={formState.assignedUsers}
+                assignedUsers={formState.assignedUsers}
                 unAssignUser={handleUnAssignUser}
               />
             </section>
@@ -284,9 +275,9 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                 />
               </label>
               <div className="form-container__pdf-preview">
-                {formState.PDFUrl && (
+                {formState.pdfFile && (
                   <embed
-                    src={formState.PDFUrl}
+                    src={formState.pdfFile}
                     type="application/pdf"
                   />
                 )}
