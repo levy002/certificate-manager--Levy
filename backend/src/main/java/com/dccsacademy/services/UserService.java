@@ -27,10 +27,10 @@ public class UserService {
     DepartmentRepository departmentRepository;
 
     public void createUser(UserDto userDto) {
-        DepartmentEntity departmentEntity = departmentRepository.findById(userDto.getDepartmentId());
+        DepartmentEntity departmentEntity = departmentRepository.findByName(userDto.getDepartmentName());
 
         if (departmentEntity == null) {
-            throw new EntityNotFoundException("Department not found");
+            throw new EntityNotFoundException(userDto.getDepartmentName() + " department not found");
         }
 
         if (userRepository.findByUserId(userDto.getUserId()) != null) {

@@ -4,7 +4,7 @@ public class UserDto {
     private Long id;
     private String firstName;
     private String lastName;
-    private Long departmentId;
+    private String departmentName;
     private String plant;
     private String email;
     private String userId;
@@ -43,12 +43,12 @@ public class UserDto {
         this.lastName = lastName;
     }
 
-    public Long getDepartmentId() {
-        return departmentId;
+    public String getDepartmentName() {
+        return departmentName;
     }
 
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     public String getPlant() {
@@ -70,11 +70,11 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(String userId, String firstName, String lastName, Long departmentId, String plant, String email) {
+    public UserDto(String userId, String firstName, String lastName, String departmentName, String plant, String email) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.departmentId = departmentId;
+        this.departmentName = departmentName;
         this.plant = plant;
         this.email = email;
     }
@@ -86,7 +86,7 @@ public class UserDto {
                 ", userId=" + userId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", departmentId=" + departmentId +
+                ", departmentName=" + departmentName +
                 ", plant='" + plant + '\'' +
                 ", email='" + email + '\'' +
                 '}';

@@ -19,13 +19,13 @@ public class SupplierSeed extends BaseSeed<SupplierDto> {
     SupplierService supplierService;
 
     private static final String[][] SUPPLIERS = {
-            {"Supplier A", "SUP-001", "Berlin"},
-            {"Supplier B", "SUP-002", "Munich"},
-            {"Supplier C", "SUP-003", "Vienna"},
-            {"Supplier D", "SUP-004", "Graz"},
-            {"Supplier E", "SUP-005", "Sarajevo"},
-            {"Supplier F", "SUP-006", "Graz"},
-            {"Supplier G", "SUP-007", "Sarajevo"}
+            {"Supplier A", "Berlin"},
+            {"Supplier B", "Munich"},
+            {"Supplier C", "Vienna"},
+            {"Supplier D", "Graz"},
+            {"Supplier E", "Sarajevo"},
+            {"Supplier F", "Graz"},
+            {"Supplier G", "Sarajevo"}
     };
 
     @Override

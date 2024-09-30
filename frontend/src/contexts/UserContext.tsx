@@ -5,15 +5,15 @@ import React, {
   useCallback,
 } from 'react';
 
-import { getAllUsers } from '../data/DB';
-import { User } from '../types/Types';
+import { UserDto } from '../generated-sources/typesAndServices';
+import apiClient from '../api/clientApi';
 
 interface UserContextType {
-  users: User[];
+  users: UserDto[];
   loading: boolean;
   error: string | null;
-  activeUser: User;
-  setActiveUser: (user: User) => void;
+  activeUser: UserDto | null;
+  setActiveUser: (user: UserDto) => void;
 }
 
 interface UserProviderProps {
@@ -23,16 +23,16 @@ interface UserProviderProps {
 export const UserContext = React.createContext<UserContextType | null>(null);
 
 const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeUser, setActiveUser] = useState<User>(users[0]);
+  const [activeUser, setActiveUser] = useState<UserDto | null>(null);
 
   const fetchUsers = useCallback(async (): Promise<void> => {
     try {
-      const allUsers = await getAllUsers();
-      setUsers(allUsers);
-      setActiveUser(allUsers[0]);
+      const allUsers = await apiClient.searchUsers();
+      setUsers(allUsers.data.data);
+      setActiveUser(allUsers.data.data[0]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
@@ -40,7 +40,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const handleSetActiveUser = useCallback((user: User) => {
+  const handleSetActiveUser = useCallback((user: UserDto) => {
     setActiveUser(user);
   }, []);
 
