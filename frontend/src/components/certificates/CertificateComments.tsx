@@ -4,6 +4,7 @@ import Textarea from '../form/Textarea';
 import { UserContext } from '../../contexts/UserContext';
 import { CommentDto } from '../../types/index';
 import "./CertificateComments.css";
+import { useI18n } from '../../contexts/LanguageContext';
 
 interface CertificateCommentsProps {
   comments: CommentDto[];
@@ -14,6 +15,7 @@ const CertificateComments: React.FC<CertificateCommentsProps> = ({ comments, add
   const [showForm, setShowForm] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<string>('');
   const [error, setError] = useState<string>("");
+  const { translate } = useI18n();
 
   const { activeUser, users } = React.useContext(UserContext)!;
 
@@ -37,29 +39,29 @@ const CertificateComments: React.FC<CertificateCommentsProps> = ({ comments, add
   return (
     <div className="comments-section">
       <Button className={showForm ? 'btn btn-cancel' : 'btn btn-blue'} onClick={handleToggleForm}>
-        {showForm ? 'Cancel Comment' : 'New comment'}
+        {showForm ? translate("cancel_comment") : translate('new_comment')}
       </Button>
 
       <div className="comments-list">
         {comments.length > 0 ? (
           comments.map((comment, index) => (
             <div key={index} className="comment">
-              <p><strong>User:</strong> {users.find((user) => user.id === comment.userId)?.name}</p>
-              <p><strong>Comment:</strong> {comment.comment}</p>
+              <p><strong>{translate("user")}:</strong> {users.find((user) => user.id === comment.userId)?.name}</p>
+              <p><strong>{translate("comment")}:</strong> {comment.comment}</p>
             </div>
           ))
         ) : (
-          <p>No comments!</p>
+            <p>{translate("no_comments_yet")}</p>
         )}
       </div>
 
       {showForm && (
         <div className="comment-form">
           <Textarea
-            label={activeUser?.name}
+            label={translate(activeUser?.name)}
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Comment"
+            placeholder={translate("comment")}
             required
             id="comment"
             rows={7}
@@ -67,7 +69,7 @@ const CertificateComments: React.FC<CertificateCommentsProps> = ({ comments, add
           />
           {error && <p className='error'>{error}</p>}
           <Button onClick={handleNewCommentSubmit} className="btn btn-red">
-            Send
+            {translate("send")}
           </Button>
         </div>
       )}
