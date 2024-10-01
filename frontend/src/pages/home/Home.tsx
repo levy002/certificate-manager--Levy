@@ -33,12 +33,9 @@ const Home: React.FC = () => {
 
   const handleUserChange = useCallback(
       (e: React.ChangeEvent<HTMLSelectElement>): void => {
-        const selectedUserId = e.target.value.split(' ');
+        const selectedUserId = e.target.value;
         const selectedUser = users.find(
-          (user) =>
-            user.firstName === selectedUserId[0] &&
-            user.name === selectedUserId[1],
-        );
+          (user) => user.userId === selectedUserId);
         if (selectedUser) {
           setActiveUser(selectedUser);
         }
@@ -57,18 +54,18 @@ const Home: React.FC = () => {
             name="language"
             placeholder=""
             error={false}
-            options={['English', 'German']}
+            options={[{value: "English", label: "English"}, {value: "German", label: "German"}]}
             onChange={handleLanguageChange}
           />
         </div>
          <div className="home_user">
                   <SelectField
                     label="User"
-                    value={`${activeUser?.firstName} ${activeUser?.name}`}
+                    value={activeUser ? activeUser.userId : ""}
                     name="user"
                     placeholder=""
                     error={false}
-                    options={users.map((user) => `${user.firstName} ${user.name}`)}
+                    options={users.map((user) => ({ label: `${user.firstName} ${user.lastName}`, value: user.userId }))}
                     onChange={handleUserChange}
                   />
           </div>

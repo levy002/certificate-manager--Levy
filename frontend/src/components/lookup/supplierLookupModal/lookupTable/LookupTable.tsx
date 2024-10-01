@@ -3,31 +3,31 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ReactComponent as ChevronSVG } from '../../../../assets/images/chevron.svg';
 import { useI18n } from '../../../../contexts/LanguageContext';
-import { Supplier } from '../../../../types/Types';
 import Button from '../../../form/Button';
 import './LookupTable.css';
 import SVGIcon from '../../../svgIcon/SVGIcon';
+import { SupplierDto } from '../../../../generated-sources/typesAndServices';
 
 interface LookupTableProps {
-  data: Supplier[];
-  handleSelectedSupplier: (supplier: Supplier | null) => void;
+  data: SupplierDto[];
+  handleSelectedSupplier: (supplier: SupplierDto | null) => void;
   closeModal: () => void;
 }
 
-const tableHeaders = ['name', 'index', 'city'];
+const tableHeaders = ['name', 'id', 'city'];
 
 const LookupTable: React.FC<LookupTableProps> = ({
   handleSelectedSupplier,
   data,
   closeModal,
 }): JSX.Element => {
-  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
+  const [selectedSupplier, setSelectedSupplier] = useState<SupplierDto | null>(
     null,
   );
   const { translate } = useI18n();
 
   const handleSupplierRowClick = useCallback(
-    (supplier: Supplier): React.ChangeEventHandler<HTMLInputElement> => {
+    (supplier: SupplierDto): React.ChangeEventHandler<HTMLInputElement> => {
       return async (event) => {
         event.preventDefault();
         setSelectedSupplier(supplier);
@@ -65,7 +65,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
                   key={header}
                   className="lookup-table__header"
                 >
-                  {translate(header)}
+                  {header === "id" ? translate("index") :  translate(header)}
                 </th>
               ))}
             </tr>
@@ -81,7 +81,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
                     <input
                       type="radio"
                       checked={
-                        selectedSupplier?.index === (item as Supplier).index
+                        selectedSupplier?.id === (item as SupplierDto).id
                       }
                       onChange={handleSupplierRowClick(item)}
                     />
@@ -91,7 +91,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
                       key={header}
                       className="lookup-table__cell"
                     >
-                      {translate(String(item[header as keyof Supplier]))}
+                      {translate(String(item[header as keyof SupplierDto]))}
                     </td>
                   ))}
                 </tr>

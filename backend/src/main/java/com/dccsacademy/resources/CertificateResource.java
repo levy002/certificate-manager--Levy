@@ -21,7 +21,6 @@ public class CertificateResource {
 
     @POST
     public Response createCertificate(CertificateDto certificate) {
-        System.out.println("new certificate " + certificate);
         try {
             certificateService.createCertificate(certificate);
             return ResponseBuilder.buildSuccessResponse("Certificate created successfully", null, Response.Status.CREATED);

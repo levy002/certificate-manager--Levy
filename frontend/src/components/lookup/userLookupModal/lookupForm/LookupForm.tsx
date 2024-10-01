@@ -2,21 +2,21 @@ import { useCallback, useState } from 'react';
 
 import { ReactComponent as ChevronSVG } from '../../../../assets/images/chevron.svg';
 import { useI18n } from '../../../../contexts/LanguageContext';
-import { Department, User } from '../../../../types/Types';
 import Button from '../../../form/Button';
 import InputField from '../../../form/InputField';
 import '../../supplierLookupModal/lookupForm/LookupForm.css';
 import SVGIcon from '../../../svgIcon/SVGIcon';
+import { UserDto } from '../../../../generated-sources/typesAndServices';
 
 interface LookupModalFormProps {
-  handleFilterCriteria: (criteria: User) => void;
+  handleFilterCriteria: (criteria: UserDto) => void;
 }
 
 const formFields = [
-  'name',
   'firstName',
+  'lastName',
   'userId',
-  'department',
+  'departmentName',
   'plant',
   'email',
 ];
@@ -24,17 +24,17 @@ const formFields = [
 const LookupForm: React.FC<LookupModalFormProps> = ({
   handleFilterCriteria,
 }): JSX.Element => {
-  const initialFilterCriteria: User = {
-    id:0,
-    name: '',
+  const initialFilterCriteria = {
+    id: 0,
     firstName: '',
+    lastName: '',
     userId: '',
-    department: Department.ITM,
+    departmentName: '',
     plant: '',
     email: '',
   };
 
-  const [formState, setFormState] = useState<User>(initialFilterCriteria);
+  const [formState, setFormState] = useState<UserDto>(initialFilterCriteria);
   const { translate } = useI18n();
 
   const handleChange = useCallback(
@@ -45,7 +45,7 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
           ({
             ...prevState,
             [name]: value,
-          }) as User,
+          })
       );
     },
     [],
@@ -53,7 +53,6 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
 
   const handleReset = useCallback((): void => {
     setFormState(initialFilterCriteria);
-    handleFilterCriteria(initialFilterCriteria);
   }, []);
 
   const handleSubmit = useCallback(
@@ -85,9 +84,9 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
             <InputField
               key={key}
               type="text"
-              label={translate(key)}
+              label={key === "departmentName" ? translate("department") : translate(key)}
               name={key}
-              value={String(formState[key as keyof User] || '')}
+              value={key === "department" ? String(formState["departmentName"]): String(formState[key as keyof UserDto])}
               placeholder=""
               error={false}
               onChange={handleChange}

@@ -2,14 +2,15 @@ import React, { useState, useCallback } from 'react';
 
 import { ReactComponent as GearSVG } from '../../assets/images/gear.svg';
 import { useI18n } from '../../contexts/LanguageContext';
-import { deleteCertificate } from '../../data/DB';
-import { Certificate } from '../../types/Types';
 import MenuNavLink from '../sidebar/MenuNavLink';
 import SVGIcon from '../svgIcon/SVGIcon';
 import './CertificateTable.css';
+import { CertificateDto } from '../../generated-sources/typesAndServices';
+import { formatDate } from '../../utils/FormatDate';
+import apiClient from '../../api/clientApi';
 
 type CertificateTableProps = {
-  certificates: Certificate[];
+  certificates: CertificateDto[];
   refetch: () => void;
 };
 
@@ -37,7 +38,7 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
   );
 
   const handleDelete = useCallback(async (id: number): Promise<void> => {
-    await deleteCertificate(id);
+    await apiClient.deleteCertificateById(id);
     refetch();
   }, []);
 
@@ -82,7 +83,7 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
                     {openGearCertificateId === certificate.id && (
                       <section className="table__cell-gear-contents">
                         <MenuNavLink
-                          to={`/machineLearning/example1/certificates/${certificate.id}`}
+                          to={`/machineLearning/certificates/${certificate.id}`}
                           desc={translate('edit')}
                         />
                         <button
@@ -94,13 +95,13 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
                       </section>
                     )}
                   </td>
-                  <td className="table__cell">{certificate?.supplier?.name}</td>
+                  <td className="table__cell">{certificate?.supplier?.name}, {certificate?.supplier?.id}, {certificate?.supplier?.city}</td>
                   <td className="table__cell">{certificate.certificateType}</td>
                   <td className="table__cell">
-                    {certificate.validFrom?.toLocaleDateString('de-DE')}
+                    {formatDate(certificate.validFrom)}
                   </td>
                   <td className="table__cell">
-                    {certificate.validTo?.toLocaleDateString('de-DE')}
+                    {formatDate(certificate.validTo)}
                   </td>
                 </tr>
               ))}

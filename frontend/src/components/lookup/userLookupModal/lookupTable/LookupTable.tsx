@@ -3,20 +3,20 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ReactComponent as ChevronSVG } from '../../../../assets/images/chevron.svg';
 import { useI18n } from '../../../../contexts/LanguageContext';
-import { User } from '../../../../types/Types';
 import Button from '../../../form/Button';
 import '../../supplierLookupModal/lookupTable/LookupTable.css';
 import SVGIcon from '../../../svgIcon/SVGIcon';
+import { UserDto } from '../../../../generated-sources/typesAndServices';
 
 interface LookupTableProps {
-  data: User[];
-  handleSelectedUser: (users: User[]) => void;
+  data: UserDto[];
+  handleSelectedUser: (userIds: number[]) => void;
   closeModal: () => void;
 }
 
 const tableHeaders = [
-  'name',
   'firstName',
+  'lastName',
   'userId',
   'department',
   'plant',
@@ -28,25 +28,25 @@ const LookupTable: React.FC<LookupTableProps> = ({
   data,
   closeModal,
 }): JSX.Element => {
-  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
   const { translate } = useI18n();
 
-  const handleSupplierRowClick = useCallback((user: User) => {
+  const handleSupplierRowClick = useCallback((userId: number) => {
     return (event: React.ChangeEvent<HTMLInputElement>): void => {
       const isChecked = event.target.checked;
 
-      setSelectedUsers((prevSelected) =>
+      setSelectedUserIds((prevSelected) =>
         isChecked
-          ? [...prevSelected, user]
-          : prevSelected.filter((selected) => selected.userId !== user.userId),
+          ? [...prevSelected, userId]
+          : prevSelected.filter((id) => id !== userId)
       );
     };
   }, []);
 
   const handleSelectUsers = useCallback(() => {
-    handleSelectedUser(selectedUsers);
+    handleSelectedUser(selectedUserIds);
     closeModal();
-  }, [selectedUsers, handleSelectedUser, closeModal]);
+  }, [selectedUserIds, handleSelectedUser, closeModal]);
 
   const handleCancel = useCallback(() => {
     closeModal();
@@ -88,10 +88,8 @@ const LookupTable: React.FC<LookupTableProps> = ({
                   <td className="lookup-table__cell">
                     <input
                       type="checkbox"
-                      checked={selectedUsers.some(
-                        (user) => user.userId === item.userId,
-                      )}
-                      onChange={handleSupplierRowClick(item)}
+                      checked={selectedUserIds.includes(item.id)}
+                      onChange={handleSupplierRowClick(item.id)}
                     />
                   </td>
                   {tableHeaders.map((header) => (
@@ -99,7 +97,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
                       key={header}
                       className="lookup-table__cell"
                     >
-                      {translate(String(item[header as keyof User]))}
+                      {header !== "department" ?  translate(String(item[header as keyof UserDto])): translate(String(item["departmentName" as keyof UserDto]))}
                     </td>
                   ))}
                 </tr>
