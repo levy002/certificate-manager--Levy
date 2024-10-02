@@ -2,17 +2,17 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { ReactComponent as CloseSVG } from '../../../../assets/images/close.svg';
 import { useI18n } from '../../../../contexts/LanguageContext';
-import { searchUser } from '../../../../data/DB';
-import { User } from '../../../../types/Types';
 import SVGIcon from '../../../svgIcon/SVGIcon';
 import LookupForm from '../lookupForm/LookupForm';
 import '../../supplierLookupModal/lookupModal/LookupModal.css';
 import LookupTable from '../lookupTable/LookupTable';
+import { UserDto } from '../../../../generated-sources/typesAndServices';
+import apiClient from '../../../../api/clientApi';
 
 interface UserLookupModalProps {
   onClose: () => void;
-  handleAssigningUsers: (users: User[]) => void;
-  preAssignedUsers: User[];
+  handleAssigningUsers: (users: number[]) => void;
+  preAssignedUsers: number[];
 }
 
 const UserLookupModal: React.FC<UserLookupModalProps> = ({
@@ -21,7 +21,7 @@ const UserLookupModal: React.FC<UserLookupModalProps> = ({
   preAssignedUsers,
 }): JSX.Element => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserDto[]>([]);
   const { translate } = useI18n();
 
   useEffect(() => {
@@ -36,24 +36,20 @@ const UserLookupModal: React.FC<UserLookupModalProps> = ({
     onClose();
   };
 
-  const handleSelectedUsers = (selectedUsers: User[]): void => {
+  const handleSelectedUsers = (selectedUsers: number[]): void => {
     const newUsers = selectedUsers.filter(
-      (user) => !preAssignedUsers.some((u) => u.userId === user.userId),
+      (userId) => !preAssignedUsers.some((currentUserId) => currentUserId === userId ),
     );
     handleAssigningUsers([...preAssignedUsers, ...newUsers]);
     handleClose();
   };
 
   const handleFilterCriteria = useCallback(
-    async (criteria: User): Promise<void> => {
+    async (criteria: UserDto): Promise<void> => {
       if (criteria) {
         try {
-          const allUsers = await searchUser(...Object.values(criteria));
-          if (allUsers && allUsers.length > 0) {
-            setUsers(allUsers);
-          } else {
-            setUsers([]);
-          }
+          const allUsers = await apiClient.searchUsers(criteria);
+          setUsers(allUsers.data.data);
         } catch (error) {
           console.error('Error fetching users:', error);
           setUsers([]);

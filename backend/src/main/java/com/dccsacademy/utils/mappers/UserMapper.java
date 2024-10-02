@@ -10,10 +10,11 @@ public class UserMapper {
             return null;
         }
         UserDto userDto = new UserDto();
+        userDto.setId(userEntity.getId());
         userDto.setUserId(userEntity.getUserId());
         userDto.setFirstName(userEntity.getFirstName());
         userDto.setLastName(userEntity.getLastName());
-        userDto.setDepartmentId(userEntity.getDepartment().getId());
+        userDto.setDepartmentName(userEntity.getDepartment().getName());
         userDto.setPlant(userEntity.getPlant());
         userDto.setEmail(userEntity.getEmail());
         return userDto;

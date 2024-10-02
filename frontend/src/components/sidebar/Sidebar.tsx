@@ -64,8 +64,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         {showMachineLearningLinks && (
           <section className="machine-learning__links">
             <MenuNavLink
-              to="/machineLearning/example1"
-              desc={translate('example1')}
+              to="/machineLearning/certificates"
+              desc={translate('certificates')}
             />
             <MenuNavLink
               to="/machineLearning/example2"

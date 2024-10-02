@@ -11,6 +11,7 @@ import com.dccsacademy.repositories.CertificateRepository;
 import com.dccsacademy.repositories.CommentRepository;
 import com.dccsacademy.repositories.SupplierRepository;
 import com.dccsacademy.repositories.UserRepository;
+import com.dccsacademy.utils.PdfUtil;
 import com.dccsacademy.utils.mappers.CertificateMapper;
 import com.dccsacademy.utils.mappers.CommentMapper;
 import com.dccsacademy.utils.mappers.UserMapper;
@@ -19,6 +20,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,10 +45,9 @@ public class CertificateService {
         if (supplier == null) {
             throw new EntityNotFoundException("Supplier with ID " + certificateDto.getSupplier() + " does not exists");
         }
-
         List<UserEntity> assignedUsers = getAssignedUsers(certificateDto.getAssignedUsers());
-
         CertificateEntity newCertificate = CertificateMapper.toEntity(certificateDto, supplier);
+        newCertificate.setPdfFile(PdfUtil.decode(certificateDto.getPdfFile()));
         newCertificate.setAssignedUsers(assignedUsers);
         certificateRepository.persist(newCertificate);
 
@@ -59,6 +60,7 @@ public class CertificateService {
             throw new EntityNotFoundException("Certificate with ID " + id + " does not exists");
         }
         CertificateDto certificate = CertificateMapper.toDto(certificateEntity);
+        certificate.setPdfFile(PdfUtil.encode(certificateEntity.getPdfFile()));
 
         List<Long> assignedUsers = getUserDtos(certificateEntity.getAssignedUsers());
         List<CommentDto> comments = getCommentDtos(certificateEntity.getComments());
@@ -87,11 +89,11 @@ public class CertificateService {
         }
 
         certificate.setSupplier(supplier);
-
+        certificate.setId(certificateDto.getId());
         certificate.setCertificateType(certificateDto.getCertificateType());
         certificate.setValidFrom(certificateDto.getValidFrom());
         certificate.setValidTo(certificateDto.getValidTo());
-        certificate.setPdfFile(certificateDto.getPdfFile());
+        certificate.setPdfFile(PdfUtil.decode(certificateDto.getPdfFile()));
 
         List<UserEntity> assignedUsers = getAssignedUsers(certificateDto.getAssignedUsers());
         List<CommentEntity> currentComments = certificate.getComments();

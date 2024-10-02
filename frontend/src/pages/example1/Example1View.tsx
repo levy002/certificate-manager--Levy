@@ -3,19 +3,19 @@ import { useCallback, useEffect, useState } from 'react';
 import CertificatesTable from '../../components/certificates/CertificateTable';
 import MenuNavLink from '../../components/sidebar/MenuNavLink';
 import { useI18n } from '../../contexts/LanguageContext';
-import { getAllCertificates } from '../../data/DB';
-import { Certificate } from '../../types/Types';
+import { CertificateDto } from '../../generated-sources/typesAndServices';
+import apiClient from '../../api/clientApi';
 
 const Example1View: React.FC = () => {
-  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [certificates, setCertificates] = useState<CertificateDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { translate } = useI18n();
 
   const fetchCertificates = useCallback(async (): Promise<void> => {
     try {
-      const allCertificates = await getAllCertificates();
-      setCertificates(allCertificates);
+      const allCertificates = await apiClient.getAllCertificates();
+      setCertificates(allCertificates.data.data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
@@ -34,10 +34,10 @@ const Example1View: React.FC = () => {
 
   return (
     <section>
-      <h2>{translate('example1')}</h2>
+      <h2>{translate('certificates')}</h2>
       <div className="table__new-certificate">
         <MenuNavLink
-          to="/machineLearning/example1/certificates/new"
+          to="/machineLearning/certificates/new"
           desc={translate('new_certificate')}
         />
       </div>

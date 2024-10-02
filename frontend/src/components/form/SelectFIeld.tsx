@@ -1,19 +1,21 @@
-import './FormFields.css';
-import { useI18n } from '../../contexts/LanguageContext';
-import Options from '../../helper/SelectOptions';
+import { Options } from "../../helper/SelectOptions";
 
-type SelectProps<T> = {
+type SelectOption = {
   label: string;
-  value: T;
+  value: string;
+};
+
+type SelectProps = {
+  label: string;
+  value: string;
   name: string;
   placeholder: string;
   error: boolean;
-  options: T[];
+  options: SelectOption[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
-const SelectField = <T extends string>(props: SelectProps<T>): JSX.Element => {
-  const { translate } = useI18n();
+const SelectField = (props: SelectProps): JSX.Element => {
   const { label, options, value, onChange, error, name, placeholder } = props;
 
   return (
@@ -22,7 +24,7 @@ const SelectField = <T extends string>(props: SelectProps<T>): JSX.Element => {
         className="select-field__label"
         htmlFor={name}
       >
-        {translate(label)}
+        {label}
       </label>
       <select
         id={name}

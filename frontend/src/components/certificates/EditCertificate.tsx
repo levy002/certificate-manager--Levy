@@ -3,12 +3,13 @@ import { useParams } from 'react-router-dom';
 
 import CertificateForm from './CertificateForm';
 import { useI18n } from '../../contexts/LanguageContext';
-import { getCertificateById } from '../../data/DB';
-import { Certificate, FormMode } from '../../types/Types';
+import { FormMode } from '../../types/Types';
+import { CertificateDto } from '../../generated-sources/typesAndServices';
+import apiClient from '../../api/clientApi';
 
 const EditCertificate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [certificate, setCertificate] = useState<Certificate | null>(null);
+  const [certificate, setCertificate] = useState<CertificateDto | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { translate } = useI18n();
@@ -17,8 +18,8 @@ const EditCertificate: React.FC = () => {
     const fetchCertificate = async (): Promise<void> => {
       try {
         if (id) {
-          const cert = await getCertificateById(parseInt(id, 10));
-          setCertificate(cert);
+          const certificate = await apiClient.getCertificateById(parseInt(id));
+          setCertificate(certificate.data.data);
         }
       } catch (err) {
         setError(`Error fetching certificate: ${(err as Error).message}`);

@@ -2,24 +2,24 @@ import { useCallback, useState } from 'react';
 
 import { ReactComponent as ChevronSVG } from '../../../../assets/images/chevron.svg';
 import { useI18n } from '../../../../contexts/LanguageContext';
-import { Supplier } from '../../../../types/Types';
 import Button from '../../../form/Button';
 import InputField from '../../../form/InputField';
 import './LookupForm.css';
 import SVGIcon from '../../../svgIcon/SVGIcon';
+import { SupplierDto } from '../../../../generated-sources/typesAndServices';
 
 interface LookupModalFormProps {
-  handleFilterCriteria: (criteria: Supplier | null) => void;
-  initialFilterCriteria: Supplier | null;
+  handleFilterCriteria: (criteria: SupplierDto | null) => void;
+  initialFilterCriteria: SupplierDto | null;
 }
 
-const formFields = ['name', 'index', 'city'];
+const formFields = ['name', 'id', 'city'];
 
 const LookupForm: React.FC<LookupModalFormProps> = ({
   initialFilterCriteria,
   handleFilterCriteria,
 }): JSX.Element => {
-  const [formState, setFormState] = useState<Supplier | null>(
+  const [formState, setFormState] = useState<SupplierDto | null>(
     initialFilterCriteria,
   );
   const { translate } = useI18n();
@@ -32,15 +32,14 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
           ({
             ...prevState,
             [name]: value,
-          }) as Supplier,
+          }) as SupplierDto,
       );
     },
     [],
   );
 
   const handleReset = useCallback((): void => {
-    setFormState(null);
-    handleFilterCriteria(null);
+    setFormState({id: 0, name: '', city: ''});
   }, []);
 
   const handleSubmit = useCallback(
@@ -72,9 +71,13 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
             <InputField
               key={key}
               type="text"
-              label={translate(key)}
+              label={key === "id" ? translate("index") : translate(key)}
               name={key}
-              value={formState ? formState[key as keyof Supplier] || '' : ''}
+              value={
+                formState
+                  ? String(formState[key as keyof SupplierDto] || '')
+                  : ''
+              }
               placeholder=""
               error={false}
               onChange={handleChange}

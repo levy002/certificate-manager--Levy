@@ -1,18 +1,13 @@
-interface OptionsProps<T> {
-  options: T[];
+interface OptionsProps {
+  options: { label: string; value: string }[];
 }
 
-const Options = <T extends string>({
-  options,
-}: OptionsProps<T>): JSX.Element => {
+export const Options = ({ options }: OptionsProps): JSX.Element => {
   return (
     <>
       {options.map((option) => (
-        <option
-          key={option}
-          value={option}
-        >
-          {option}
+        <option key={option.value} value={option.value}>
+          {option.label}
         </option>
       ))}
     </>
