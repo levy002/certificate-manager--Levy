@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS certificates.certificates (
     certificate_type VARCHAR(255) NOT NULL,
     valid_from DATE NOT NULL,
     valid_to DATE NOT NULL,
-    pdf_file BYTEA,
+    pdf_file BIGINT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
