@@ -36,7 +36,7 @@ module.exports = {
   devServer: {
     static: path.resolve(__dirname, '..', 'build'),
     historyApiFallback: true,
-    port: 8080,
+    port: 8088,
     open: true,
   },
 };
