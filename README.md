@@ -1,46 +1,78 @@
 <div align="center">
   <h1>Certificate Manager</h1>
-
+  <p>An application to manage certificates efficiently with a clean and intuitive interface.</p>
 </div>
 
-The application for managing certificates.
-
+---
 
 ## 🛠 Built With <a name="built-with"></a>
 
 ### Tech Stack <a name="tech-stack"></a>
 
-  <ul>
-    <li>Java (Quarkus + Maven) -- Backend</li>
-    <li>ReactJs (Typescript) -- Frontend</li>
-  </ul>
+**Backend**:
+- Java with Quarkus
+- Maven
+- PostgreSQL (Database)
 
-<!-- Features -->
+**Frontend**:
+- ReactJS with TypeScript
+- Webpack
 
-<!-- ### Key Features <a name="key-features"></a> -->
+---
 
+## 📊 Database Structure <a name="erd-diagram"></a>
 
-<!-- LIVE DEMO -->
+---
 
-<!-- ## 🚀 Live link <a name="live-demo"></a>
+## 🚀 Getting Started <a name="getting-started"></a>
 
-- [Live Link]() -->
+### Prerequisites
 
-## Running the application in dev mode
+To run this project locally, you will need the following tools installed on your machine:
 
-You can run your application in dev mode that enables live coding using:
+- **Java 11+**
+- **Node.js**
+- **Maven**
+- **PostgreSQL**
 
-First build application:
+### Setting Up Environment Variables
+
+To manage your database configuration more efficiently, you can create a `.env` file in your project root directory.
+
+1. **Create a `.env` file**:
+   In the root of your project, create a file named `.env` and add the following contents:
+
+   ```plaintext
+   DB_USERNAME=
+   DB_PASSWORD=
+   DB_URL=jdbc:postgresql://localhost:5433/{YOUR-DATABASE-NAME}
+   ```
+
+⚠️ 
+` Before running the application, ensure that the PostgreSQL database is created and properly configured 
+  `
+
+### Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/certificate-manager.git
+   cd certificate-manager
+
+2. First build application:
 ```shell script
-mvn clean install
+mvn clean 
+mvn quarkus:build
 ```
 
-then inside the `backend` module:
+3. then inside the `backend` module:
 ```shell script
-mvn quarkus:dev
+java -jar target/quarkus-app/quarkus-run.jar
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+> **_NOTE:_**  The Quarkus backend now serves the frontend at http://localhost:8080.
+ 
+---
 
 <!-- AUTHORS -->
 
@@ -52,6 +84,8 @@ mvn quarkus:dev
 - Twitter: [@levy_ukwishaka](https://twitter.com/levy_ukwishaka)
 - LinkedIn: [@levy-ukwishaka](https://www.linkedin.com/in/levy-ukwishaka/)
 
+---
+
 <!-- CONTRIBUTING -->
 
 ## 🤝 Contributing <a name="contributing"></a>
@@ -60,11 +94,15 @@ Contributions, issues, and feature requests are welcome!
 
 Feel free to check the [issues page](../../issues/).
 
+---
+
 <!-- SUPPORT -->
 
 ## ⭐️ Show your support <a name="support"></a>
 
-If you like this project please leave ⭐️ 
+If you like this project, please leave a ⭐️ to show your support!
+
+---
 
 <!-- ACKNOWLEDGEMENTS -->
 
