@@ -27,15 +27,17 @@
   margin: 0;
 }
 
-.lookup-container__header svg {
-  cursor: pointer;
-  width: 0.7rem;
-  height: 1rem;
+.close-icon {
+  padding: 0.2rem 1.5rem;
   background-color: var(--secondary-color);
-  padding: 0.5rem 2rem;
 }
 
-.lookup-container__header svg:hover {
-  background-color: var(--active-color);
-    fill: #fff;
+.close-icon svg {
+  text-align: center;
+  cursor: pointer;
+  height: 1rem;
+}
+
+.close-icon svg:hover {
+    fill:  var(--active-color);
 }

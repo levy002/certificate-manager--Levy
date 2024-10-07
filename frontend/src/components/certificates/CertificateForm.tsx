@@ -14,9 +14,15 @@ import UserLookupModal from '../lookup/userLookupModal/lookupModal/UserLookupMod
 import SVGIcon from '../svgIcon/SVGIcon';
 import './CertificateForm.css';
 import CertificateComments from './CertificateComments';
-import { CertificateDto, CommentDto, SupplierDto, CertificateType } from '../../generated-sources/typesAndServices';
+import {
+  CertificateDto,
+  CommentDto,
+  SupplierDto,
+  CertificateType,
+} from '../../generated-sources/typesAndServices';
 import { FormMode } from '../../types/Types';
 import apiClient from '../../api/clientApi';
+import { triggerNotification } from '../notification/Notification';
 
 interface CertificateFormProps {
   initialFormState: CertificateDto;
@@ -75,7 +81,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
   const handleClearSupplier = useCallback(() => {
     setFormState((prevState) => ({
       ...prevState,
-      supplier: {name: "", city: "", id: 0},
+      supplier: { name: '', city: '', id: 0 },
     }));
   }, []);
 
@@ -87,12 +93,29 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     try {
       if (mode === FormMode.EDIT) {
         await apiClient.updateCertificate(formState.id, formState);
+        triggerNotification(
+          translate('certificate_updated_successfully'),
+          'success',
+        );
       } else {
         await apiClient.createCertificate(formState);
+        triggerNotification(
+          translate('certificate_created_successfully'),
+          'success',
+        );
       }
       handleReset();
       navigate('/machineLearning/certificates');
     } catch (err) {
+      mode === FormMode.CREATE
+        ? triggerNotification(
+            translate('failed_to_create_certificate'),
+            'error',
+          )
+        : triggerNotification(
+            translate('failed_to_update_certificate'),
+            'error',
+          );
       setFormError(
         err instanceof Error ? err.message : translate('something_went_wrong'),
       );
@@ -140,13 +163,12 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     setShowUserModal(false);
   }, []);
 
-   const handleAddComment = (newComment: CommentDto): void => {
+  const handleAddComment = (newComment: CommentDto): void => {
     setFormState((prevState) => ({
       ...prevState,
-      comments: [...prevState.comments, newComment]
+      comments: [...prevState.comments, newComment],
     }));
-   };
-  
+  };
 
   return (
     <div className="form-container">
@@ -173,6 +195,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                 required
                 readonly
               />
+
               <div className="form-container__icons">
                 <SVGIcon
                   Icon={SearchSVG}
@@ -180,6 +203,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                   width={16}
                   onClick={handleOpenSupplierLookupModal}
                 />
+                <div className="icons-separator"></div>
                 <SVGIcon
                   Icon={CloseSVG}
                   fill="#565757"
@@ -194,7 +218,13 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
               name="certificateType"
               value={formState.certificateType}
               placeholder={translate('select')}
-              options={Object.values(CertificateType).map((type) => ({label: type, value: type}))}
+              options={Object.values(CertificateType).map((type) => ({
+                label:
+                  type === 'PERMISSION_OF_PRINTING'
+                    ? translate('permission_of_printing')
+                    : translate('ohsas_18001'),
+                value: type,
+              }))}
               error={!!formError}
               onChange={handleChange}
             />
@@ -207,6 +237,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
               placeholder={translate('click_to_select_date')}
               error={!!formError}
               onChange={handleChange}
+              max={formatValue('date', formState.validTo)}
             />
 
             <InputField
@@ -217,19 +248,15 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
               placeholder={translate('click_to_select_date')}
               error={!!formError}
               onChange={handleChange}
-              min={
-                formState.validFrom instanceof Date
-                  ? formatValue('date', formState.validFrom)
-                  : undefined
-              }
+              min={formatValue('date', formState.validFrom)}
               required
             />
 
             <CertificateComments
-          comments={formState.comments}
-          addComment={handleAddComment}
-        />
-            
+              comments={formState.comments}
+              addComment={handleAddComment}
+            />
+
             <section className="assigned-users">
               <label
                 htmlFor="users"
@@ -280,32 +307,34 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                 )}
               </div>
             </div>
+
+            <div className="form-container__buttons">
+              <button
+                className="form-container__buttons-submit-btn"
+                type="submit"
+              >
+                {mode === FormMode.EDIT
+                  ? translate('update')
+                  : translate('save')}
+              </button>
+
+              <button
+                className="form-container__buttons-reset-btn"
+                type="button"
+                onClick={handleReset}
+              >
+                {translate('reset')}
+              </button>
+            </div>
           </div>
         </div>
-
-        <div className="form-container__buttons">
-          <button
-            className="form-container__buttons-submit-btn"
-            type="submit"
-          >
-            {mode === FormMode.EDIT ? translate('update') : translate('save')}
-          </button>
-
-          <button
-            className="form-container__buttons-reset-btn"
-            type="button"
-            onClick={handleReset}
-          >
-            {translate('reset')}
-          </button>
-        </div>
       </form>
-      {formError && <p>{formError}</p>}
+
       {showSupplierModal && (
         <LookupModal
           onClose={handleCloseSupplierModal}
           handleSelectedSupplier={handleSupplierSelection}
-          preSelectedSupplier={formState.supplier || null}
+          preSelectedSupplier={formState.supplier}
         />
       )}
 

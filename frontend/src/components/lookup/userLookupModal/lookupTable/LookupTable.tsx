@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ReactComponent as ChevronSVG } from '../../../../assets/images/chevron.svg';
@@ -12,21 +12,23 @@ interface LookupTableProps {
   data: UserDto[];
   handleSelectedUser: (userIds: number[]) => void;
   closeModal: () => void;
+  preAssignedUsers: number[];
 }
 
-const tableHeaders = [
-  'firstName',
-  'lastName',
-  'userId',
-  'department',
-  'plant',
-  'email',
-];
+const tableHeaders = {
+  firstName: 'first_name',
+  lastName: 'last_name',
+  userId: 'user_id',
+  departmentName: 'department',
+  plant: 'plant',
+  email: 'email',
+};
 
 const LookupTable: React.FC<LookupTableProps> = ({
   handleSelectedUser,
   data,
   closeModal,
+  preAssignedUsers,
 }): JSX.Element => {
   const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
   const { translate } = useI18n();
@@ -42,6 +44,12 @@ const LookupTable: React.FC<LookupTableProps> = ({
       );
     };
   }, []);
+
+  useEffect(() => {
+    if (preAssignedUsers.length > 0) {
+      setSelectedUserIds(preAssignedUsers);
+    }
+  }, [preAssignedUsers]);
 
   const handleSelectUsers = useCallback(() => {
     handleSelectedUser(selectedUserIds);
@@ -68,12 +76,9 @@ const LookupTable: React.FC<LookupTableProps> = ({
           <thead className="lookup-table__head">
             <tr className="lookup-table__row">
               <th className="lookup-table__header" />
-              {tableHeaders.map((header) => (
-                <th
-                  key={header}
-                  className="lookup-table__header"
-                >
-                  {translate(header)}
+              {Object.keys(tableHeaders).map((header) => (
+                <th key={header} className="lookup-table__header">
+                  {translate(tableHeaders[header as keyof Omit<UserDto, 'id'>])}
                 </th>
               ))}
             </tr>
@@ -81,10 +86,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
           <tbody className="lookup-table__body">
             {data.length > 0 ? (
               data.map((item) => (
-                <tr
-                  key={uuidv4()}
-                  className="lookup-table__row"
-                >
+                <tr key={uuidv4()} className="lookup-table__row">
                   <td className="lookup-table__cell">
                     <input
                       type="checkbox"
@@ -92,12 +94,10 @@ const LookupTable: React.FC<LookupTableProps> = ({
                       onChange={handleSupplierRowClick(item.id)}
                     />
                   </td>
-                  {tableHeaders.map((header) => (
-                    <td
-                      key={header}
-                      className="lookup-table__cell"
-                    >
-                      {header !== "department" ?  translate(String(item[header as keyof UserDto])): translate(String(item["departmentName" as keyof UserDto]))}
+                  {Object.keys(tableHeaders).map((header) => (
+                    <td key={header} className="lookup-table__cell">
+                      {/* Accessing the correct translation based on the header */}
+                      {translate(String(item[header as keyof UserDto]))}
                     </td>
                   ))}
                 </tr>
@@ -105,7 +105,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
             ) : (
               <tr>
                 <td
-                  colSpan={tableHeaders.length + 1}
+                  colSpan={Object.values(tableHeaders).length + 1}
                   className="lookup-table__cell"
                 >
                   {translate('no_users_available')}

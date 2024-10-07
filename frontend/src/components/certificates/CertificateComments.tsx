@@ -44,21 +44,24 @@ const CertificateComments: React.FC<CertificateCommentsProps> = ({ comments, add
 
       <div className="comments-list">
         {comments.length > 0 ? (
-          comments.map((comment, index) => (
-            <div key={index} className="comment">
-              <p><strong>{translate("user")}:</strong> {users.find((user) => user.id === comment.userId)?.firstName}</p>
-              <p><strong>{translate("comment")}:</strong> {comment.comment}</p>
-            </div>
-          ))
+          comments.map(({ userId, comment }, index) => {
+            const user = users.find(user => user.id === userId);
+            return (
+              <div key={index} className="comment">
+                <p><strong>{translate("user")}:</strong> {`${user?.firstName} ${user?.lastName}`}</p>
+                <p><strong>{translate("comment")}:</strong> {comment}</p>
+              </div>
+            );
+          })
         ) : (
-            <p>{translate("no_comments_yet")}</p>
+          <p>{translate("no_comments_yet")}</p>
         )}
       </div>
 
       {showForm && (
         <div className="comment-form">
           <Textarea
-            label={activeUser?.firstName}
+            label={`${activeUser?.firstName} ${activeUser?.lastName}`}
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder={translate("comment")}
@@ -68,7 +71,7 @@ const CertificateComments: React.FC<CertificateCommentsProps> = ({ comments, add
             className="comment-textarea"
           />
           {error && <p className='error'>{error}</p>}
-          <Button onClick={handleNewCommentSubmit} className="btn btn-red">
+          <Button onClick={handleNewCommentSubmit} className="btn btn-green">
             {translate("send")}
           </Button>
         </div>

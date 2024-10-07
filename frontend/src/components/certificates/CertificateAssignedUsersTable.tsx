@@ -15,7 +15,7 @@ const tableHeaders: (keyof UserDto)[] = ['firstName', 'departmentName', 'email']
 
 const getDisplayLabel = (field: keyof UserDto, translate: (key: string) => string): string => {
   if (field === 'departmentName') return translate('department');
-  if (field === 'firstName') return translate('name');
+  if (field === 'firstName') return translate('full_names');
   return translate(field);
 };
 
@@ -63,7 +63,7 @@ const CertificateAssignedUsersTable: React.FC<CertificateAssignedUsersTableProps
                   </td>
                   {tableHeaders.map((header) => (
                     <td key={header} className="lookup-table__cell">
-                      {user[header]}
+                      {header === "firstName" ? user.firstName + " " + user.lastName  : user[header]}
                     </td>
                   ))}
                 </tr>

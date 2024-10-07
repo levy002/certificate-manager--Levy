@@ -31,6 +31,8 @@ const EditCertificate: React.FC = () => {
     fetchCertificate();
   }, [id]);
 
+
+
   if (loading) {
     return <p>Loading...</p>;
   }

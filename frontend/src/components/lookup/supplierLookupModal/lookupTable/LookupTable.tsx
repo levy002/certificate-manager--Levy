@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ReactComponent as ChevronSVG } from '../../../../assets/images/chevron.svg';
@@ -12,6 +12,7 @@ interface LookupTableProps {
   data: SupplierDto[];
   handleSelectedSupplier: (supplier: SupplierDto | null) => void;
   closeModal: () => void;
+  preSelectedSupplier: SupplierDto
 }
 
 const tableHeaders = ['name', 'id', 'city'];
@@ -20,11 +21,18 @@ const LookupTable: React.FC<LookupTableProps> = ({
   handleSelectedSupplier,
   data,
   closeModal,
+  preSelectedSupplier
 }): JSX.Element => {
   const [selectedSupplier, setSelectedSupplier] = useState<SupplierDto | null>(
     null,
-  );
+);
   const { translate } = useI18n();
+
+  useEffect(() => {
+  if(preSelectedSupplier.id) {
+    setSelectedSupplier(preSelectedSupplier)
+  }
+}, [preSelectedSupplier])
 
   const handleSupplierRowClick = useCallback(
     (supplier: SupplierDto): React.ChangeEventHandler<HTMLInputElement> => {
@@ -71,7 +79,7 @@ const LookupTable: React.FC<LookupTableProps> = ({
             </tr>
           </thead>
           <tbody className="lookup-table__body">
-            {data.length > 0 ? (
+            {data.length > 0 && data[0].id ? (
               data.map((item) => (
                 <tr
                   key={uuidv4()}
