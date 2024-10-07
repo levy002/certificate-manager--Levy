@@ -8,7 +8,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
 import java.util.List;
 
 @Path("/api/v1/users")
@@ -16,24 +15,24 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserResource {
 
-    @Inject
-    UserService userService;
+  @Inject UserService userService;
 
-    @GET
-    public Response searchUsers(
-            @QueryParam("userId") String userId,
-            @QueryParam("firstName") String firstName,
-            @QueryParam("lastName") String lastName,
-            @QueryParam("departmentName") String departmentName,
-            @QueryParam("plant") String plant) {
-        try {
-            List<UserDto> users = userService.searchUsers(userId, firstName, lastName, departmentName, plant);
-            return ResponseBuilder.buildSuccessResponse("Users retrieved successfully", users, Response.Status.OK);
-        } catch (EntityNotFoundException e) {
-            return ResponseBuilder.buildErrorResponse(e.getMessage(), Response.Status.NOT_FOUND);
-        } catch (Exception e) {
-            return ResponseBuilder.buildErrorResponse(e.getMessage(), Response.Status.BAD_REQUEST);
-        }
+  @GET
+  public Response searchUsers(
+      @QueryParam("userId") String userId,
+      @QueryParam("firstName") String firstName,
+      @QueryParam("lastName") String lastName,
+      @QueryParam("departmentName") String departmentName,
+      @QueryParam("plant") String plant) {
+    try {
+      List<UserDto> users =
+          userService.searchUsers(userId, firstName, lastName, departmentName, plant);
+      return ResponseBuilder.buildSuccessResponse(
+          "Users retrieved successfully", users, Response.Status.OK);
+    } catch (EntityNotFoundException e) {
+      return ResponseBuilder.buildErrorResponse(e.getMessage(), Response.Status.NOT_FOUND);
+    } catch (Exception e) {
+      return ResponseBuilder.buildErrorResponse(e.getMessage(), Response.Status.BAD_REQUEST);
     }
-
+  }
 }

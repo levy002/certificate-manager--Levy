@@ -11,27 +11,22 @@ import java.util.stream.Stream;
 @ApplicationScoped
 public class DepartmentSeed extends BaseSeed<DepartmentDto> {
 
-    @Inject
-    DepartmentService departmentService;
+  @Inject DepartmentService departmentService;
 
-    private static final String[] DEPARTMENTS = {
-            "ITM", "HR", "Sales", "Engineering"
-    };
+  private static final String[] DEPARTMENTS = {"ITM", "HR", "Sales", "Engineering"};
 
-    @Override
-    protected boolean isEmpty() {
-        return departmentService.getDepartments().isEmpty();
-    }
+  @Override
+  protected boolean isEmpty() {
+    return departmentService.getDepartments().isEmpty();
+  }
 
-    @Override
-    protected List<DepartmentDto> getSeedData() {
-        return Stream.of(DEPARTMENTS)
-                .map(DepartmentDto::new)
-                .collect(Collectors.toList());
-    }
+  @Override
+  protected List<DepartmentDto> getSeedData() {
+    return Stream.of(DEPARTMENTS).map(DepartmentDto::new).collect(Collectors.toList());
+  }
 
-    @Override
-    protected void createEntity(DepartmentDto departmentDto) {
-        departmentService.createDepartment(departmentDto);
-    }
+  @Override
+  protected void createEntity(DepartmentDto departmentDto) {
+    departmentService.createDepartment(departmentDto);
+  }
 }
