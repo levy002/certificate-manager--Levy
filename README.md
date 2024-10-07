@@ -22,6 +22,9 @@
 
 ## 📊 Database Structure <a name="erd-diagram"></a>
 
+![drawSQL-image-export-2024-10-07 (1)](https://github.com/user-attachments/assets/448ee11e-0992-47d8-a683-42ba2fbc6864)
+
+
 ---
 
 ## 🚀 Getting Started <a name="getting-started"></a>
