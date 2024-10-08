@@ -1,51 +1,64 @@
 .form-container {
-    background-color: var(--secondary-color);
-    padding: 1rem;
-    min-height: 95%;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     position: relative;
+    height: 100%;
+    overflow-y: auto;
+    padding: 0 1rem ;
+}
+
+.form-container h2 {
+    margin: 0;
+    padding-bottom: 1rem;
+
 }
 
 .form-container__form {
-    padding: 1rem;
-    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 1.7rem;
-    min-height: 100%;
 }
 
 .form-container__input-group {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
+    flex: 1;
+
 }
 
 .form-container__icons {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--secondary-color);
+    width: 10rem;
     margin-top: 1.1rem;
+    height: 2.5rem;
+    border: 1px solid var(--grey-color);
 }
 
-.form-container__icons > * {
+.form-container__icons svg {
     text-align: center;
-    border: 1px solid var(--grey-color);
     flex: 1;
-    padding: 0.35rem 1rem;
     cursor: pointer;
+}
+
+.icons-separator {
+  width: 1px;
+  height: 100%;
+  background-color: var(--grey-color);
 }
 
 .form-container__form__all-inputs {
     display: flex;
     gap: 3rem;
     flex: 1;
+    max-width: 100%;
+    flex-wrap: wrap;
 }
 
-.form-container__form__all-inputs > *{
+.form-container__form__all-inputs > * {
     flex: 1;
+    min-width: 300px;
 }
 
 .form-container__supplier-input {
@@ -56,6 +69,7 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+    height: 95%;
 }
 
 .form-container__pdf-upload {
@@ -76,9 +90,10 @@
 
 .form-container__pdf-preview {
     border: 1px solid var(--grey-color);
-    height: 95%;
+    height: 100%;
     flex: 1;
     margin-top: 1rem;
+    max-height: 80%;
 }
 
 .form-container__pdf-preview embed {
@@ -123,12 +138,13 @@
   cursor: pointer;
   font-size: 14px;
   color: #615b5b;
-   border: 1px solid #615b5b;
-   display: flex;
+  border: 1px solid #615b5b;
+  display: flex;
   align-items: center;
   padding: 0.8rem 1rem;
   border-radius: 4px;
   width: 12rem;
+  margin-bottom: 1rem;
 }
 
 .assigned-users__button svg {
@@ -137,7 +153,6 @@
 
 .form-container__form .lookup-table {
  width: 100%;
- height: 15rem;
  overflow-y: auto;
 }
 
@@ -146,12 +161,20 @@
   font-weight: bold;
 }
 
-@media screen and (max-width: 1024px) {
-    .form-container {
-      height:fit-content;
-    }
+.form-container__form .lookup-table__container {
+    padding: 0;
+    height: auto;
+    max-height: 15rem;
+}
 
+
+@media screen and (max-width: 1024px) {
     .form-container__form__all-inputs {
         flex-direction: column;
+        gap: 1rem;
+    }
+
+    .form-container__pdf-preview {
+        max-height: 200px;
     }
 }

@@ -12,14 +12,14 @@ interface LookupModalFormProps {
   handleFilterCriteria: (criteria: UserDto) => void;
 }
 
-const formFields = [
-  'firstName',
-  'lastName',
-  'userId',
-  'departmentName',
-  'plant',
-  'email',
-];
+const formFields = {
+  firstName: 'first_name',
+  lastName: 'last_name',
+  userId: 'user_id',
+  departmentName: 'department',
+  plant: 'plant',
+  email: 'email',
+};
 
 const LookupForm: React.FC<LookupModalFormProps> = ({
   handleFilterCriteria,
@@ -40,13 +40,10 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
       const { name, value } = event.target;
-      setFormState(
-        (prevState) =>
-          ({
-            ...prevState,
-            [name]: value,
-          })
-      );
+      setFormState((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
     },
     [],
   );
@@ -75,18 +72,15 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
         <p className="lookup__title">{translate('search_criteria')}</p>
       </div>
 
-      <form
-        className="lookup-form__form"
-        onSubmit={handleSubmit}
-      >
+      <form className="lookup-form__form" onSubmit={handleSubmit}>
         <div className="lookup-form__fields">
-          {formFields.map((key) => (
+          {Object.keys(formFields).map((key) => (
             <InputField
               key={key}
               type="text"
-              label={key === "departmentName" ? translate("department") : translate(key)}
+              label={translate(formFields[key as keyof typeof formFields])}
               name={key}
-              value={key === "department" ? String(formState["departmentName"]): String(formState[key as keyof UserDto])}
+              value={String(formState[key as keyof UserDto])}
               placeholder=""
               error={false}
               onChange={handleChange}
@@ -94,10 +88,7 @@ const LookupForm: React.FC<LookupModalFormProps> = ({
           ))}
         </div>
         <div className="lookup-form__buttons">
-          <Button
-            type="submit"
-            className="lookup-form__button"
-          >
+          <Button type="submit" className="lookup-form__button">
             {translate('search')}
           </Button>
           <Button

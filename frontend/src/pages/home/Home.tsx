@@ -9,6 +9,7 @@ import Sidebar from '../../components/sidebar/Sidebar';
 import SVGIcon from '../../components/svgIcon/SVGIcon';
 import { useI18n } from '../../contexts/LanguageContext';
 import { UserContext } from '../../contexts/UserContext';
+import Notification from '../../components/notification/Notification';
 
 const Home: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
@@ -32,43 +33,51 @@ const Home: React.FC = () => {
   );
 
   const handleUserChange = useCallback(
-      (e: React.ChangeEvent<HTMLSelectElement>): void => {
-        const selectedUserId = e.target.value;
-        const selectedUser = users.find(
-          (user) => user.userId === selectedUserId);
-        if (selectedUser) {
-          setActiveUser(selectedUser);
-        }
-      },
-      [users, setActiveUser],
-    );
+    (e: React.ChangeEvent<HTMLSelectElement>): void => {
+      const selectedUserId = e.target.value;
+      const selectedUser = users.find((user) => user.userId === selectedUserId);
+      if (selectedUser) {
+        setActiveUser(selectedUser);
+      }
+    },
+    [users, setActiveUser],
+  );
 
   return (
     <div className="home">
       <header className="home__header">
         <h1 className="home__title">DCCS Tuzla</h1>
-        <div className="home_language">
-          <SelectField
-            label="Language"
-            value={language === 'en' ? 'English' : 'German'}
-            name="language"
-            placeholder=""
-            error={false}
-            options={[{value: "English", label: "English"}, {value: "German", label: "German"}]}
-            onChange={handleLanguageChange}
-          />
-        </div>
-         <div className="home_user">
-                  <SelectField
-                    label="User"
-                    value={activeUser ? activeUser.userId : ""}
-                    name="user"
-                    placeholder=""
-                    error={false}
-                    options={users.map((user) => ({ label: `${user.firstName} ${user.lastName}`, value: user.userId }))}
-                    onChange={handleUserChange}
-                  />
+        <section>
+          <div className="home_language">
+            <SelectField
+              label="Language"
+              value={language === 'en' ? 'English' : 'German'}
+              name="language"
+              placeholder=""
+              error={false}
+              options={[
+                { value: 'English', label: 'English' },
+                { value: 'German', label: 'German' },
+              ]}
+              onChange={handleLanguageChange}
+            />
           </div>
+          <div className="home_user">
+            <SelectField
+              label="User"
+              value={activeUser ? activeUser.userId : ''}
+              name="user"
+              placeholder=""
+              error={false}
+              options={users.map((user) => ({
+                label: `${user.firstName} ${user.lastName}`,
+                value: user.userId,
+              }))}
+              onChange={handleUserChange}
+            />
+          </div>
+        
+
         {showMobileMenu ? (
           <SVGIcon
             Icon={CloseSVG}
@@ -81,7 +90,9 @@ const Home: React.FC = () => {
             fill="#fff"
             onClick={handleMenuClick}
           />
-        )}
+          )}
+          
+          </section>
       </header>
       <section className="home__contents-wrapper">
         <Sidebar showMobileSidebar={showMobileMenu} />
@@ -89,6 +100,8 @@ const Home: React.FC = () => {
           <Outlet />
         </section>
       </section>
+
+      <Notification />
     </div>
   );
 };

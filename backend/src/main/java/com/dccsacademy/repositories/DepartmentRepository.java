@@ -7,7 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class DepartmentRepository implements PanacheRepository<DepartmentEntity> {
-    public DepartmentEntity findByName(String name) {
-        return SearchQueryUtil.findByField(DepartmentEntity.class, "name", name, getEntityManager());
-    }
+  public DepartmentEntity findByName(String name) {
+    return SearchQueryUtil.findByField(DepartmentEntity.class, "name", name, getEntityManager());
+  }
 }

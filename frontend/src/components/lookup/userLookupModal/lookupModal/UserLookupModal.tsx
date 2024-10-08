@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { ReactComponent as CloseSVG } from '../../../../assets/images/close.svg';
 import { useI18n } from '../../../../contexts/LanguageContext';
@@ -8,6 +8,7 @@ import '../../supplierLookupModal/lookupModal/LookupModal.css';
 import LookupTable from '../lookupTable/LookupTable';
 import { UserDto } from '../../../../generated-sources/typesAndServices';
 import apiClient from '../../../../api/clientApi';
+import {UserContext} from '../../../..///contexts/UserContext';
 
 interface UserLookupModalProps {
   onClose: () => void;
@@ -21,8 +22,9 @@ const UserLookupModal: React.FC<UserLookupModalProps> = ({
   preAssignedUsers,
 }): JSX.Element => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [users, setUsers] = useState<UserDto[]>([]);
+  const [allUsers, setAllUsers] = useState<UserDto[]>([]);
   const { translate } = useI18n();
+  const { users } = useContext(UserContext)!;
 
   useEffect(() => {
     dialogRef.current?.showModal();
@@ -31,16 +33,20 @@ const UserLookupModal: React.FC<UserLookupModalProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (preAssignedUsers.length > 0) {
+      const assignedUsers = users.filter(user => preAssignedUsers.includes(user.id));
+      setAllUsers(assignedUsers);
+    }
+  }, [preAssignedUsers, users]);
+
   const handleClose = (): void => {
     dialogRef.current?.close();
     onClose();
   };
 
   const handleSelectedUsers = (selectedUsers: number[]): void => {
-    const newUsers = selectedUsers.filter(
-      (userId) => !preAssignedUsers.some((currentUserId) => currentUserId === userId ),
-    );
-    handleAssigningUsers([...preAssignedUsers, ...newUsers]);
+    handleAssigningUsers(selectedUsers);
     handleClose();
   };
 
@@ -49,13 +55,12 @@ const UserLookupModal: React.FC<UserLookupModalProps> = ({
       if (criteria) {
         try {
           const allUsers = await apiClient.searchUsers(criteria);
-          setUsers(allUsers.data.data);
+          setAllUsers(allUsers.data.data);
         } catch (error) {
-          console.error('Error fetching users:', error);
-          setUsers([]);
+          setAllUsers([]);
         }
       } else {
-        setUsers([]);
+        setAllUsers([]);
       }
     },
     [],
@@ -71,17 +76,20 @@ const UserLookupModal: React.FC<UserLookupModalProps> = ({
           <h3 className="lookup-container__title">
             {translate('search_for_user')}
           </h3>
-          <SVGIcon
-            Icon={CloseSVG}
-            fill="#565757"
-            onClick={handleClose}
-          />
+          <div className='close-icon'>
+            <SVGIcon
+              Icon={CloseSVG}
+              fill="#565757"
+              onClick={handleClose}
+            />
+          </div>
         </div>
         <LookupForm handleFilterCriteria={handleFilterCriteria} />
         <LookupTable
           handleSelectedUser={handleSelectedUsers}
-          data={users}
+          data={allUsers}
           closeModal={onClose}
+          preAssignedUsers={preAssignedUsers}
         />
       </section>
     </dialog>

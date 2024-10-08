@@ -2,85 +2,83 @@ package com.dccsacademy.entities;
 
 import io.smallrye.common.constraint.NotNull;
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
 @Table(name = "users", schema = "certificates")
 public class UserEntity extends BaseEntity {
 
-    @NotNull
-    @Column(name = "user_id", nullable = false, unique = true)
-    private String userId;
+  @NotNull
+  @Column(name = "user_id", nullable = false, unique = true)
+  private String userId;
 
-    @NotNull
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
+  @NotNull
+  @Column(name = "first_name", nullable = false)
+  private String firstName;
 
-    @NotNull
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
+  @NotNull
+  @Column(name = "last_name", nullable = false)
+  private String lastName;
 
-    @ManyToOne
-    @JoinColumn(name = "department_id", nullable = false)
-    private DepartmentEntity department;
+  @ManyToOne
+  @JoinColumn(name = "department_id", nullable = false)
+  private DepartmentEntity department;
 
-    @Column
-    private String plant;
+  @Column private String plant;
 
-    @NotNull
-    @Column(nullable = false, unique = true)
-    private String email;
+  @NotNull
+  @Column(nullable = false, unique = true)
+  private String email;
 
-    @ManyToMany(mappedBy = "assignedUsers")
-    private List<CertificateEntity> certificates;
+  @ManyToMany(mappedBy = "assignedUsers")
+  private List<CertificateEntity> certificates;
 
-    // Getters and setters
-    public String getFirstName() {
-        return firstName;
-    }
+  // Getters and setters
+  public String getFirstName() {
+    return firstName;
+  }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-    public String getLastName() {
-        return lastName;
-    }
+  public String getLastName() {
+    return lastName;
+  }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 
-    public DepartmentEntity getDepartment() {
-        return department;
-    }
+  public DepartmentEntity getDepartment() {
+    return department;
+  }
 
-    public void setDepartment(DepartmentEntity department) {
-        this.department = department;
-    }
+  public void setDepartment(DepartmentEntity department) {
+    this.department = department;
+  }
 
-    public String getPlant() {
-        return plant;
-    }
+  public String getPlant() {
+    return plant;
+  }
 
-    public void setPlant(String plant) {
-        this.plant = plant;
-    }
+  public void setPlant(String plant) {
+    this.plant = plant;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public String getUserId() {
-        return userId;
-    }
+  public String getUserId() {
+    return userId;
+  }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
 }

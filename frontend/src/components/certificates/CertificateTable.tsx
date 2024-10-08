@@ -8,6 +8,7 @@ import './CertificateTable.css';
 import { CertificateDto } from '../../generated-sources/typesAndServices';
 import { formatDate } from '../../utils/FormatDate';
 import apiClient from '../../api/clientApi';
+import { triggerNotification } from '../notification/Notification';
 
 type CertificateTableProps = {
   certificates: CertificateDto[];
@@ -38,7 +39,15 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
   );
 
   const handleDelete = useCallback(async (id: number): Promise<void> => {
-    await apiClient.deleteCertificateById(id);
+    try {
+      await apiClient.deleteCertificateById(id);
+      triggerNotification(
+        translate('certificate_deleted_successfully'),
+        'success',
+      );
+    } catch (error) {
+      triggerNotification(translate('failed_to_delete_certificate'), 'error');
+    }
     refetch();
   }, []);
 
@@ -95,8 +104,15 @@ const CertificatesTable: React.FC<CertificateTableProps> = ({
                       </section>
                     )}
                   </td>
-                  <td className="table__cell">{certificate?.supplier?.name}, {certificate?.supplier?.id}, {certificate?.supplier?.city}</td>
-                  <td className="table__cell">{certificate.certificateType}</td>
+                  <td className="table__cell">
+                    {certificate?.supplier?.name}, {certificate?.supplier?.id},{' '}
+                    {certificate?.supplier?.city}
+                  </td>
+                  <td className="table__cell">
+                    {certificate.certificateType === 'PERMISSION_OF_PRINTING'
+                      ? translate('permission_of_printing')
+                      : translate('ohsas_18001')}
+                  </td>
                   <td className="table__cell">
                     {formatDate(certificate.validFrom)}
                   </td>

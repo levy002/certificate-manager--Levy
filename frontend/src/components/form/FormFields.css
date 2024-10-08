@@ -22,3 +22,9 @@
 .input-field__error {
   color: var(--red-color);
 }
+
+.input-field__error,
+.select-field__error {
+  margin: 0;
+  padding: 0;
+}

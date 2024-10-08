@@ -10,6 +10,7 @@ type InputProps = {
   placeholder: string;
   error: boolean;
   min?: string;
+  max?: string;
   required?: boolean;
   readonly?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -23,6 +24,7 @@ const InputField: React.FC<InputProps> = ({
   placeholder,
   error,
   min,
+  max,
   onChange,
   required,
   readonly,
@@ -47,6 +49,7 @@ const InputField: React.FC<InputProps> = ({
         onChange={onChange}
         className="input-field__input"
         min={min}
+        max={max}
         required={required}
         readOnly={readonly}
       />

@@ -12,7 +12,7 @@ import apiClient from '../../../../api/clientApi';
 interface SupplierLookupModalProps {
   onClose: () => void;
   handleSelectedSupplier: (supplier: SupplierDto | null) => void;
-  preSelectedSupplier: SupplierDto | null;
+  preSelectedSupplier: SupplierDto;
 }
 
 const SupplierLookupModal: React.FC<SupplierLookupModalProps> = ({
@@ -21,7 +21,7 @@ const SupplierLookupModal: React.FC<SupplierLookupModalProps> = ({
   preSelectedSupplier,
 }): JSX.Element => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [suppliers, setSuppliers] = useState<SupplierDto[]>([]);
+  const [suppliers, setSuppliers] = useState<SupplierDto[]>([preSelectedSupplier]);
   const { translate } = useI18n();
 
   useEffect(() => {
@@ -45,7 +45,11 @@ const SupplierLookupModal: React.FC<SupplierLookupModalProps> = ({
     async (criteria: SupplierDto | null): Promise<void> => {
       if (criteria) {
         try {
-          const supplier = await apiClient.searchSuppliers({name: criteria.name, city: criteria.city, id: criteria.id ? String(criteria.id) : ""})
+          const supplier = await apiClient.searchSuppliers({
+            name: criteria.name,
+            city: criteria.city,
+            id: criteria.id ? String(criteria.id) : '',
+          });
           if (supplier) {
             setSuppliers(supplier.data.data);
           } else {
@@ -71,11 +75,13 @@ const SupplierLookupModal: React.FC<SupplierLookupModalProps> = ({
           <h3 className="lookup-container__title">
             {translate('search_for_supplier')}
           </h3>
-          <SVGIcon
-            Icon={CloseSVG}
-            fill="#565757"
-            onClick={handleClose}
-          />
+          <div className='close-icon'>
+            <SVGIcon
+              Icon={CloseSVG}
+              fill="#565757"
+              onClick={handleClose}
+            />
+          </div>
         </div>
         <LookupForm
           handleFilterCriteria={handleFilterCriteria}
@@ -85,6 +91,7 @@ const SupplierLookupModal: React.FC<SupplierLookupModalProps> = ({
           handleSelectedSupplier={handleChangeSelectedSupplier}
           data={suppliers}
           closeModal={onClose}
+        preSelectedSupplier={preSelectedSupplier}
         />
       </section>
     </dialog>

@@ -2,7 +2,6 @@ package com.dccsacademy.entities;
 
 import com.dccsacademy.utils.enums.CertificateType;
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -10,102 +9,104 @@ import java.util.List;
 @Table(name = "certificates", schema = "certificates")
 public class CertificateEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "supplier_id", nullable = false)
-    private SupplierEntity supplier;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "supplier_id", nullable = false)
+  private SupplierEntity supplier;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "certificate_type", nullable = false)
-    private CertificateType certificateType;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "certificate_type", nullable = false)
+  private CertificateType certificateType;
 
-    @Column(name = "valid_from", nullable = false)
-    private LocalDate validFrom;
+  @Column(name = "valid_from", nullable = false)
+  private LocalDate validFrom;
 
-    @Column(name = "valid_to", nullable = false)
-    private LocalDate validTo;
+  @Column(name = "valid_to", nullable = false)
+  private LocalDate validTo;
 
-    @Lob
-    @Column(name = "pdf_file")
-    private byte[] pdfFile;
+  @Lob
+  @Column(name = "pdf_file")
+  private byte[] pdfFile;
 
-    @ManyToMany
-    @JoinTable(name = "assigned_users",
-            joinColumns = @JoinColumn(name = "certificate_id"),
-            schema = "certificates",
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<UserEntity> assignedUsers;
+  @ManyToMany
+  @JoinTable(
+      name = "assigned_users",
+      joinColumns = @JoinColumn(name = "certificate_id"),
+      schema = "certificates",
+      inverseJoinColumns = @JoinColumn(name = "user_id"))
+  private List<UserEntity> assignedUsers;
 
-    @OneToMany(mappedBy = "certificate", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommentEntity> comments;
+  @OneToMany(mappedBy = "certificate", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<CommentEntity> comments;
 
-    // Getters and setters
+  // Getters and setters
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+  @Override
+  public Long getId() {
+    return id;
+  }
 
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
+  @Override
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public SupplierEntity getSupplier() {
-        return supplier;
-    }
+  public SupplierEntity getSupplier() {
+    return supplier;
+  }
 
-    public void setSupplier(SupplierEntity supplier) {
-        this.supplier = supplier;
-    }
+  public void setSupplier(SupplierEntity supplier) {
+    this.supplier = supplier;
+  }
 
-    public CertificateType getCertificateType() {
-        return certificateType;
-    }
+  public CertificateType getCertificateType() {
+    return certificateType;
+  }
 
-    public void setCertificateType(CertificateType certificateType) {
-        this.certificateType = certificateType;
-    }
+  public void setCertificateType(CertificateType certificateType) {
+    this.certificateType = certificateType;
+  }
 
-    public LocalDate getValidFrom() {
-        return validFrom;
-    }
+  public LocalDate getValidFrom() {
+    return validFrom;
+  }
 
-    public void setValidFrom(LocalDate validFrom) {
-        this.validFrom = validFrom;
-    }
+  public void setValidFrom(LocalDate validFrom) {
+    this.validFrom = validFrom;
+  }
 
-    public LocalDate getValidTo() {
-        return validTo;
-    }
+  public LocalDate getValidTo() {
+    return validTo;
+  }
 
-    public void setValidTo(LocalDate validTo) {
-        this.validTo = validTo;
-    }
+  public void setValidTo(LocalDate validTo) {
+    this.validTo = validTo;
+  }
 
-    public byte[] getPdfFile() {
-        return pdfFile;
-    }
+  public byte[] getPdfFile() {
+    return pdfFile;
+  }
 
-    public void setPdfFile(byte[] pdfFile) {
-        this.pdfFile = pdfFile;
-    }
-    public List<UserEntity> getAssignedUsers() {
-        return assignedUsers;
-    }
+  public void setPdfFile(byte[] pdfFile) {
+    this.pdfFile = pdfFile;
+  }
 
-    public void setAssignedUsers(List<UserEntity> assignedUsers) {
-        this.assignedUsers = assignedUsers;
-    }
+  public List<UserEntity> getAssignedUsers() {
+    return assignedUsers;
+  }
 
-    public List<CommentEntity> getComments() {
-        return comments;
-    }
+  public void setAssignedUsers(List<UserEntity> assignedUsers) {
+    this.assignedUsers = assignedUsers;
+  }
 
-    public void setComments(List<CommentEntity> comments) {
-        this.comments = comments;
-    }
+  public List<CommentEntity> getComments() {
+    return comments;
+  }
+
+  public void setComments(List<CommentEntity> comments) {
+    this.comments = comments;
+  }
 }

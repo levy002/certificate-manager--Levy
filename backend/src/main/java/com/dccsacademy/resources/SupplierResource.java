@@ -7,7 +7,6 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
 import java.util.List;
 
 @Path("api/v1/suppliers")
@@ -15,19 +14,19 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class SupplierResource {
 
-    @Inject
-    SupplierService supplierService;
+  @Inject SupplierService supplierService;
 
-    @GET
-    public Response searchSuppliers(
-            @QueryParam("id") String id,
-            @QueryParam("name") String name,
-            @QueryParam("city") String city) {
-        try{
-            List<SupplierDto> suppliers = supplierService.searchSuppliers(id, name, city);
-            return ResponseBuilder.buildSuccessResponse("Suppliers retrieved successfully", suppliers, Response.Status.OK);
-        } catch(Exception e) {
-            return ResponseBuilder.buildErrorResponse(e.getMessage(), Response.Status.BAD_REQUEST);
-        }
+  @GET
+  public Response searchSuppliers(
+      @QueryParam("id") String id,
+      @QueryParam("name") String name,
+      @QueryParam("city") String city) {
+    try {
+      List<SupplierDto> suppliers = supplierService.searchSuppliers(id, name, city);
+      return ResponseBuilder.buildSuccessResponse(
+          "Suppliers retrieved successfully", suppliers, Response.Status.OK);
+    } catch (Exception e) {
+      return ResponseBuilder.buildErrorResponse(e.getMessage(), Response.Status.BAD_REQUEST);
     }
+  }
 }
