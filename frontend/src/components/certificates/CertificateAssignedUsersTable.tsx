@@ -47,7 +47,7 @@ const CertificateAssignedUsersTable: React.FC<CertificateAssignedUsersTableProps
           </tr>
         </thead>
         <tbody className="lookup-table__body">
-          {users.length > 0 ? (
+          {assignedUsers.length > 0 ? (
             assignedUsers.map((userId) => {
               const user = users.find((user) => user.id === userId);
               return user ? (
