@@ -65,5 +65,6 @@
   "failed_to_delete_certificate": "Failed to delete certificate",
   "certificate_deleted_successfully": "Certificate deleted successfully!",
   "permission_of_printing": "Permission of Printing",
-  "ohsas_18001": "OHSAS 18001"
+  "ohsas_18001": "OHSAS 18001",
+  "language": "Language"
 }

@@ -13,7 +13,7 @@ import Notification from '../../components/notification/Notification';
 
 const Home: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
-  const { setLanguage, language } = useI18n();
+  const { setLanguage, language, translate } = useI18n();
   const { users, activeUser, setActiveUser } = React.useContext(UserContext)!;
 
   const handleMenuClick = useCallback((): void => {
@@ -50,7 +50,7 @@ const Home: React.FC = () => {
         <section>
           <div className="home_language">
             <SelectField
-              label="Language"
+              label={translate("language")}
               value={language === 'en' ? 'English' : 'German'}
               name="language"
               placeholder=""
@@ -64,7 +64,7 @@ const Home: React.FC = () => {
           </div>
           <div className="home_user">
             <SelectField
-              label="User"
+              label={translate("user")}
               value={activeUser ? activeUser.userId : ''}
               name="user"
               placeholder=""
